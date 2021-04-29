@@ -1,0 +1,326 @@
+% Format teze zasnovan je na paketu memoir
+% http://tug.ctan.org/macros/latex/contrib/memoir/memman.pdf ili
+% http://texdoc.net/texmf-dist/doc/latex/memoir/memman.pdf
+% 
+% Prilikom zadavanja klase memoir, navedenim opcijama se podešava 
+% veličina slova (12pt) i jednostrano štampanje (oneside).
+% Ove parametre možete menjati samo ako pravite nezvanične verzije
+% mastera za privatnu upotrebu (na primer, u b5 varijanti ima smisla 
+% smanjiti 
+\documentclass[12pt,oneside]{memoir} 
+
+% Paket koji definiše sve specifičnosti master rada Matematičkog fakulteta
+\usepackage[latinica]{matfmaster} 
+%
+% Podrazumevano pismo je ćirilica.
+%   Ako koristite pdflatex, a ne xetex, sav latinički tekst na srpskom jeziku
+%   treba biti okružen sa \lat{...} ili \begin{latinica}...\end{latinica}.
+%
+% Opicija [latinica]:
+%   ako želite da pišete latiniciom, dodajte opciju "latinica" tj.
+%   prethodni paket uključite pomoću: \usepackage[latinica]{matfmaster}.
+%   Ako koristite pdflatex, a ne xetex, sav ćirilički tekst treba biti
+%   okružen sa \cir{...} ili \begin{cirilica}...\end{cirilica}.
+%
+% Opcija [biblatex]:
+%   ako želite da koristite reference na više jezika i umesto paketa
+%   bibtex da koristite BibLaTeX/Biber, dodajte opciju "biblatex" tj.
+%   prethodni paket uključite pomoću: \usepackage[biblatex]{matfmaster}
+%
+% Opcija [b5paper]:
+%   ako želite da napravite verziju teze u manjem (b5) formatu, navedite
+%   opciju "b5paper", tj. prethodni paket uključite pomoću: 
+%   \usepackage[b5paper]{matfmaster}. Tada ima smisla razmisliti o promeni
+%   veličine slova (izmenom opcije 12pt na 11pt u \documentclass{memoir}).
+%
+% Naravno, opcije je moguće kombinovati.
+% Npr. \usepackage[b5paper,biblatex]{matfmaster}
+
+\usepackage{noto}
+\usepackage{listings}
+\usepackage{listings-rust}
+\input{toml}
+% Datoteka sa literaturom u BibTex tj. BibLaTeX/Biber formatu
+\bib{matfmaster-primer}
+
+% Ime kandidata na srpskom jeziku (u odabranom pismu)
+\autor{Jovan Dmitrović}
+% Naslov teze na srpskom jeziku (u odabranom pismu)
+\naslov{Master iz matematike ili računarstva čiji je naslov jako dugačak}
+% Godina u kojoj je teza predana komisiji
+\godina{2021}
+% Ime i afilijacija mentora (u odabranom pismu)
+\mentor{dr Mika \textsc{Mikić}, redovan profesor\\ Univerzitet u Beogradu, Matematički fakultet}
+% Ime i afilijacija prvog člana komisije (u odabranom pismu)
+\komisijaA{dr Ana \textsc{Anić}, vanredni profesor\\ University of Disneyland, Nedođija}
+% Ime i afilijacija drugog člana komisije (u odabranom pismu)
+\komisijaB{dr Laza \textsc{Lazić}, docent\\ Univerzitet u Beogradu, Matematički fakultet}
+% Ime i afilijacija trećeg člana komisije (opciono)
+% \komisijaC{}
+% Ime i afilijacija četvrtog člana komisije (opciono)
+% \komisijaD{}
+% Datum odbrane (odkomentarisati narednu liniju i upisati datum odbrane ako je poznat)
+% \datumodbrane{}
+
+% Apstrakt na srpskom jeziku (u odabranom pismu)
+\apstr{Apstrakt ide ovde}
+
+% Ključne reči na srpskom jeziku (u odabranom pismu)
+\kljucnereci{programiranje, programski jezici}
+
+\begin{document}
+% ==============================================================================
+% Uvodni deo teze
+\frontmatter
+% ==============================================================================
+% Naslovna strana
+\naslovna
+% Strana sa podacima o mentoru i članovima komisije
+\komisija
+% Strana sa posvetom (u odabranom pismu)
+\posveta{Mami, tati i dedi}
+% Strana sa podacima o disertaciji na srpskom jeziku
+\apstrakt
+% Sadržaj teze
+\tableofcontents*
+
+% ==============================================================================
+% Glavni deo teze
+\mainmatter
+% ==============================================================================
+
+% ------------------------------------------------------------------------------
+\chapter{Uvod}
+% ------------------------------------------------------------------------------
+\chapter{Programski jezik \emph{Rust}}
+\emph{Rust} je statički tipiziran jezik koji ima podršku za više programskih 
+paradigmi, fokusiran na bezbednost i performanse. Od svog nastanka, ovaj jezik
+je dobio veliku pažnju u svetu programiranja, čemu svedoči i činjenica da je 
+\emph{Rust} bio proglašen za "omiljeni programski jezik" već petu godinu za redom 
+u anketi koju je sproveo popularni veb-sajt \emph{Stack Overflow}.
+
+Danas se \emph{Rust} koristi na sve većem broju ozbiljnih projekata, na primer:
+
+\begin{itemize}
+    \item AWS servisima firme Amazon, poput \emph{Lambda}, \emph{EC2}
+        i \emph{Cloudfront},
+    \item U okviru operativnog sistema kompanije Gugl (engl. \emph{Google}) 
+        \emph{ChromeOS},
+    \item Određenim komponentama Majkrosoftove platforme \emph{Azure}, uključujući i 
+        IoT sigurosni servis \emph{edgelet},
+    \item Registru \emph{JavaScript} paketa \emph{npm}, 
+        kod procedura koje prouzrokuju veliko CPU opterećenje,
+    \item Mozilinom veb-brauzeru Fajerfoks (engl. \emph{Firefox}).
+\end{itemize}
+
+\section{Istorijat}
+Programski jezik \emph{Rust} je dizajnirao Grejdon Hor 
+(engl. \emph{Graydon Hoare}) koji je, u to vreme, bio zaposlen u kompaniji 
+Mozila (engl. \emph{Mozilla}).
+Hor je rad na ovom jeziku započeo 2006. godine kao svoj lični projekat, 
+na kojem je samostalno radio naredne tri godine.
+Kada je \emph{Rust} počeo da zreli, tada se u projekat 
+uključila i sama Mozila, koja i dan-danas sponzoriše njegov razvoj.
+Pored zaposlenih Mozile, pošto je u pitanju programski jezik otvorenog koda,
+svoj doprinos je dalo i preko 5000 dobrovoljaca.
+
+Pre nego što se Mozila priključila projektu, \emph{Rust} je izgledao dosta 
+drugačije nego danas. U ovoj, početnoj, fazi, \emph{Rust} je bio čist jezik, 
+tj. nije imao bočne efekte; takođe, postojala je i analiza stanja tipa 
+(engl. \emph{typestate analysis}), koja je omogućavala proveru operacija 
+koje se mogu izvoditi nad specifičnim tipom podataka pri kompajliranju. Za 
+razliku od ove dve osobine, neka dizajnerska rešenja su ostala do danas, kao 
+što je imutabilnost i kontrola pristupa memoriji.
+
+Nedugo nakon priključivanja Mozile 2010. godine, Grejdon Hor napušta projekat 
+2012. godine, što dovodi do određenih novina; \emph{Rust} dobija svoj menadžer 
+paketa \emph{Cargo}, kao i sakupljač otpadaka. Proces \emph{RFD}, inspirisan 
+procesom \emph{PEP} programskog jezika \emph{Python}, se osniva 2014. 
+godine u svrhe strogog kontrolisanja novina u samom jeziku.
+
+\emph{Rust} 1.0, prva "stabilna" verzija \emph{Rust}-a je distribuirana 2015. 
+godine. Od tad, \emph{Rust} ima politiku izbacivanja novih 
+verzija gde se one distribuiraju svakih 6 nedelja, što je "agresivniji" pristup 
+u odnosu na većinu programskih jezika gde je taj period minimalno godinu dana. 
+Ovom odlukom se stavlja akcenat na stabilnost jezika time što će svaka nova 
+verzija biti slična svom prethodniku, dok se kod jezika sa dugim periodom 
+između verzija očekuju velike promene, što može da šteti kompatibilnosti. 
+
+\section{Instalacija}
+Ukoliko se zvaničan veb-sajt programskog jezika \emph{Rust} poseti na 
+klijentu koji ima \emph{Windows} operativni sistem, biće ponuđeni 
+instalacioni fajlovi za 32-bitne i 64-bitne sisteme.
+
+Na \emph{GNU/Linux} operativnim sistemima potrebno je uneti sledeću 
+komandu u terminal:
+
+\begin{verbatim}
+curl --proto '=https' --tlsv1.2 https://sh.rustup.rs 
+ -sSf | sh
+\end{verbatim}
+
+Potvrdu da li se instalacija izvršila uspešno može se dobiti 
+komandom:
+
+\begin{verbatim}
+rustc --version
+\end{verbatim}
+
+Pored samog \emph{Rust} kompajlera, u instalaciju su uključeni i 
+\emph{Cargo} i \emph{rustup}; \emph{rustup} daje mogućnost 
+dobavljanja nove verzije \emph{Rust}-a sa veba, kao i 
+mogućnost deinstalacije komandama:
+
+\begin{verbatim}
+rustup update
+rustup self uninstall
+\end{verbatim}
+
+\section{Korišćenje sistema \emph{Cargo}}
+Pored toga što je menadžer paketa, \emph{Cargo} vrši i automatizaciju 
+kompajliranja. Kreiranje novog projekta uz pomoć ovog sistema izvršava 
+se komandom:
+
+\begin{verbatim}
+cargo new novi_projekat
+\end{verbatim}
+
+Komandom iznad se pravi novi direktorijum \texttt{novi\_projekat} koji 
+sadrži fajl \texttt{Cargo.toml} i direktorijum \texttt{src} u kome 
+postoji fajl \texttt{main.rs}. Takođe, sa novim direktorijumom se 
+inicijalizuje i novi \emph{Git} repozitorijum.
+
+Generisani \texttt{Cargo.toml} fajl izgleda ovako:
+
+\lstinputlisting[language=TOML]{Cargo.toml}
+
+U prvoj liniji koda, \texttt{[package]} označava sekciju koja opisuje 
+paket koji je napravljen; informacije koje se ovde nalaze su dobijene 
+iz varijabli okruženja. Posle oznake \texttt{[dependencies]} se 
+popisuju svi paketi koji su neophodni za rad sa novim paketom, 
+tako da ih \emph{Cargo} može dopremiti.
+
+Po osnovnim podešavanjima, u \texttt{main.rs} fajlu se nalazi 
+\emph{Hello World} program.
+
+\lstinputlisting[language=Rust]{main.rs}
+
+\emph{Cargo} takođe može kompajlirati projekat komandom 
+\texttt{cargo build} ili ga kompajlirati i pokrenuti sa 
+\texttt{cargo run}. Korišćenjem komande \texttt{cargo check} 
+može se proveriti da li se kod kompajlira, bez generisanja 
+izvršnog fajla, što je korisno jer je ova opcija efikasnija 
+od korišćenja pomenute \texttt{build} komande. Kompajliranjem 
+projekta se pravi nova putanja \texttt{target/debug}, gde će se 
+generisati izvršni fajlovi.
+
+\section{Osnovne karakteristike}
+U programskom jeziku \emph{Rust}, kada se nova promenljiva definiše 
+ključnom rečju \texttt{let}, podrazumevano ponašanje je da je ta 
+promenljiva imutabilna, tj. ona se ne može menjati. Razlog ovakvog 
+ponašanja leži u tome što \emph{Rust} teži tome da kompajler može 
+prepoznati eventualne greške u kodu, koje bi se teško mogle uočiti 
+ukoliko bi se one dešavale tokom izvršavanja programa. I pored 
+eventualnih problema, mutabilne promenljive se mogu definisati 
+sa \texttt{let mut}.
+
+Moguće je definisati i konstante ključnom rečju \texttt{const}. 
+Konstante se razlikuju od imutabilnih promeljivih po tome što se 
+mogu definisati u bilo kom opsegu, uključujući i globalni, i po 
+tome što konstante samo mogu imati vrednost konstantnog izraza, 
+ali ne i vrednost izvršavanja funkcije.
+
+Još jedna od opcija je i tzv. sakrivanje (engl. \emph{shadowing}). 
+Sakrivanje je ponovno definisanje promenljivih.
+
+% \section{Primeri korišćenja klasičnih \LaTeX{} elemenata}
+% % Primeri citiranja
+% Ovo je rečenica u kojoj se javlja citat \cite{PetrovicMikic2015}.
+% Još jedan citat \cite{GuSh:243}.
+% % Primeri navodnika
+% Isprobavamo navodnike: "Rekao je da mu se javimo sutra".
+% % Primer referisanja na tabelu (koja se javlja kasnije)
+% U tabeli \ref{tbl:rezultati} koja sledi prikazani su rezultati eksperimenta.
+% % Primer kraćeg ćiriličkog teksta
+% {\cir Ово је пример ћириличког текста који се јавља у латиничком документу.}
+% U ovoj rečenici se javlja jedna reč na {\cir ћирилици}.
+% % Primer korišćenja fusnota
+% Iza ove rečenice sledi fusnota.\footnote{Ovo je fusnota.}
+
+% % Primer dužeg ćirličkog teksta
+% \begin{cirilica}
+%   Ово је мало дужи блок текста исписан ћириличким писмом у оквиру
+%   латиничког документа. Фијуче ветар у шибљу, леди пасаже и куће иза
+%   њих и гунђа у оџацима.
+% \end{cirilica}
+
+% % Primer korišćenja tabele
+% \begin{table}
+% \centering
+% \caption{Rezultati}
+% \label{tbl:rezultati}
+% \begin{tabular}{c>{\centering}p{2cm}c}
+% \toprule
+% 1 & 2 & 3\\\midrule
+% 4 & 5 & 6\\\cmidrule(rl){1-2}
+% 7 & 8 & 8\\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+
+% % Primer korišćenja slike
+% \begin{figure}[!ht]
+%   \centering
+%   \label{fig:grafikon}
+%   \includegraphics[width=0.5\textwidth]{graph.png}
+%   \caption{Grafikon}
+% \end{figure}
+
+
+% % Primer jednostavnije matematičke formule
+% Evo i jedan primer matematičke formule: $e^{i\pi} + 1 = 0$. 
+% % Primer referisanja na sliku
+% Na slici \ref{fig:grafikon} prikazan je jedan grafikon.
+
+% % primer kompleksnije matematičke formule
+% $$
+% \int_a^b f(x)\ \mathrm{d}x \ =_{def}\ \lim_{\max{\Delta x_k \rightarrow 0}} \sum_{k=1}^n f(x_k^*)\Delta x_k
+% $$
+
+% % primer referisanja na poglavlja i strane poglavlja
+% Više detalja biće dato u glavi \ref{chp:razrada} na strani \pageref{chp:razrada}.
+
+% % primer liste
+% Možemo praviti i nabrajanja:
+% \begin{enumerate}
+% \item Analiza 1
+% \item Linearna algebra
+% \item Analitička geometrija
+% \item Osnovi programiranja
+% \end{enumerate}
+
+% ------------------------------------------------------------------------------
+\chapter{Razrada}
+\label{chp:razrada}
+
+% ------------------------------------------------------------------------------
+\chapter{Zaključak}
+
+% ------------------------------------------------------------------------------
+% Literatura
+% ------------------------------------------------------------------------------
+\literatura
+
+% ==============================================================================
+% Završni deo teze i prilozi
+\backmatter
+% ==============================================================================
+
+% ------------------------------------------------------------------------------
+% Biografija kandidata
+\begin{biografija}
+  \textbf{Jovan Dmitrović} (\emph{Gornji Milanovac, 17.11.1995.}) 
+\end{biografija}
+% ------------------------------------------------------------------------------
+
+\end{document}
