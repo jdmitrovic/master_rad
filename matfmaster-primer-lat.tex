@@ -136,7 +136,7 @@ Nedugo nakon priključivanja Mozile 2010. godine, Grejdon Hor napušta projekat
 2012. godine, što dovodi do određenih novina; \emph{Rust} dobija svoj menadžer 
 paketa \emph{Cargo}, kao i sakupljač otpadaka. Proces \emph{RFD}, inspirisan 
 procesom \emph{PEP} programskog jezika \emph{Python}, se osniva 2014. 
-godine u svrhe strogog kontrolisanja novina u samom jeziku.
+godine u svrhu strogog kontrolisanja novina u samom jeziku.
 
 \emph{Rust} 1.0, prva "stabilna" verzija \emph{Rust}-a je distribuirana 2015. 
 godine. Od tad, \emph{Rust} ima politiku izbacivanja novih 
@@ -215,6 +215,8 @@ projekta se pravi nova putanja \texttt{target/debug}, gde će se
 generisati izvršni fajlovi.
 
 \section{Osnovne karakteristike}
+
+\subsection{Imutabilnost}
 U programskom jeziku \emph{Rust}, kada se nova promenljiva definiše 
 ključnom rečju \texttt{let}, podrazumevano ponašanje je da je ta 
 promenljiva imutabilna, tj. ona se ne može menjati. Razlog ovakvog 
@@ -231,7 +233,47 @@ tome što konstante samo mogu imati vrednost konstantnog izraza,
 ali ne i vrednost izvršavanja funkcije.
 
 Još jedna od opcija je i tzv. sakrivanje (engl. \emph{shadowing}). 
-Sakrivanje je ponovno definisanje promenljivih.
+Sakrivanje je ponovno definisanje promenljivih. Za razliku od
+korišćenja ključne reči \texttt{mut}, prilikom sakrivanja je
+moguće promeniti tip promenljive koja se ponovo definiše.
+
+\subsection{Tipovi}
+Programski jezik \emph{Rust} je statički tipiziran jezik, ali
+ne zaheva pisanje tipa uz svaku promenljivu, osim ako je to
+neophodno; primer je korišćenje funkcije \texttt{parse}:
+
+\lstinputlisting[language=Rust]{parse.rs}
+
+Ukoliko se pokuša kompajliranje ovog koda, \texttt{Cargo} će
+pokazati grešku:
+
+\begin{verbatim}
+error[E0282]: type annotations needed
+ --> src/main.rs:2:9
+  |
+2 |     let num = "10".parse().expect("Nije unet broj!");
+  |         ^^^ consider giving `num` a type
+\end{verbatim}
+
+Ova greška se javlja zbog toga što funkcija \texttt{parse}
+prima generičke parametre, te je kompajleru neophodna informacija
+kojeg je tipa promenljiva \texttt{num}.
+
+\emph{Rust} sadrži četiri vrste prostih tipova: cele brojeve,
+brojeve zapisane sa pokretnim zarezom, karaktere i Bulove
+konstante \emph{true} i \emph{false}. Celi brojevi mogu biti
+označeni ili neoznačeni; označeni brojevi su predstavljeni
+tipovima \texttt{i8}, \texttt{i16}, \texttt{i32}, \texttt{i64} i
+\texttt{i128}, gde broj posle karaktera \texttt{i} predstavlja
+veličinu tipa u bitovima. Neoznačeni brojevi su predstavljeni
+analogno označenim, s tim da oni počinju karakterom \texttt{u}.
+Postoje i tipovi \texttt{isize} i \texttt{usize} čija veličina
+zavisi od arhitekture.
+Analogon tipovima \texttt{float} i \texttt{double} iz programskog
+jezika \emph{C} su tipovi \texttt{f32} i \texttt{f64}. Tip
+\texttt{char} je veličine 4 bajta, gde su karakteri predstavljeni
+\emph{Unicode} vrednostima.
+
 
 % \section{Primeri korišćenja klasičnih \LaTeX{} elemenata}
 % % Primeri citiranja
