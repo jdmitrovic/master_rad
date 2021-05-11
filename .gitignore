@@ -6,3 +6,4 @@
 *.xdv
 *.fls
 *.aux
+.auctex-auto/

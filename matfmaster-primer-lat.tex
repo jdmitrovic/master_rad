@@ -36,7 +36,7 @@
 % Naravno, opcije je moguće kombinovati.
 % Npr. \usepackage[b5paper,biblatex]{matfmaster}
 
-\usepackage{noto}
+% \usepackage{sourcecodepro}
 \usepackage{listings}
 \usepackage{listings-rust}
 \input{toml}
@@ -273,6 +273,70 @@ Analogon tipovima \texttt{float} i \texttt{double} iz programskog
 jezika \emph{C} su tipovi \texttt{f32} i \texttt{f64}. Tip
 \texttt{char} je veličine 4 bajta, gde su karakteri predstavljeni
 \emph{Unicode} vrednostima.
+
+Osnovni složeni tipovi u programskom jeziku \emph{Rust} su torke
+i nizovi. Torke se predstavljaju na sledeći način:
+
+\lstinputlisting[language=Rust]{tuples_arrays.rs}
+
+Torke mogu sadržati vrednosti različitog tipa, a može im se pristupiti
+ili korišćenjem novih promenljivih, ili korišćenjem \texttt{.i} sintakse,
+čime se pristupa elementu na $i$-toj poziciji, gde se elementi torke broje
+počevši od $0$.
+
+Nizovi predstavljaju kolekciju vrednosti istog tipa i, poput torki,
+fiksne su veličine. Obeležavaju se sa uglastim zagradama, unutra kojih su elementi
+razdvojeni zarezima.
+
+\subsection{Funkcije}
+Funkcije se definišu na sledeći način:
+
+\lstinputlisting[language=Rust]{functions.rs}
+
+Pored korišćenja ključne reči \texttt{return}, funkcija će vratiti
+vredost poslednje naredbe koja se ne završava delimiterom.
+
+\subsection{Kontrola toka}
+\emph{Rust} podržava klasične načine kontrole toka sa \texttt{if},
+\texttt{while} i \texttt{for} komandama; postoji par dodatnih mogućosti
+koje \emph{Rust} dovoljava:
+
+\begin{itemize}
+  \item \texttt{if} se može koristiti u \texttt{let} naredbama; ali
+        tipovi moraju biti unifikabilni,
+  \item I \texttt{while} i \texttt{for} se mogu naći u okviru \texttt{let}
+        naredbe, s tim da se u telu petlje mora naći \texttt{break} komanda,
+        uz koju se dopisuje povratna vrednosti, analogno korišćenju \texttt{return}
+        komande u funkcijama,
+  \item Ukoliko je potrebno napisati beskonačnu petlju, nije neophodno koristiti
+        \texttt{while} naredbu sa uvek netačnim uslovom, već se može koristiti
+        ključna reč \texttt{loop},
+  \item Iteriranje kroz kolekciju pomoću \texttt{for} petlje se može vršiti ili
+        preko indeksa trenutnog elementa, ili pomoću \texttt{iter} funkcije;
+        za iteriranje od kraja kolekcije, na \texttt{iter} se nadovezuje
+        funkcija \texttt{rev} kao u listingu~\ref{fc:for}.
+\end{itemize}
+
+\lstinputlisting[language=Rust,
+                 caption={Korišćenje \texttt{iter} i \texttt{rev} funkcija},
+                 label={fc:for}]{control_flow.rs}
+
+\subsection{Vlasništvo}
+Koncept \textbf{vlasništva} je novina u odnosu na druge programske jezike; ova
+osobina dozvoljava programskom jeziku \emph{Rust} da funkcioniše bez sakupljača
+otpadaka. Za razliku od sakupljača otpadaka, sistem vlasništva ne utiče ni na
+koji način na izvršavanje programa, jer se postupanje prema skupu pravila
+vlasništva proverava prilikom kompajliranja.
+
+Sistem vlasništva se može svesti na tri pravila:
+
+\begin{enumerate}
+  \item Svaka vrednost u programskom jeziku \emph{Rust} ima promenljivu koja
+        je poseduje.
+  \item U jednom trenutku, za svaku vrednost, postoji tačno jedan vlasnik.
+  \item Kada promenljiva završi svoj životni vek, tada se vrednost
+        koju ta promenljiva poseduje automatski briše iz memorije.
+\end{enumerate}
 
 
 % \section{Primeri korišćenja klasičnih \LaTeX{} elemenata}
