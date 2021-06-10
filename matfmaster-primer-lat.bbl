@@ -55,6 +55,28 @@
       \field{note}{on-line at: \url{https://opensource.google/projects/crosvm}}
       \field{title}{{crosvm}}
     \endentry
+    \entry{firefox_rust}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=499b9a7fb6efd2652c3be19d90d5c001}{%
+           family={Goregaokar},
+           familyi={G\bibinitperiod},
+           given={Manish},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{499b9a7fb6efd2652c3be19d90d5c001}
+      \strng{fullhash}{499b9a7fb6efd2652c3be19d90d5c001}
+      \strng{bibnamehash}{499b9a7fb6efd2652c3be19d90d5c001}
+      \strng{authorbibnamehash}{499b9a7fb6efd2652c3be19d90d5c001}
+      \strng{authornamehash}{499b9a7fb6efd2652c3be19d90d5c001}
+      \strng{authorfullhash}{499b9a7fb6efd2652c3be19d90d5c001}
+      \field{sortinit}{G}
+      \field{sortinithash}{62eb2aa29549e4fdbd3cb154ec5711cb}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{on-line at: \url{https://blog.rust-lang.org/2017/11/14/Fearless-Concurrency-In-Firefox-Quantum.html}}
+      \field{title}{{Fearless Concurrency in Firefox Quantum}}
+      \field{year}{2017}
+    \endentry
     \entry{edgelet}{misc}{}
       \field{sortinit}{I}
       \field{sortinithash}{9417e9a1288a9371e2691d999083ed39}
@@ -105,6 +127,43 @@
       \field{note}{on-line at: \url{https://insights.stackoverflow.com/survey/2020}}
       \field{title}{{Stack Overflow Developer Survey}}
       \field{year}{2020}
+    \endentry
+    \entry{python_pep}{misc}{}
+      \name{author}{4}{}{%
+        {{hash=ff558ff0cd511cc1b20be95eac7f7210}{%
+           family={Warsaw},
+           familyi={W\bibinitperiod},
+           given={Barry},
+           giveni={B\bibinitperiod}}}%
+        {{hash=3da8977e7e0068f6cbea0c57e048dd78}{%
+           family={Hylton},
+           familyi={H\bibinitperiod},
+           given={Jeremy},
+           giveni={J\bibinitperiod}}}%
+        {{hash=5e645712644218d81fb1a1e438955b8e}{%
+           family={Goodger},
+           familyi={G\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+        {{hash=90b0e252e28a3ae865d44f3830798d17}{%
+           family={Coghlan},
+           familyi={C\bibinitperiod},
+           given={Nick},
+           giveni={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{a51e9b911755c3da68ca5db2b112b220}
+      \strng{fullhash}{0380b21ad6350eab9a7de53ef99e81a0}
+      \strng{bibnamehash}{a51e9b911755c3da68ca5db2b112b220}
+      \strng{authorbibnamehash}{a51e9b911755c3da68ca5db2b112b220}
+      \strng{authornamehash}{a51e9b911755c3da68ca5db2b112b220}
+      \strng{authorfullhash}{0380b21ad6350eab9a7de53ef99e81a0}
+      \field{sortinit}{W}
+      \field{sortinithash}{1af34bd8c148ffb32de1494636b49713}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{on-line at: \url{https://www.python.org/dev/peps/pep-0001/}}
+      \field{title}{{PEP 1 -- PEP Purpose and Guidelines}}
+      \field{year}{2001}
     \endentry
   \enddatalist
 \endrefsection

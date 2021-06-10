@@ -2355,9 +2355,11 @@
     <bcf:citekey order="3">crosvm</bcf:citekey>
     <bcf:citekey order="4">edgelet</bcf:citekey>
     <bcf:citekey order="5">npm</bcf:citekey>
-    <bcf:citekey order="6">thanks_rust</bcf:citekey>
-    <bcf:citekey order="7">history_rust</bcf:citekey>
-    <bcf:citekey order="8">stable_rust</bcf:citekey>
+    <bcf:citekey order="6">firefox_rust</bcf:citekey>
+    <bcf:citekey order="7">thanks_rust</bcf:citekey>
+    <bcf:citekey order="8">history_rust</bcf:citekey>
+    <bcf:citekey order="9">python_pep</bcf:citekey>
+    <bcf:citekey order="10">stable_rust</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

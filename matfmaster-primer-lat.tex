@@ -37,6 +37,7 @@
 % Npr. \usepackage[b5paper,biblatex]{matfmaster}
 
 % \usepackage{sourcecodepro}
+\usepackage{hyperref}
 \usepackage{listings}
 \usepackage{listings-rust}
 \input{toml}
@@ -94,26 +95,13 @@
 % ------------------------------------------------------------------------------
 \chapter{Programski jezik \emph{Rust}}
 \emph{Rust} je statički tipiziran jezik koji ima podršku za više programskih
-paradigmi, fokusiran na bezbednost i performanse. Od svog nastanka, ovaj jezik
+paradigmi, kao što su generička i konkurentna, fokusiran na bezbednost i
+performanse. Od svog nastanka, ovaj jezik
 je dobio veliku pažnju u svetu programiranja, čemu svedoči i činjenica da je
 \emph{Rust} bio proglašen za "omiljeni programski jezik" već petu godinu za redom
-u anketi koju je sproveo popularni veb-sajt \emph{Stack Overflow}\cite{mostloved_so}.
+u anketi koju je sproveo popularni veb-stranica \emph{Stack Overflow}~\cite{mostloved_so}.
 
-Danas se \emph{Rust} koristi na sve većem broju ozbiljnih projekata, na primer:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Danas se \emph{Rust} koristi na velikom broju ozbiljnih projekata. Na primer:
 
 \begin{itemize}
     \item AWS servisima firme Amazon, poput \emph{Lambda}, \emph{EC2}
@@ -121,49 +109,50 @@ Danas se \emph{Rust} koristi na sve većem broju ozbiljnih projekata, na primer:
     \item U okviru operativnog sistema kompanije Gugl (engl. \emph{Google})
         \emph{ChromeOS}~\cite{crosvm},
     \item Određenim komponentama Majkrosoftove platforme \emph{Azure}, uključujući i
-        IoT sigurosni servis \emph{edgelet}~\cite{edgelet},
+        IoT sigurnosni servis \emph{edgelet}~\cite{edgelet},
     \item Registru \emph{JavaScript} paketa \emph{npm},
         kod procedura koje prouzrokuju veliko CPU opterećenje~\cite{npm},
-    \item Mozilinom veb-brauzeru Fajerfoks (engl. \emph{Firefox}).
+    \item Mozilinom veb-brauzeru Fajerfoks (engl. \emph{Firefox})~\cite{firefox_rust}.
 \end{itemize}
 
-\section{Istorijat}
+\section{Razvoj jezika \emph{Rust}}
 Programski jezik \emph{Rust} je dizajnirao Grejdon Hor
 (engl. \emph{Graydon Hoare}) koji je, u to vreme, bio zaposlen u kompaniji
 Mozila (engl. \emph{Mozilla}).
 Hor je rad na ovom jeziku započeo 2006. godine kao svoj lični projekat,
 na kojem je samostalno radio naredne tri godine.
-Kada je \emph{Rust} počeo da zreli, tada se u projekat
-uključila i sama Mozila, koja i dan-danas sponzoriše njegov razvoj.
+Sredinom 2010. godine, u projekat se
+uključila i sama Mozila, koja i danas sponzoriše njegov razvoj.
 Pored zaposlenih Mozile, pošto je u pitanju programski jezik otvorenog koda,
 svoj doprinos je dalo i preko 5000 dobrovoljaca~\cite{thanks_rust}.
 
 Pre nego što se Mozila priključila projektu, \emph{Rust} je izgledao dosta
-drugačije nego danas. U ovoj, početnoj, fazi, \emph{Rust} je bio čist jezik,
-tj. nije imao bočne efekte; takođe, postojala je i analiza stanja tipa
+drugačije nego danas. U svojoj početnoj fazi, \emph{Rust} je bio čist funkcionalni jezik,
+tj\. nije imao bočne efekte; takođe, postojala je i analiza stanja tipa
 (engl. \emph{typestate analysis}), koja je omogućavala proveru operacija
-koje se mogu izvoditi nad specifičnim tipom podataka pri kompajliranju. Za
+koje se mogu izvoditi nad specifičnim tipom podataka pri kompiliranju. Za
 razliku od ove dve osobine, neka dizajnerska rešenja su ostala do danas, kao
 što je imutabilnost i kontrola pristupa memoriji.~\cite{history_rust}
 
-Nedugo nakon priključivanja Mozile 2010. godine, Grejdon Hor napušta projekat
-2012. godine, što dovodi do određenih novina; \emph{Rust} dobija svoj menadžer
-paketa \emph{Cargo}, kao i sakupljač otpadaka. Proces \emph{RFD}, inspirisan
-procesom \emph{PEP} programskog jezika \emph{Python}, se osniva 2014.
-godine u svrhu strogog kontrolisanja novina u samom jeziku.
+Nedugo nakon priključivanja Mozile, Grejdon Hor napušta projekat
+2012\. godine. U ovom periodu \emph{Rust} dobija svoj menadžer
+paketa \emph{Cargo} zajedno sa repozitorijumom paketa \url{crates.io}.
+Proces \emph{RFC}, inspirisan procesom \emph{PEP} programskog jezika
+\emph{Python}~\cite{python_pep}, se
+osniva 2014\. godine u svrhu strogog kontrolisanja novina u samom jeziku.
 
-\emph{Rust} 1.0, prva "stabilna" verzija \emph{Rust}-a je distribuirana 2015.
-godine~\cite{stable_rust}. Od tad, \emph{Rust} ima politiku izbacivanja novih
-verzija gde se one distribuiraju svakih 6 nedelja, što je "agresivniji" pristup
+Prva verzija programskog jezika \emph{Rust}, odnosno \emph{Rust} 1.0, objavljena je 2015.
+godine~\cite{stable_rust}. Od tad, u \emph{Rust} zajednici je formiran model izbacivanja novih
+verzija gde se one distribuiraju svakih 6 nedelja, što je dinamičniji pristup
 u odnosu na većinu programskih jezika gde je taj period minimalno godinu dana.
 Ovom odlukom se stavlja akcenat na stabilnost jezika time što će svaka nova 
 verzija biti slična svom prethodniku, dok se kod jezika sa dugim periodom 
 između verzija očekuju velike promene, što može da šteti kompatibilnosti. 
 
-\section{Instalacija}
-Ukoliko se zvaničan veb-sajt programskog jezika \emph{Rust} poseti na 
-klijentu koji ima \emph{Windows} operativni sistem, biće ponuđeni 
-instalacioni fajlovi za 32-bitne i 64-bitne sisteme.
+\section{Instalacija i korišćenje sistema \emph{Cargo}}
+Ukoliko se zvaničan veb-stranica programskog jezika \emph{Rust} poseti koristeći
+mašinu koja ima \emph{Windows} operativni sistem, biće ponuđene
+instalacione datoteke za 32-bitne i 64-bitne \emph{Windows} sisteme.
 
 Na \emph{GNU/Linux} operativnim sistemima potrebno je uneti sledeću 
 komandu u terminal:
@@ -172,15 +161,16 @@ komandu u terminal:
 curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 \end{verbatim}
 
-Potvrdu da li se instalacija izvršila uspešno može se dobiti 
+\noindent
+Potvrdu da li se instalacija uspešno izvršila uspešno može se dobiti
 komandom:
 
 \begin{verbatim}
 rustc --version
 \end{verbatim}
 
-Pored samog \emph{Rust} kompajlera, u instalaciju su uključeni i 
-\emph{Cargo} i \emph{rustup}; \emph{rustup} daje mogućnost 
+Pored samog \emph{Rust} kompilatora, u instalaciju su uključeni i
+sistem \emph{Cargo} i alat \emph{rustup}. Alat \emph{rustup} daje mogućnost
 dobavljanja nove verzije \emph{Rust}-a sa veba, kao i 
 mogućnost deinstalacije komandama:
 
@@ -189,9 +179,8 @@ rustup update
 rustup self uninstall
 \end{verbatim}
 
-\section{Korišćenje sistema \emph{Cargo}}
-Pored toga što je menadžer paketa, \emph{Cargo} vrši i automatizaciju 
-kompajliranja. Kreiranje novog projekta uz pomoć ovog sistema izvršava 
+Pored toga što je menadžer paketa, \emph{Cargo} vrši i automatizaciju
+kompiliranja. Kreiranje novog projekta uz pomoć ovog sistema izvršava
 se komandom:
 
 \begin{verbatim}
@@ -199,53 +188,51 @@ cargo new novi_projekat
 \end{verbatim}
 
 Komandom iznad se pravi novi direktorijum \texttt{novi\_projekat} koji 
-sadrži fajl \texttt{Cargo.toml} i direktorijum \texttt{src} u kome 
-postoji fajl \texttt{main.rs}. Takođe, sa novim direktorijumom se 
+sadrži konfiguracionu datoteku \texttt{Cargo.toml} i direktorijum \texttt{src} koji treba da sadrži izvorne
+datoteke obeležene ekstenzijom \emph{.rs}
+i u kojem se inicijalno nalazi datoteka \emph{main.rs}. Takođe, sa novim direktorijumom se
 inicijalizuje i novi \emph{Git} repozitorijum.
 
-Generisani \texttt{Cargo.toml} fajl izgleda ovako:
+Generisana \texttt{Cargo.toml} datoteka izgleda ovako:
 
 \lstinputlisting[language=TOML]{Cargo.toml}
 
 U prvoj liniji koda, \texttt{[package]} označava sekciju koja opisuje 
-paket koji je napravljen; informacije koje se ovde nalaze su dobijene 
+paket koji je napravljen. Informacije koje se ovde nalaze su dobijene
 iz varijabli okruženja. Posle oznake \texttt{[dependencies]} se 
 popisuju svi paketi koji su neophodni za rad sa novim paketom, 
 tako da ih \emph{Cargo} može dopremiti.
 
-Po osnovnim podešavanjima, u \texttt{main.rs} fajlu se nalazi 
+Po osnovnim podešavanjima, u \texttt{main.rs} datoteci se nalazi
 \emph{Hello World} program.
 
 \lstinputlisting[language=Rust]{main.rs}
 
-\emph{Cargo} takođe može kompajlirati projekat komandom 
-\texttt{cargo build} ili ga kompajlirati i pokrenuti sa 
+\emph{Cargo} prevodi projekat komandom
+\texttt{cargo build} a prevodi ga i pokreće
 \texttt{cargo run}. Korišćenjem komande \texttt{cargo check} 
-može se proveriti da li se kod kompajlira, bez generisanja 
-izvršnog fajla, što je korisno jer je ova opcija efikasnija 
-od korišćenja pomenute \texttt{build} komande. Kompajliranjem 
+može se proveriti da li se kôd kompilira, bez generisanja
+izvršne datoteke, što je korisno jer je ova opcija efikasnija
+od korišćenja pomenute \texttt{build} komande. Kompiliranjem
 projekta se pravi nova putanja \texttt{target/debug}, gde će se 
-generisati izvršni fajlovi.
+generisati izvršne datoteke.
 
-\section{Osnovne karakteristike}
+\section{Osnovne karakteristike jezika}
 
-\subsection{Imutabilnost}
-U programskom jeziku \emph{Rust}, kada se nova promenljiva definiše 
-ključnom rečju \texttt{let}, podrazumevano ponašanje je da je ta 
-promenljiva imutabilna, tj. ona se ne može menjati. Razlog ovakvog 
-ponašanja leži u tome što \emph{Rust} teži tome da kompajler može 
-prepoznati eventualne greške u kodu, koje bi se teško mogle uočiti 
-ukoliko bi se one dešavale tokom izvršavanja programa. I pored 
-eventualnih problema, mutabilne promenljive se mogu definisati 
-sa \texttt{let mut}.
+\subsection{Promenljive i konstante}
+Promenljive se mogu definisati korišćenjem kljucne reci \texttt{let}, čime se podrazumeva da
+je takva promenljiva zapravo imutabilna, tj\. ona se ne može menjati. Imutabilnost
+promenljivih omogućava kompilatoru da prepozna razne vrste grešaka već u fazi kompilacije.
+Ipak, Rust dozvoljava i definisanje mutabilnih promenljivih koriscenjem ključnih reci \texttt{let mut}.
 
-Moguće je definisati i konstante ključnom rečju \texttt{const}. 
+Pored promenljivih, \emph{Rust} dozvoljava i definisanje konstanti
+upotrebom ključne reči \texttt{const}.
 Konstante se razlikuju od imutabilnih promeljivih po tome što se 
 mogu definisati u bilo kom opsegu, uključujući i globalni, i po 
 tome što konstante samo mogu imati vrednost konstantnog izraza, 
 ali ne i vrednost izvršavanja funkcije.
 
-Još jedna od opcija je i tzv. sakrivanje (engl. \emph{shadowing}). 
+U okviru jezika dozvoljeno je i tzv\. sakrivanje (engl. \emph{shadowing}).
 Sakrivanje je ponovno definisanje promenljivih. Za razliku od
 korišćenja ključne reči \texttt{mut}, prilikom sakrivanja je
 moguće promeniti tip promenljive koja se ponovo definiše.
@@ -257,7 +244,8 @@ neophodno; primer je korišćenje funkcije \texttt{parse}:
 
 \lstinputlisting[language=Rust]{parse.rs}
 
-Ukoliko se pokuša kompajliranje ovog koda, \texttt{Cargo} će
+\noindent
+Ukoliko se pokuša prevođenje ovog koda, \emph{Cargo} će
 pokazati grešku:
 
 \begin{verbatim}
@@ -268,12 +256,13 @@ error[E0282]: type annotations needed
   |         ^^^ consider giving `num` a type
 \end{verbatim}
 
+\noindent
 Ova greška se javlja zbog toga što funkcija \texttt{parse}
-prima generičke parametre, te je kompajleru neophodna informacija
+prima generičke parametre, te je kompilatoru neophodna informacija
 kojeg je tipa promenljiva \texttt{num}.
 
 \emph{Rust} sadrži četiri vrste prostih tipova: cele brojeve,
-brojeve zapisane sa pokretnim zarezom, karaktere i Bulove
+brojeve zapisane u pokretnom zarezu, karaktere i Bulove
 konstante \emph{true} i \emph{false}. Celi brojevi mogu biti
 označeni ili neoznačeni; označeni brojevi su predstavljeni
 tipovima \texttt{i8}, \texttt{i16}, \texttt{i32}, \texttt{i64} i
@@ -284,11 +273,12 @@ Postoje i tipovi \texttt{isize} i \texttt{usize} čija veličina
 zavisi od arhitekture.
 Analogon tipovima \texttt{float} i \texttt{double} iz programskog
 jezika \emph{C} su tipovi \texttt{f32} i \texttt{f64}. Tip
-\texttt{char} je veličine 4 bajta, gde su karakteri predstavljeni
+\texttt{char} je veličine četiri bajta, gde su karakteri predstavljeni
 \emph{Unicode} vrednostima.
 
 Osnovni složeni tipovi u programskom jeziku \emph{Rust} su torke
-i nizovi. Torke se predstavljaju na sledeći način:
+i nizovi. Torke se predstavljaju na navođenjem liste tipova, razdvojene zarazima u okviru
+zagrada. Naredni primer ilustruje upotrebu torki:
 
 \lstinputlisting[language=Rust]{tuples_arrays.rs}
 
@@ -308,20 +298,27 @@ Literalima se veličina zna pre kompilacije i njihov sadržaj se ne može promen
 pa se one mogu čuvati na steku, dok se niske promenljive dužine moraju čuvati na hipu.
 
 \subsection{Funkcije}
-Funkcije se definišu na sledeći način:
+Funkcije se definišu ključnom reči \texttt{fn}, navođenjem imena funkcije za kojim sledi
+lista parametara i njihovih tipova u zagradama, razdvojenih zarezima. Nakon liste parametara,
+moguće je napisati tip povratne vrednosti posle oznake \texttt{->}. Ukoliko povratni tip izostane,
+kompilator će ga automatski izvesti. Na kraju se nalazi telo funkcije između vitičastih zagrada.
+Primer funkcije koja izračunava zbir kvadrata dva broja je dat u okviru listinga~\ref{fn:zbir_kvadrata}.
 
-\lstinputlisting[language=Rust]{functions.rs}
+\lstinputlisting[language=Rust,
+                 caption={Funkcija koja izračunava zbir kvadrata},
+                 label={fn:zbir_kvadrata}]{functions.rs}
 
-Pored korišćenja ključne reči \texttt{return}, funkcija će vratiti
-vredost poslednje naredbe koja se ne završava delimiterom.
+\noindent
+Pored standardnog korišćenja ključne reči \texttt{return} kao oznake za povratnu vrednost funkcije,
+funkcija će vratiti vrednost poslednje naredbe koja se ne završava delimiterom.
 
 \subsection{Kontrola toka}
 \emph{Rust} podržava klasične načine kontrole toka sa \texttt{if},
-\texttt{while} i \texttt{for} komandama; postoji par dodatnih mogućosti
+\texttt{while} i \texttt{for} komandama. Postoji par dodatnih mogućosti
 koje \emph{Rust} dovoljava:
 
 \begin{itemize}
-  \item \texttt{if} se može koristiti u \texttt{let} naredbama; ali
+  \item Izraz \texttt{if} se može koristiti u \texttt{let} naredbama; ali
         tipovi moraju biti unifikabilni,
   \item I \texttt{while} i \texttt{for} se mogu naći u okviru \texttt{let}
         naredbe, s tim da se u telu petlje mora naći \texttt{break} komanda,
@@ -331,8 +328,8 @@ koje \emph{Rust} dovoljava:
         \texttt{while} naredbu sa uvek netačnim uslovom, već se može koristiti
         ključna reč \texttt{loop},
   \item Iteriranje kroz kolekciju pomoću \texttt{for} petlje se može vršiti ili
-        preko indeksa trenutnog elementa, ili pomoću \texttt{iter} funkcije;
-        za iteriranje od kraja kolekcije, na \texttt{iter} se nadovezuje
+        preko indeksa trenutnog elementa, ili pomoću \texttt{iter} funkcije.
+        Za iteriranje od kraja kolekcije, na \texttt{iter} se nadovezuje
         funkcija \texttt{rev} kao u listingu~\ref{fc:for}.
 \end{itemize}
 
@@ -341,11 +338,11 @@ koje \emph{Rust} dovoljava:
                  label={fc:for}]{control_flow.rs}
 
 \subsection{Vlasništvo}
-Koncept \textbf{vlasništva} je novina u odnosu na druge programske jezike; ova
+Koncept \textbf{vlasništva} je novina u odnosu na druge programske jezike. Ova
 osobina dozvoljava programskom jeziku \emph{Rust} da funkcioniše bez sakupljača
 otpadaka. Za razliku od sakupljača otpadaka, sistem vlasništva ne utiče ni na
 koji način na izvršavanje programa, jer se postupanje prema skupu pravila
-vlasništva proverava prilikom kompajliranja.
+vlasništva proverava prilikom kompiliranja.
 
 Sistem vlasništva se može svesti na tri pravila:
 
@@ -359,16 +356,30 @@ Sistem vlasništva se može svesti na tri pravila:
 
 Primer funkcionisanja ovog sistema se može dati uz pomoć pomenutih niski promenljive dužine,
 odnosno tipa \texttt{String}: ako se, kao u listingu~\ref{vl:str}, pokuša
-ulančavanje pokazivača na istu vrednost, \texttt{Rust} kompajler će prikazati
-grešku, jer promenljiva \texttt{niska1} vlasništvo vrednosti \emph{Hello World!}
-daje promenljivoj \texttt{niska2}, čime programer gubi mogućnost korišćenja
-promenljive \texttt{niska1} bez njenog redefinisanja.
+ulančavanje pokazivača na istu vrednost, \texttt{Rust} kompilator će prikazati sledeću grešku:
+
+\begin{verbatim}
+error[E0382]: borrow of moved value: `niska1`
+ --> src/main.rs:6:32
+  |
+2 |     let niska1 = String::from("Hello World!");
+  |         ------ move occurs because `niska1` has type `String`, which does not implement the `Copy` trait
+3 |     let niska2 = niska1;
+  |                  ------ value moved here
+...
+6 |     println!("Prva niska: {}", niska1);
+  |                                ^^^^^^ value borrowed here after move
+\end{verbatim}
+
+Kompilator ukazuje na promenu poseda vrednosti na koju pokazuje \texttt{niska1}, čime promenljiva
+\texttt{niska1} gubi mogućnost manipulisanja vrednošću nad kojom je imala vlasništvo, time poštujući
+pravilo da vrednost pripada samo jednoj promenljivoj.
 
 \lstinputlisting[language=Rust,
                  caption={Prenos vlasništva između promenljivih},
                  label={vl:str}]{fn_ownership.rs}
 
-Može se uočiti da je kopiranje promenljive \texttt{niska1} plitko; duboko kopiranje promenljivih
+Može se uočiti da je kopiranje promenljive \texttt{niska1} plitko. Duboko kopiranje promenljivih
 se odvija pomoću metoda \texttt{clone} koja je implementirana za tip \texttt{String}.
 
 % Pomenuti kasnije Traits, i Trait Copy koji omogućava prostim tipovima da automatski koriste clone
@@ -379,15 +390,14 @@ Međutim, pozvana funkcija može \emph{vratiti} vlasništvo nad promenljivom tak
 promenljivu kao povratnu vrednost: time se vlasništvo te promenljive vraća pozivaocu te funkcije.
 Promenljiva koja je vraćena može biti bilo koja promenljiva nad kojom ta funkcija ima vlasništvo,
 uključujući i promenljive koje ne potiču odatle (dakle, i sami parametri funkcije).
- wv
+
 \subsection{Pozajmljivanje}
 Proces davanja i preuzimanja vlasništva može da bude nepogodan u nekim slučajevima; zbog toga,
 postoji i opcija \textbf{pozajmljivanja} (engl. \emph{borrowing}). Pozajmljivanje omogućava
 funkcijama da pozajme vrednosti promeljivih, koje se moraju vratiti vlasniku po završetku
 izvršavanja te funkcije, što znači da se pozajmljene promenljive mogu kasnije koristiti, kao u
-listingu \ref{poz:imut}, gde će izvršavanje ovog koda ispisati: \texttt{Niska "Hello world"
+listingu~\ref{poz:imut}, gde će izvršavanje ovog koda ispisati: \texttt{Niska "Hello world"
 ima 2 reci}.
-
 
 \lstinputlisting[language=Rust,
                  caption={Pozajmljivanje vrednosti promenljivih},
@@ -400,8 +410,8 @@ u drugim programskim jezicima, može postojati samo jedna mutabilna referenca za
 promenljivu u istom dosegu u kojem ne sme postojati ni imutabilna referenca te promenljive.
 
 U \emph{Rust}-u je nemoguće napraviti ``zalutalu'' referencu (engl. \emph{dangling reference}),
-tj.\ referencu koja referiše na prostor u memoriji koji se već oslobodio; prilikom kompajliranja
-koda, kompajler će dati preporuku za korišćenje statičke reference uz pomoć sintakse
+tj.\ referencu koja referiše na prostor u memoriji koji se već oslobodio; prilikom kompiliranja
+koda, kompilator će dati preporuku za korišćenje statičke reference uz pomoć sintakse
 \texttt{\&'static}.
 
 \subsection{Strukture}
@@ -450,7 +460,7 @@ listingu~\ref{enum:match}.
 caption={Korišćenje \texttt{match} semantike},
 label={enum:match}]{enum_match.rs}
 
-Ukoliko se promenljiva ne otpakuje, kompajler će ispisati odgovarajuću grešku. Slično, greška će
+Ukoliko se promenljiva ne otpakuje, kompilator će ispisati odgovarajuću grešku. Slično, greška će
 se ispisati i kada naredba \texttt{match} ne pokrije sve moguće vrste enumeratora, gde je moguće
 koristiti \texttt{\_} notaciju za obeležavanje podrazumevane grane.
 
