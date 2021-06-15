@@ -18,7 +18,7 @@ fn main() {
         String::from("mi15123")
     );
     let student2 = Student {
-        ime: String::from("Marko"),
+        indeks: String::from("mr14321"),
         ..student1
     };
 }

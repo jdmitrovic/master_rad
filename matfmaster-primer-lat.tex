@@ -36,11 +36,20 @@
 % Naravno, opcije je moguće kombinovati.
 % Npr. \usepackage[b5paper,biblatex]{matfmaster}
 
-% \usepackage{sourcecodepro}
+% \usepackage{droid}
 \usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+    citecolor=blue,
+}
 \usepackage{listings}
 \usepackage{listings-rust}
-\input{toml}
+\lstset{
+  style=boxed,
+}
 % Datoteka sa literaturom u BibTex tj. BibLaTeX/Biber formatu
 \bib{matfmaster-primer}
 
@@ -94,12 +103,11 @@
 \chapter{Uvod}
 % ------------------------------------------------------------------------------
 \chapter{Programski jezik \emph{Rust}}
-\emph{Rust} je statički tipiziran jezik koji ima podršku za više programskih
-paradigmi, kao što su generička i konkurentna, fokusiran na bezbednost i
+\emph{Rust} je statički tipiziran jezik  fokusiran na bezbednost i
 performanse. Od svog nastanka, ovaj jezik
 je dobio veliku pažnju u svetu programiranja, čemu svedoči i činjenica da je
 \emph{Rust} bio proglašen za "omiljeni programski jezik" već petu godinu za redom
-u anketi koju je sproveo popularni veb-stranica \emph{Stack Overflow}~\cite{mostloved_so}.
+u anketi koju je sprovela popularna veb-stranica \emph{Stack Overflow}~\cite{mostloved_so}.
 
 Danas se \emph{Rust} koristi na velikom broju ozbiljnih projekata. Na primer:
 
@@ -128,7 +136,7 @@ svoj doprinos je dalo i preko 5000 dobrovoljaca~\cite{thanks_rust}.
 
 Pre nego što se Mozila priključila projektu, \emph{Rust} je izgledao dosta
 drugačije nego danas. U svojoj početnoj fazi, \emph{Rust} je bio čist funkcionalni jezik,
-tj\. nije imao bočne efekte; takođe, postojala je i analiza stanja tipa
+tj. nije imao bočne efekte; takođe, postojala je i analiza stanja tipa
 (engl. \emph{typestate analysis}), koja je omogućavala proveru operacija
 koje se mogu izvoditi nad specifičnim tipom podataka pri kompiliranju. Za
 razliku od ove dve osobine, neka dizajnerska rešenja su ostala do danas, kao
@@ -150,42 +158,42 @@ verzija biti slična svom prethodniku, dok se kod jezika sa dugim periodom
 između verzija očekuju velike promene, što može da šteti kompatibilnosti. 
 
 \section{Instalacija i korišćenje sistema \emph{Cargo}}
-Ukoliko se zvaničan veb-stranica programskog jezika \emph{Rust} poseti koristeći
+Ukoliko se zvanična veb-stranica programskog jezika \emph{Rust} poseti koristeći
 mašinu koja ima \emph{Windows} operativni sistem, biće ponuđene
 instalacione datoteke za 32-bitne i 64-bitne \emph{Windows} sisteme.
 
 Na \emph{GNU/Linux} operativnim sistemima potrebno je uneti sledeću 
 komandu u terminal:
 
-\begin{verbatim}
+\begin{lstlisting}[language={}, style=text]
 curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
-\end{verbatim}
+\end{lstlisting}
 
 \noindent
-Potvrdu da li se instalacija uspešno izvršila uspešno može se dobiti
-komandom:
+Potvrdu da li se instalacija uspešno izvršila uspešno može se dobiti proverom verzije
+\emph{Rust} kompilatora komandom:
 
-\begin{verbatim}
+\begin{lstlisting}[language={}, style=text]
 rustc --version
-\end{verbatim}
+\end{lstlisting}
 
 Pored samog \emph{Rust} kompilatora, u instalaciju su uključeni i
 sistem \emph{Cargo} i alat \emph{rustup}. Alat \emph{rustup} daje mogućnost
 dobavljanja nove verzije \emph{Rust}-a sa veba, kao i 
 mogućnost deinstalacije komandama:
 
-\begin{verbatim}
+\begin{lstlisting}[language={}, style=text]
 rustup update
 rustup self uninstall
-\end{verbatim}
+\end{lstlisting}
 
 Pored toga što je menadžer paketa, \emph{Cargo} vrši i automatizaciju
-kompiliranja. Kreiranje novog projekta uz pomoć ovog sistema izvršava
+prevođenja. Kreiranje novog projekta uz pomoć ovog sistema izvršava
 se komandom:
 
-\begin{verbatim}
+\begin{lstlisting}[language={}, style=text]
 cargo new novi_projekat
-\end{verbatim}
+\end{lstlisting}
 
 Komandom iznad se pravi novi direktorijum \texttt{novi\_projekat} koji 
 sadrži konfiguracionu datoteku \texttt{Cargo.toml} i direktorijum \texttt{src} koji treba da sadrži izvorne
@@ -217,7 +225,29 @@ od korišćenja pomenute \texttt{build} komande. Kompiliranjem
 projekta se pravi nova putanja \texttt{target/debug}, gde će se 
 generisati izvršne datoteke.
 
+Kompilator ima dva profila: \texttt{dev} profil, koji se koristi za prevođenje koda tokom razvoja, i
+\texttt{release} profil za prevođenje završne verzije programa, spremne za isporuku. Razlika između
+profila ogleda se u nivou optimizacije izvršnog koda: koristeći \texttt{dev} profil, kompilator
+će koristiti minimalan nivo optimizacije zarad bržeg prevođenja, dok se za \texttt{release} profil
+projekat prevodi sa maksimalnim nivoom optimizacije zarad dobijanja najboljih performansi
+programa. Podrazumevano ponašanje je da se koristi \texttt{dev} profil pokretanjem
+komande \texttt{cargo build}, dok se prevođenje u \texttt{release} profilu izvršava komandom:
+
+\begin{lstlisting}[language={}, style=text]
+cargo build --release
+\end{lstlisting}
+
 \section{Osnovne karakteristike jezika}
+U nastavku će biti opisane bitne karakteristike programskog jezika \emph{Rust}, koje nisu nužno
+u okviru jednog stila programiranja. Zastupljeno je nekoliko programskih paradigmi:
+
+\begin{itemize}
+    \item Imperativna,
+    \item Objektno-orijentisana, gde se umesto klasa koriste svojstva (engl. \emph{traits}),
+    \item Generička, u vidu generičkih tipova,
+    \item Funkcionalna, u vidu iteratora i zatvorenja~\cite{functional_rust},
+    \item Konkurentna~\cite{concurrent_rust}.
+\end{itemize}
 
 \subsection{Promenljive i konstante}
 Promenljive se mogu definisati korišćenjem kljucne reci \texttt{let}, čime se podrazumeva da
@@ -248,13 +278,13 @@ neophodno; primer je korišćenje funkcije \texttt{parse}:
 Ukoliko se pokuša prevođenje ovog koda, \emph{Cargo} će
 pokazati grešku:
 
-\begin{verbatim}
+\begin{lstlisting}[language={}, style=text]
 error[E0282]: type annotations needed
  --> src/main.rs:2:9
   |
 2 |     let num = "10".parse().expect("Nije unet broj!");
   |         ^^^ consider giving `num` a type
-\end{verbatim}
+\end{lstlisting}
 
 \noindent
 Ova greška se javlja zbog toga što funkcija \texttt{parse}
@@ -342,7 +372,7 @@ Koncept \textbf{vlasništva} je novina u odnosu na druge programske jezike. Ova
 osobina dozvoljava programskom jeziku \emph{Rust} da funkcioniše bez sakupljača
 otpadaka. Za razliku od sakupljača otpadaka, sistem vlasništva ne utiče ni na
 koji način na izvršavanje programa, jer se postupanje prema skupu pravila
-vlasništva proverava prilikom kompiliranja.
+vlasništva proverava prilikom prevođenja.
 
 Sistem vlasništva se može svesti na tri pravila:
 
@@ -358,18 +388,19 @@ Primer funkcionisanja ovog sistema se može dati uz pomoć pomenutih niski prome
 odnosno tipa \texttt{String}: ako se, kao u listingu~\ref{vl:str}, pokuša
 ulančavanje pokazivača na istu vrednost, \texttt{Rust} kompilator će prikazati sledeću grešku:
 
-\begin{verbatim}
+\begin{lstlisting}[language={}, style=text]
 error[E0382]: borrow of moved value: `niska1`
  --> src/main.rs:6:32
   |
 2 |     let niska1 = String::from("Hello World!");
-  |         ------ move occurs because `niska1` has type `String`, which does not implement the `Copy` trait
+  |         ------ move occurs because `niska1` has type `String`, which
+does not implement the `Copy` trait
 3 |     let niska2 = niska1;
   |                  ------ value moved here
 ...
 6 |     println!("Prva niska: {}", niska1);
   |                                ^^^^^^ value borrowed here after move
-\end{verbatim}
+\end{lstlisting}
 
 Kompilator ukazuje na promenu poseda vrednosti na koju pokazuje \texttt{niska1}, čime promenljiva
 \texttt{niska1} gubi mogućnost manipulisanja vrednošću nad kojom je imala vlasništvo, time poštujući
@@ -395,8 +426,9 @@ uključujući i promenljive koje ne potiču odatle (dakle, i sami parametri funk
 Proces davanja i preuzimanja vlasništva može da bude nepogodan u nekim slučajevima; zbog toga,
 postoji i opcija \textbf{pozajmljivanja} (engl. \emph{borrowing}). Pozajmljivanje omogućava
 funkcijama da pozajme vrednosti promeljivih, koje se moraju vratiti vlasniku po završetku
-izvršavanja te funkcije, što znači da se pozajmljene promenljive mogu kasnije koristiti, kao u
-listingu~\ref{poz:imut}, gde će izvršavanje ovog koda ispisati: \texttt{Niska "Hello world"
+izvršavanja te funkcije, što znači da se pozajmljene promenljive mogu kasnije koristiti.
+Promenljive se pozajmljuju koristeći simbol \texttt{\&}, što je ilustrovano na
+listingu~\ref{poz:imut}, gde će izvršavanje koda ispisati: \texttt{Niska "Hello world"
 ima 2 reci}.
 
 \lstinputlisting[language=Rust,
@@ -410,7 +442,7 @@ u drugim programskim jezicima, može postojati samo jedna mutabilna referenca za
 promenljivu u istom dosegu u kojem ne sme postojati ni imutabilna referenca te promenljive.
 
 U \emph{Rust}-u je nemoguće napraviti ``zalutalu'' referencu (engl. \emph{dangling reference}),
-tj.\ referencu koja referiše na prostor u memoriji koji se već oslobodio; prilikom kompiliranja
+tj.\ referencu koja referiše na prostor u memoriji koji se već oslobodio; prilikom prevođenja
 koda, kompilator će dati preporuku za korišćenje statičke reference uz pomoć sintakse
 \texttt{\&'static}.
 
@@ -422,9 +454,11 @@ sintaksu, kao u listingu~\ref{stc:sdef}:
                  caption={Kreiranje novih struktura},
                  label={stc:sdef}]{structure_def.rs}
 
-U primeru iznad se može primetiti kako se mogu definisati nove instance strukture gde se imena
-polja poklapaju sa promenljivima funkcije i kako definisati nove instance koje imaju neka polja
-ista kao i već definisana instanca, pri čemu se mogu neka polja mogu postaviti drugačije.
+Sa listinga~\ref{stc:sdef} se može primetiti kako se uz pomoć oznake \texttt{\ldots} mogu definisati
+nove instance strukture gde se imena
+polja poklapaju sa imenima parametara funkcije. U istom primeru će instanca \texttt{student2}
+imati isto ime kao i instanca \texttt{student1}, ali će polje \texttt{indeks} imati
+drugačiju vrednost.
 
 Strukture se mogu i definisati putem torki, s tim da njihova polja neće imati imena, već će
 im se pristupati \texttt{.} notacijom. Strukture definisane na ovaj način ne moraju nužno imati
@@ -442,8 +476,8 @@ Mogu se implementirati i metodi koji ne uzimaju instancu kao argument; njima se 
 
 \subsection{Enumeratori}
 Enumeratori u programskom jeziku \emph{Rust} imaju dodatne mogućnosti u odnosu na enumeratore u
-drugim programskim jezicima: svaki ``tip'' u enumeratoru može se posmatrati kao torka vrednosti;
-ovime se, na primer, postiže ponašanje tipa \texttt{Option} koji premošćava izostanak vrednosti
+drugim programskim jezicima: svaki ``tip'' u enumeratoru može se posmatrati kao torka vrednosti.
+Ovime se, na primer, postiže ponašanje tipa \texttt{Option} koji premošćava izostanak vrednosti
 \texttt{null}. Tip \texttt{Option} je definisan na sledeći način:
 
 \lstinputlisting[language=Rust,
@@ -451,84 +485,18 @@ caption={Definisanje enumeratora},
 label={enum:def}]{enum_def.rs}
 
 Ono što \texttt{Option} nudi jeste mogućnost izostanka neke vrednosti, ali da taj izostanak ne
-može uticati na integritet programa; pre nego što se koristi, vrednost tipa \texttt{Option}
+može uticati na integritet programa. Pre nego što se koristi, vrednost tipa \texttt{Option}
 se mora otpakovati (engl. \emph{unwrap}), odnosno, mora se utvrditi da li je vrednost generičkog
 tipa \texttt{T} izostala. Otpakivanje se vrši \texttt{match} naredbom kao u
 listingu~\ref{enum:match}.
 
 \lstinputlisting[language=Rust,
-caption={Korišćenje \texttt{match} semantike},
+caption={Korišćenje \texttt{match} naredbe},
 label={enum:match}]{enum_match.rs}
 
 Ukoliko se promenljiva ne otpakuje, kompilator će ispisati odgovarajuću grešku. Slično, greška će
 se ispisati i kada naredba \texttt{match} ne pokrije sve moguće vrste enumeratora, gde je moguće
 koristiti \texttt{\_} notaciju za obeležavanje podrazumevane grane.
-
-% \section{Primeri korišćenja klasičnih \LaTeX{} elemenata}
-% % Primeri citiranja
-% Ovo je rečenica u kojoj se javlja citat \cite{PetrovicMikic2015}.
-% Još jedan citat \cite{GuSh:243}.
-% % Primeri navodnika
-% Isprobavamo navodnike: "Rekao je da mu se javimo sutra".
-% % Primer referisanja na tabelu (koja se javlja kasnije)
-% U tabeli \ref{tbl:rezultati} koja sledi prikazani su rezultati eksperimenta.
-% % Primer kraćeg ćiriličkog teksta
-% {\cir Ово је пример ћириличког текста који се јавља у латиничком документу.}
-% U ovoj rečenici se javlja jedna reč na {\cir ћирилици}.
-% % Primer korišćenja fusnota
-% Iza ove rečenice sledi fusnota.\footnote{Ovo je fusnota.}
-
-% % Primer dužeg ćirličkog teksta
-% \begin{cirilica}
-%   Ово је мало дужи блок текста исписан ћириличким писмом у оквиру
-%   латиничког документа. Фијуче ветар у шибљу, леди пасаже и куће иза
-%   њих и гунђа у оџацима.
-% \end{cirilica}
-
-% % Primer korišćenja tabele
-% \begin{table}
-% \centering
-% \caption{Rezultati}
-% \label{tbl:rezultati}
-% \begin{tabular}{c>{\centering}p{2cm}c}
-% \toprule
-% 1 & 2 & 3\\\midrule
-% 4 & 5 & 6\\\cmidrule(rl){1-2}
-% 7 & 8 & 8\\
-% \bottomrule
-% \end{tabular}
-% \end{table}
-
-% % Primer korišćenja slike
-% \begin{figure}[!ht]
-%   \centering
-%   \label{fig:grafikon}
-%   \includegraphics[width=0.5\textwidth]{graph.png}
-%   \caption{Grafikon}
-% \end{figure}
-
-
-% % Primer jednostavnije matematičke formule
-% Evo i jedan primer matematičke formule: $e^{i\pi} + 1 = 0$. 
-% % Primer referisanja na sliku
-% Na slici \ref{fig:grafikon} prikazan je jedan grafikon.
-
-% % primer kompleksnije matematičke formule
-% $$
-% \int_a^b f(x)\ \mathrm{d}x \ =_{def}\ \lim_{\max{\Delta x_k \rightarrow 0}} \sum_{k=1}^n f(x_k^*)\Delta x_k
-% $$
-
-% % primer referisanja na poglavlja i strane poglavlja
-% Više detalja biće dato u glavi \ref{chp:razrada} na strani \pageref{chp:razrada}.
-
-% % primer liste
-% Možemo praviti i nabrajanja:
-% \begin{enumerate}
-% \item Analiza 1
-% \item Linearna algebra
-% \item Analitička geometrija
-% \item Osnovi programiranja
-% \end{enumerate}
 
 % ------------------------------------------------------------------------------
 \chapter{Razrada}

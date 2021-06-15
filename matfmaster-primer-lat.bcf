@@ -2360,6 +2360,8 @@
     <bcf:citekey order="8">history_rust</bcf:citekey>
     <bcf:citekey order="9">python_pep</bcf:citekey>
     <bcf:citekey order="10">stable_rust</bcf:citekey>
+    <bcf:citekey order="11">functional_rust</bcf:citekey>
+    <bcf:citekey order="12">concurrent_rust</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

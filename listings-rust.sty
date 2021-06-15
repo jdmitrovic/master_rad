@@ -41,35 +41,62 @@
 , morekeywords=[5]{assert!, assert_eq!, assert_ne!, cfg!, column!, compile_error!, concat!, concat_idents!, debug_assert!, debug_assert_eq!, debug_assert_ne!, env!, eprint!, eprintln!, file!, format!, format_args!, include!, include_bytes!, include_str!, line!, module_path!, option_env!, panic!, print!, println!, select!, stringify!, thread_local!, try!, unimplemented!, unreachable!, vec!, write!, writeln!}  % prelude macros
 }%
 
-\lstdefinestyle{colouredRust}%
-{ basicstyle=\ttfamily%
+\lstdefinelanguage{TOML}{
+  keywords={package, dependencies},
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  % stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]",
+}
+
+\definecolor{bubbles}{rgb}{0.91, 1.0, 1.0}
+\definecolor{backcolor}{rgb}{0.97,0.97,0.95}
+\definecolor{textbackcolor}{rgb}{0.90,0.99,0.95}
+\definecolor{beaublue}{rgb}{0.74, 0.83, 0.9}
+\definecolor{crimsonglory}{rgb}{0.75, 0.0, 0.2}
+\definecolor{darkgoldenrod}{rgb}{0.72, 0.53, 0.04}
+\definecolor{purpleheart}{rgb}{0.41, 0.21, 0.61}
+
+\lstdefinestyle{coloredRust}%
+{ basicstyle=\ttfamily\small%
 , identifierstyle=%
 , commentstyle=\color[gray]{0.4}%
 , stringstyle=\color[rgb]{0, 0, 0.5}%
-, keywordstyle=\bfseries% reserved keywords
+, keywordstyle=\color{purpleheart}\bfseries% reserved keywords
 , keywordstyle=[2]\color[rgb]{0.75, 0, 0}% traits
-, keywordstyle=[3]\color[rgb]{0, 0.5, 0}% primitive types
-, keywordstyle=[4]\color[rgb]{0, 0.5, 0}% type and value constructors
-, keywordstyle=[5]\color[rgb]{0, 0, 0.75}% macros
+, keywordstyle=[3]\color{darkgoldenrod}% primitive types
+, keywordstyle=[4]\color{darkgoldenrod}% type and value constructors
+, keywordstyle=[5]\color{crimsonglory}% macros
 , columns=spaceflexible%
 , keepspaces=true%
 , showspaces=false%
 , showtabs=false%
 , showstringspaces=true%
+, captionpos=b
 }%
 
 \lstdefinestyle{boxed}{
-  style=colouredRust%
+  style=coloredRust%
 , numbers=left%
+, numberstyle=\tiny\color{gray}
 , firstnumber=auto%
 , numberblanklines=true%
+, backgroundcolor=\color{backcolor}
+, rulecolor=\color{bubbles}%
 , frame=trbL%
-, numberstyle=\tiny%
 , frame=leftline%
 , numbersep=7pt%
 , framesep=5pt%
-, framerule=10pt%
-, xleftmargin=15pt%
-, backgroundcolor=\color[gray]{0.97}%
-, rulecolor=\color[gray]{0.90}%
+}
+
+\lstdefinestyle{text}{
+  basicstyle=\ttfamily\small,
+  numbers=none,
+  backgroundcolor=\color{textbackcolor},
 }
