@@ -1,0 +1,46 @@
+[package]
+name = "rust_primeri"
+version = "0.1.0"
+authors = ["jovan <jdmitrovic@gmail.com>"]
+edition = "2018"
+
+[[example]]
+name = "dangling"
+
+[[example]]
+name = "main"
+
+[[example]]
+name = "control_flow"
+
+[[example]]
+name = "enum_def"
+
+[[example]]
+name = "enum_match"
+
+[[example]]
+name = "fn_ownership"
+
+[[example]]
+name = "functions"
+
+[[example]]
+name = "immutable_borrow"
+
+[[example]]
+name = "let_for"
+
+[[example]]
+name = "parse"
+
+[[example]]
+name = "structure_def"
+
+[[example]]
+name = "structure_method"
+
+[[example]]
+name = "tuples_arrays"
+
+[dependencies]

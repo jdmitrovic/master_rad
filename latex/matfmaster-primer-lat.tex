@@ -49,6 +49,7 @@
 \usepackage{listings-rust}
 \lstset{
   style=boxed,
+  inputpath=../rust_primeri/examples
 }
 % Datoteka sa literaturom u BibTex tj. BibLaTeX/Biber formatu
 \bib{matfmaster-primer}
@@ -196,14 +197,22 @@ cargo new novi_projekat
 \end{lstlisting}
 
 Komandom iznad se pravi novi direktorijum \texttt{novi\_projekat} koji 
-sadrži konfiguracionu datoteku \texttt{Cargo.toml} i direktorijum \texttt{src} koji treba da sadrži izvorne
-datoteke obeležene ekstenzijom \emph{.rs}
+sadrži konfiguracionu datoteku \texttt{Cargo.toml} i direktorijum \texttt{src}
+koji treba da sadrži izvorne datoteke obeležene ekstenzijom \emph{.rs}
 i u kojem se inicijalno nalazi datoteka \emph{main.rs}. Takođe, sa novim direktorijumom se
 inicijalizuje i novi \emph{Git} repozitorijum.
 
 Generisana \texttt{Cargo.toml} datoteka izgleda ovako:
 
-\lstinputlisting[language=TOML]{Cargo.toml}
+\begin{lstlisting}[language=TOML, caption={Inicijalna \emph{Cargo.toml} datoteka}]
+[package]
+name = "novi_projekat"
+version = "0.1.0"
+authors = ["jovan <jdmitrovic@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+\end{lstlisting}
 
 U prvoj liniji koda, \texttt{[package]} označava sekciju koja opisuje 
 paket koji je napravljen. Informacije koje se ovde nalaze su dobijene
@@ -345,23 +354,30 @@ funkcija će vratiti vrednost poslednje naredbe koja se ne završava delimiterom
 \subsection{Kontrola toka}
 \emph{Rust} podržava klasične načine kontrole toka sa \texttt{if},
 \texttt{while} i \texttt{for} komandama. Postoji par dodatnih mogućosti
-koje \emph{Rust} dovoljava:
+koje \emph{Rust} takođe nudi:
 
 \begin{itemize}
   \item Izraz \texttt{if} se može koristiti u \texttt{let} naredbama; ali
         tipovi moraju biti unifikabilni,
-  \item I \texttt{while} i \texttt{for} se mogu naći u okviru \texttt{let}
-        naredbe, s tim da se u telu petlje mora naći \texttt{break} komanda,
-        uz koju se dopisuje povratna vrednosti, analogno korišćenju \texttt{return}
-        komande u funkcijama,
   \item Ukoliko je potrebno napisati beskonačnu petlju, nije neophodno koristiti
         \texttt{while} naredbu sa uvek netačnim uslovom, već se može koristiti
-        ključna reč \texttt{loop},
+        ključna reč \texttt{loop}, kao u listingu~\ref{fc:let_for}, gde se
+        \emph{loop} koristi u svrhe nalaženja najvećeg zajedničkog delioca
+        dva broja,
+  \item I \texttt{while} i \texttt{for} se mogu naći u okviru \texttt{let}
+        naredbe, s tim da se u telu petlje mora naći \texttt{break} naredba
+        uz koju se dopisuje povratna vrednosti kao u primeru~\ref{fc:let_for},
+        analogno korišćenju \texttt{return}
+        naredbe u funkcijama,
   \item Iteriranje kroz kolekciju pomoću \texttt{for} petlje se može vršiti ili
         preko indeksa trenutnog elementa, ili pomoću \texttt{iter} funkcije.
         Za iteriranje od kraja kolekcije, na \texttt{iter} se nadovezuje
         funkcija \texttt{rev} kao u listingu~\ref{fc:for}.
 \end{itemize}
+
+\lstinputlisting[language=Rust,
+                 caption={Korišćenje naredbe \emph{loop} i petlje u okviru \emph{let} naredbe},
+                 label={fc:let_for}]{let_for.rs}
 
 \lstinputlisting[language=Rust,
                  caption={Korišćenje \texttt{iter} i \texttt{rev} funkcija},
@@ -442,9 +458,16 @@ u drugim programskim jezicima, može postojati samo jedna mutabilna referenca za
 promenljivu u istom dosegu u kojem ne sme postojati ni imutabilna referenca te promenljive.
 
 U \emph{Rust}-u je nemoguće napraviti ``zalutalu'' referencu (engl. \emph{dangling reference}),
-tj.\ referencu koja referiše na prostor u memoriji koji se već oslobodio; prilikom prevođenja
+tj.\ referencu koja referiše na prostor u memoriji koji se već oslobodio. Prilikom prevođenja
 koda, kompilator će dati preporuku za korišćenje statičke reference uz pomoć sintakse
-\texttt{\&'static}.
+\texttt{\&'static}. Ukoliko bi se kôd iz listinga~\ref{poz:dangle} pokušao prevesti,
+kompilator ne bi dozvolio prevođenje bez
+\texttt{static} oznaka. Konvencija je da imena promenljivih sa statičkim životnim vekom
+počinju velikim početnim slovom.
+
+\lstinputlisting[language=Rust,
+                 caption={Korišćenje promenljivih sa statičkim životnim vekom},
+                 label={poz:dangle}]{dangling.rs}
 
 \subsection{Strukture}
 Definisanje struktura se vrši na uobičajen način, ali \emph{Rust} nudi mogućnosti koje skraćuju
@@ -468,9 +491,10 @@ Da bi se implementirali metodi u okviru struktura, koristi se ključna reč \tex
 listingu~\ref{stc:met}.
 
 \lstinputlisting[language=Rust,
-caption={Definisanje metoda},
-label={stc:met}]{structure_method.rs}
+                 caption={Definisanje metoda},
+                 label={stc:met}]{structure_method.rs}
 
+\noindent
 Mogu se implementirati i metodi koji ne uzimaju instancu kao argument; njima se pristupa pomoću
 \texttt{::} notacije.
 
@@ -481,8 +505,8 @@ Ovime se, na primer, postiže ponašanje tipa \texttt{Option} koji premošćava 
 \texttt{null}. Tip \texttt{Option} je definisan na sledeći način:
 
 \lstinputlisting[language=Rust,
-caption={Definisanje enumeratora},
-label={enum:def}]{enum_def.rs}
+                 caption={Definisanje enumeratora},
+                 label={enum:def}]{enum_def.rs}
 
 Ono što \texttt{Option} nudi jeste mogućnost izostanka neke vrednosti, ali da taj izostanak ne
 može uticati na integritet programa. Pre nego što se koristi, vrednost tipa \texttt{Option}
@@ -491,8 +515,8 @@ tipa \texttt{T} izostala. Otpakivanje se vrši \texttt{match} naredbom kao u
 listingu~\ref{enum:match}.
 
 \lstinputlisting[language=Rust,
-caption={Korišćenje \texttt{match} naredbe},
-label={enum:match}]{enum_match.rs}
+                 caption={Korišćenje \texttt{match} naredbe},
+                 label={enum:match}]{enum_match.rs}
 
 Ukoliko se promenljiva ne otpakuje, kompilator će ispisati odgovarajuću grešku. Slično, greška će
 se ispisati i kada naredba \texttt{match} ne pokrije sve moguće vrste enumeratora, gde je moguće
