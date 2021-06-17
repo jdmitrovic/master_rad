@@ -1,3 +1,3 @@
 #!/bin/bash
 
-(cd latex && latexmk -pdfxe -output-directory="../" matfmaster-primer-lat && cd ../ && latexmk -c latex/matfmaster-primer-lat)
+(cd latex && latexmk -pdfxe matfmaster-primer-lat && latexmk -c matfmaster-primer-lat && mv matfmaster-primer-lat.pdf ../)

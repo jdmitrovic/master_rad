@@ -8,3 +8,6 @@
 *.aux
 .auctex-auto/
 rust_primeri/target/
+*.bbl
+*.xml
+*.bcf
