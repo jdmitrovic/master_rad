@@ -144,26 +144,31 @@ razliku od ove dve osobine, neka dizajnerska rešenja su ostala do danas, kao
 što je imutabilnost i kontrola pristupa memoriji.~\cite{history_rust}
 
 Nedugo nakon priključivanja Mozile, Grejdon Hor napušta projekat
-2012\. godine. U ovom periodu \emph{Rust} dobija svoj menadžer
+2012.\ godine. U ovom periodu \emph{Rust} dobija svoj menadžer
 paketa \emph{Cargo} zajedno sa repozitorijumom paketa \url{crates.io}.
 Proces \emph{RFC}, inspirisan procesom \emph{PEP} programskog jezika
 \emph{Python}~\cite{python_pep}, se
-osniva 2014\. godine u svrhu strogog kontrolisanja novina u samom jeziku.
+osniva 2014.\ godine u svrhu strogog kontrolisanja novina u samom jeziku.
 
 Prva verzija programskog jezika \emph{Rust}, odnosno \emph{Rust} 1.0, objavljena je 2015.
 godine~\cite{stable_rust}. Od tad, u \emph{Rust} zajednici je formiran model izbacivanja novih
-verzija gde se one distribuiraju svakih 6 nedelja, što je dinamičniji pristup
+verzija gde se one distribuiraju svakih šest nedelja, što je dinamičniji pristup
 u odnosu na većinu programskih jezika gde je taj period minimalno godinu dana.
-Ovom odlukom se stavlja akcenat na stabilnost jezika time što će svaka nova 
-verzija biti slična svom prethodniku, dok se kod jezika sa dugim periodom 
-između verzija očekuju velike promene, što može da šteti kompatibilnosti. 
+Ovom odlukom se stavlja akcenat na stabilnost jezika time što će svaka nova
+verzija biti slična svom prethodniku, dok se kod jezika sa dugim periodom
+između verzija očekuju velike promene, što može da šteti kompatibilnosti.
+
+U februaru 2021.\ godine ozvaničen je nastanak \emph{Rust} fondacije (engl.
+\texttt{Rust Foundation}), neprofitne organizacije osnovane u svrhe daljeg razvoja programskog
+jezika Rust~\cite{rust_foundation}. Pored Mozile, sponzori \emph{Rust} fondacije su i kompanije
+\emph{Google}, \emph{AWS}, \emph{Huawei}, \emph{Facebook} i \emph{Microsoft}.
 
 \section{Instalacija i korišćenje sistema \emph{Cargo}}
 Ukoliko se zvanična veb-stranica programskog jezika \emph{Rust} poseti koristeći
 mašinu koja ima \emph{Windows} operativni sistem, biće ponuđene
 instalacione datoteke za 32-bitne i 64-bitne \emph{Windows} sisteme.
 
-Na \emph{GNU/Linux} operativnim sistemima potrebno je uneti sledeću 
+Na \emph{GNU/Linux} operativnim sistemima potrebno je uneti sledeću
 komandu u terminal:
 
 \begin{lstlisting}[language={}, style=text]
@@ -171,7 +176,7 @@ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 \end{lstlisting}
 
 \noindent
-Potvrdu da li se instalacija uspešno izvršila uspešno može se dobiti proverom verzije
+Potvrdu da li se instalacija uspešno izvršila može se dobiti proverom verzije
 \emph{Rust} kompilatora komandom:
 
 \begin{lstlisting}[language={}, style=text]
@@ -180,7 +185,7 @@ rustc --version
 
 Pored samog \emph{Rust} kompilatora, u instalaciju su uključeni i
 sistem \emph{Cargo} i alat \emph{rustup}. Alat \emph{rustup} daje mogućnost
-dobavljanja nove verzije \emph{Rust}-a sa veba, kao i 
+dobavljanja nove verzije \emph{Rust}-a sa veba, kao i
 mogućnost deinstalacije komandama:
 
 \begin{lstlisting}[language={}, style=text]
@@ -196,15 +201,17 @@ se komandom:
 cargo new novi_projekat
 \end{lstlisting}
 
-Komandom iznad se pravi novi direktorijum \texttt{novi\_projekat} koji 
+Komandom iznad se pravi novi direktorijum \texttt{novi\_projekat} koji
 sadrži konfiguracionu datoteku \texttt{Cargo.toml} i direktorijum \texttt{src}
 koji treba da sadrži izvorne datoteke obeležene ekstenzijom \emph{.rs}
 i u kojem se inicijalno nalazi datoteka \emph{main.rs}. Takođe, sa novim direktorijumom se
 inicijalizuje i novi \emph{Git} repozitorijum.
 
-Generisana \texttt{Cargo.toml} datoteka izgleda ovako:
+Generisana \texttt{Cargo.toml} datoteka je prikazana na listingu~\ref{inst:cargo}.
 
-\begin{lstlisting}[language=TOML, caption={Inicijalna \emph{Cargo.toml} datoteka}]
+\begin{lstlisting}[language=TOML,
+                   caption={Inicijalna \emph{Cargo.toml} datoteka}
+                   label={inst:cargo}]
 [package]
 name = "novi_projekat"
 version = "0.1.0"
@@ -214,24 +221,26 @@ edition = "2018"
 [dependencies]
 \end{lstlisting}
 
-U prvoj liniji koda, \texttt{[package]} označava sekciju koja opisuje 
+U prvoj liniji koda, \texttt{[package]} označava sekciju koja opisuje
 paket koji je napravljen. Informacije koje se ovde nalaze su dobijene
-iz varijabli okruženja. Posle oznake \texttt{[dependencies]} se 
-popisuju svi paketi koji su neophodni za rad sa novim paketom, 
+iz varijabli okruženja. Posle oznake \texttt{[dependencies]} se
+popisuju svi paketi koji su neophodni za rad sa novim paketom,
 tako da ih \emph{Cargo} može dopremiti.
 
-Po osnovnim podešavanjima, u \texttt{main.rs} datoteci se nalazi
-\emph{Hello World} program.
+Na listingu~\ref{inst:main} je prikazana \texttt{main.rs} datoteka. U njoj se, po osnovnim
+podešavanjima, nalazi \emph{Hello World} program.
 
-\lstinputlisting[language=Rust]{main.rs}
+\lstinputlisting[language=Rust,
+                 caption={Inicijalna \emph{main.rs} datoteka},
+                 label={inst:main}]{main.rs}
 
 \emph{Cargo} prevodi projekat komandom
 \texttt{cargo build} a prevodi ga i pokreće
-\texttt{cargo run}. Korišćenjem komande \texttt{cargo check} 
+\texttt{cargo run}. Korišćenjem komande \texttt{cargo check}
 može se proveriti da li se kôd kompilira, bez generisanja
 izvršne datoteke, što je korisno jer je ova opcija efikasnija
 od korišćenja pomenute \texttt{build} komande. Kompiliranjem
-projekta se pravi nova putanja \texttt{target/debug}, gde će se 
+projekta se pravi nova putanja \texttt{target/debug}, gde će se
 generisati izvršne datoteke.
 
 Kompilator ima dva profila: \texttt{dev} profil, koji se koristi za prevođenje koda tokom razvoja, i
@@ -259,19 +268,19 @@ u okviru jednog stila programiranja. Zastupljeno je nekoliko programskih paradig
 \end{itemize}
 
 \subsection{Promenljive i konstante}
-Promenljive se mogu definisati korišćenjem kljucne reci \texttt{let}, čime se podrazumeva da
-je takva promenljiva zapravo imutabilna, tj\. ona se ne može menjati. Imutabilnost
+Promenljive se mogu definisati korišćenjem kljucne reči \texttt{let}, čime se podrazumeva da
+je takva promenljiva zapravo imutabilna, tj.\ ona se ne može menjati. Imutabilnost
 promenljivih omogućava kompilatoru da prepozna razne vrste grešaka već u fazi kompilacije.
-Ipak, Rust dozvoljava i definisanje mutabilnih promenljivih koriscenjem ključnih reci \texttt{let mut}.
+Ipak, Rust dozvoljava i definisanje mutabilnih promenljivih korišćenjem ključnih reči \texttt{let mut}.
 
 Pored promenljivih, \emph{Rust} dozvoljava i definisanje konstanti
 upotrebom ključne reči \texttt{const}.
-Konstante se razlikuju od imutabilnih promeljivih po tome što se 
-mogu definisati u bilo kom opsegu, uključujući i globalni, i po 
-tome što konstante samo mogu imati vrednost konstantnog izraza, 
+Konstante se razlikuju od imutabilnih promeljivih po tome što se
+mogu definisati u bilo kom opsegu, uključujući i globalni, i po
+tome što konstante samo mogu imati vrednost konstantnog izraza,
 ali ne i vrednost izvršavanja funkcije.
 
-U okviru jezika dozvoljeno je i tzv\. sakrivanje (engl. \emph{shadowing}).
+U okviru jezika dozvoljeno je i tzv.\ sakrivanje (engl. \emph{shadowing}).
 Sakrivanje je ponovno definisanje promenljivih. Za razliku od
 korišćenja ključne reči \texttt{mut}, prilikom sakrivanja je
 moguće promeniti tip promenljive koja se ponovo definiše.
@@ -303,7 +312,7 @@ kojeg je tipa promenljiva \texttt{num}.
 \emph{Rust} sadrži četiri vrste prostih tipova: cele brojeve,
 brojeve zapisane u pokretnom zarezu, karaktere i Bulove
 konstante \emph{true} i \emph{false}. Celi brojevi mogu biti
-označeni ili neoznačeni; označeni brojevi su predstavljeni
+označeni ili neoznačeni. Označeni brojevi su predstavljeni
 tipovima \texttt{i8}, \texttt{i16}, \texttt{i32}, \texttt{i64} i
 \texttt{i128}, gde broj posle karaktera \texttt{i} predstavlja
 veličinu tipa u bitovima. Neoznačeni brojevi su predstavljeni
@@ -316,7 +325,7 @@ jezika \emph{C} su tipovi \texttt{f32} i \texttt{f64}. Tip
 \emph{Unicode} vrednostima.
 
 Osnovni složeni tipovi u programskom jeziku \emph{Rust} su torke
-i nizovi. Torke se predstavljaju na navođenjem liste tipova, razdvojene zarazima u okviru
+i nizovi. Torke se predstavljaju navođenjem liste tipova, razdvojene zarazima u okviru
 zagrada. Naredni primer ilustruje upotrebu torki:
 
 \lstinputlisting[language=Rust]{tuples_arrays.rs}
@@ -357,10 +366,8 @@ funkcija će vratiti vrednost poslednje naredbe koja se ne završava delimiterom
 koje \emph{Rust} takođe nudi:
 
 \begin{itemize}
-  \item Izraz \texttt{if} se može koristiti u \texttt{let} naredbama; ali
-        tipovi moraju biti unifikabilni,
   \item Ukoliko je potrebno napisati beskonačnu petlju, nije neophodno koristiti
-        \texttt{while} naredbu sa uvek netačnim uslovom, već se može koristiti
+        \texttt{while} naredbu sa uvek tačnim uslovom, već se može koristiti
         ključna reč \texttt{loop}, kao u listingu~\ref{fc:let_for}, gde se
         \emph{loop} koristi u svrhe nalaženja najvećeg zajedničkog delioca
         dva broja,
@@ -441,7 +448,7 @@ uključujući i promenljive koje ne potiču odatle (dakle, i sami parametri funk
 \subsection{Pozajmljivanje}
 Proces davanja i preuzimanja vlasništva može da bude nepogodan u nekim slučajevima; zbog toga,
 postoji i opcija \textbf{pozajmljivanja} (engl. \emph{borrowing}). Pozajmljivanje omogućava
-funkcijama da pozajme vrednosti promeljivih, koje se moraju vratiti vlasniku po završetku
+funkcijama da pozajme vrednosti promenljivih, koje se moraju vratiti vlasniku po završetku
 izvršavanja te funkcije, što znači da se pozajmljene promenljive mogu kasnije koristiti.
 Promenljive se pozajmljuju koristeći simbol \texttt{\&}, što je ilustrovano na
 listingu~\ref{poz:imut}, gde će izvršavanje koda ispisati: \texttt{Niska "Hello world"
@@ -460,10 +467,9 @@ promenljivu u istom dosegu u kojem ne sme postojati ni imutabilna referenca te p
 U \emph{Rust}-u je nemoguće napraviti ``zalutalu'' referencu (engl. \emph{dangling reference}),
 tj.\ referencu koja referiše na prostor u memoriji koji se već oslobodio. Prilikom prevođenja
 koda, kompilator će dati preporuku za korišćenje statičke reference uz pomoć sintakse
-\texttt{\&'static}. Ukoliko bi se kôd iz listinga~\ref{poz:dangle} pokušao prevesti,
-kompilator ne bi dozvolio prevođenje bez
-\texttt{static} oznaka. Konvencija je da imena promenljivih sa statičkim životnim vekom
-počinju velikim početnim slovom.
+\texttt{\&'static}. Ukoliko bi se pokušalo prevođenje koda iz listinga~\ref{poz:dangle},
+kompilator ne bi dozvolio prevođenje bez \texttt{static} oznaka. Konvencija je da imena
+promenljivih sa statičkim životnim vekom počinju velikim početnim slovom.
 
 \lstinputlisting[language=Rust,
                  caption={Korišćenje promenljivih sa statičkim životnim vekom},
@@ -471,13 +477,13 @@ počinju velikim početnim slovom.
 
 \subsection{Strukture}
 Definisanje struktura se vrši na uobičajen način, ali \emph{Rust} nudi mogućnosti koje skraćuju
-sintaksu, kao u listingu~\ref{stc:sdef}:
+sintaksu, kao u listingu~\ref{stc:sdef}.
 
 \lstinputlisting[language=Rust,
                  caption={Kreiranje novih struktura},
                  label={stc:sdef}]{structure_def.rs}
 
-Sa listinga~\ref{stc:sdef} se može primetiti kako se uz pomoć oznake \texttt{\ldots} mogu definisati
+Sa listinga~\ref{stc:sdef} se može primetiti kako se uz pomoć oznake \texttt{..} mogu definisati
 nove instance strukture gde se imena
 polja poklapaju sa imenima parametara funkcije. U istom primeru će instanca \texttt{student2}
 imati isto ime kao i instanca \texttt{student1}, ali će polje \texttt{indeks} imati
@@ -501,8 +507,8 @@ Mogu se implementirati i metodi koji ne uzimaju instancu kao argument; njima se 
 \subsection{Enumeratori}
 Enumeratori u programskom jeziku \emph{Rust} imaju dodatne mogućnosti u odnosu na enumeratore u
 drugim programskim jezicima: svaki ``tip'' u enumeratoru može se posmatrati kao torka vrednosti.
-Ovime se, na primer, postiže ponašanje tipa \texttt{Option} koji premošćava izostanak vrednosti
-\texttt{null}. Tip \texttt{Option} je definisan na sledeći način:
+Ovime se, na primer, postiže ponašanje enumeratora \texttt{Option} koji premošćava izostanak vrednosti
+\texttt{null}. \texttt{Option} je definisan na sledeći način:
 
 \lstinputlisting[language=Rust,
                  caption={Definisanje enumeratora},
@@ -521,6 +527,54 @@ listingu~\ref{enum:match}.
 Ukoliko se promenljiva ne otpakuje, kompilator će ispisati odgovarajuću grešku. Slično, greška će
 se ispisati i kada naredba \texttt{match} ne pokrije sve moguće vrste enumeratora, gde je moguće
 koristiti \texttt{\_} notaciju za obeležavanje podrazumevane grane.
+
+\subsection{Strukture podataka promenljivog sadržaja}
+Pored torki i nizova, \emph{Rust} ima podršku za strukture podataka kojima se sadržaj
+može menjati: to su vektori i heš mape.
+
+\subsubsection{Vektori}
+Vektori su predstavljeni tipom \texttt{Vec<T>}, gde je \texttt{T} generički tip
+podataka sadržanih
+u vektoru. Novi vektor se inicijalizuje funkcijom \texttt{Vec::new} ili korišćenjem
+naredbe \texttt{vec!} kao u listingu~\ref{vec:init}. U istom listingu su prikazane funkcije
+dodavanja odnosno brisanja elemenata u vektoru: \texttt{push}, odnosno \texttt{remove}.
+Poziv funkcije \texttt{remove(i)} briše element koji se nalazi na poziciji $i$ u vektoru.
+Da bi elementi vektora mogli menjati njihovu unutrašnju strukturu, mora se
+dodati ključna reč \texttt{mut} prilikom inicijalizacije. Vektorima koji su definisani bez te
+ključne reči se i dalje mogu dodavati ili brisati elementi, ali naknadne promene tih
+elemenata nisu dozvoljene.
+
+Pravila vlasništva su i dalje na snazi, pa se prilikom iteriranja kroz petlju
+koriste reference na elemente vektora. Da bi se te reference mogle menjati, prvo
+ih je potrebno dereferencirati operatorom \texttt{*}.
+
+\lstinputlisting[language=Rust,
+                 caption={Inicijalizacija, dodavanje i brisanje elemenata iz vektora},
+                 label={vec:init}]{vector.rs}
+
+Kao i u nizu, u vektoru se moraju naći elementi istog tipa. Međutim, ovo
+ograničenje se može prevazići korišćenjem enumeratora, pošto je kompilatoru
+neophodno samo da ima informaciju koji se tipovi mogu naći u vektoru da bi se
+mogla rezervisati adekvatna količina memorije.
+
+\subsubsection{Heš mape}
+
+Za razliku od vektora, deo standardne biblioteke koja implementira heš mape
+se mora ručno uključiti u program naredbom \texttt{use}. Funkcija insert će uneti
+odgovarajući par u mapu, ali će postaviti novu vrednost, bez obzira da li se ključ već
+nalazi u mapi.
+
+Korišćenjem funkcije \texttt{entry}, može se dobiti enumerator \texttt{Entry} koji ukazuje
+da li vrednost za dati ključ postoji u mapi. Ako se na \texttt{Entry} nadoveže funkcija
+\texttt{or\_insert}, koja će uneti odgovarajući par u mapu samo ako taj ključ ne postoji u
+mapi. Nakon toga, \texttt{or\_insert} će vratiti referencu na par koji je napravljen, ili koji
+je nađen u mapi, kao u listingu~\ref{hmap:insert}. U istom listingu se koristi naredba
+\texttt{println!} sa argumentom \texttt{\{:?\}}, koja ispisuje odgovarajuće informacije
+za debagiranje; u ovom slučaju, biće ispisano \texttt{\{„Pas”: 7, „Macka”: 3\}}.
+
+\lstinputlisting[language=Rust,
+                 caption={Inicijalizacija heš mape i korišćenje \texttt{insert} i \texttt{or\_insert} funkcija},
+                 label={hmap:insert}]{hash_map.rs}
 
 % ------------------------------------------------------------------------------
 \chapter{Razrada}
@@ -542,7 +596,7 @@ koristiti \texttt{\_} notaciju za obeležavanje podrazumevane grane.
 % ------------------------------------------------------------------------------
 % Biografija kandidata
 \begin{biografija}
-  \textbf{Jovan Dmitrović} (\emph{Gornji Milanovac, 17.11.1995.}) 
+  \textbf{Jovan Dmitrović} (\emph{Gornji Milanovac, 17.11.1995.})
 \end{biografija}
 % ------------------------------------------------------------------------------
 
