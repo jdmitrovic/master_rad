@@ -21,7 +21,7 @@
   \datalist[entry]{nty/global//global/global}
     \entry{stable_rust}{misc}{}
       \field{sortinit}{A}
-      \field{sortinithash}{a3dcedd53b04d1adfd5ac303ecd5e6fa}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{labeltitlesource}{title}
       \field{note}{on-line at: \url{https://blog.rust-lang.org/2015/05/15/Rust-1.0.html}}
       \field{title}{{Announcing Rust 1.0}}
@@ -41,7 +41,7 @@
       \strng{authornamehash}{1c78437fc87d487965915617f2e71c3a}
       \strng{authorfullhash}{1c78437fc87d487965915617f2e71c3a}
       \field{sortinit}{A}
-      \field{sortinithash}{a3dcedd53b04d1adfd5ac303ecd5e6fa}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{note}{on-line at: \url{https://aws.amazon.com/blogs/opensource/why-aws-loves-rust-and-how-wed-like-to-help/}}
@@ -50,7 +50,7 @@
     \endentry
     \entry{crosvm}{misc}{}
       \field{sortinit}{c}
-      \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{labeltitlesource}{title}
       \field{note}{on-line at: \url{https://opensource.google/projects/crosvm}}
       \field{title}{{crosvm}}
@@ -70,7 +70,7 @@
       \strng{authornamehash}{499b9a7fb6efd2652c3be19d90d5c001}
       \strng{authorfullhash}{499b9a7fb6efd2652c3be19d90d5c001}
       \field{sortinit}{G}
-      \field{sortinithash}{62eb2aa29549e4fdbd3cb154ec5711cb}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{note}{on-line at: \url{https://blog.rust-lang.org/2017/11/14/Fearless-Concurrency-In-Firefox-Quantum.html}}
@@ -79,7 +79,7 @@
     \endentry
     \entry{edgelet}{misc}{}
       \field{sortinit}{I}
-      \field{sortinithash}{9417e9a1288a9371e2691d999083ed39}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
       \field{labeltitlesource}{title}
       \field{note}{on-line at: \url{https://github.com/Azure/iotedge/tree/master/edgelet}}
       \field{title}{{IoT Edge Security Daemon edgelet}}
@@ -99,7 +99,7 @@
       \strng{authornamehash}{a41f7649d631481ec7b8c9984f13ca74}
       \strng{authorfullhash}{a41f7649d631481ec7b8c9984f13ca74}
       \field{sortinit}{K}
-      \field{sortinithash}{d3edc18d54b9438a72c24c925bfb38f4}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{note}{on-line at: \url{https://dl.acm.org/doi/10.1145/2959689.2960081}}
@@ -127,7 +127,7 @@
       \strng{authorfullhash}{e2d6cc0cf49d363084c5ab92add7b56f}
       \field{extraname}{1}
       \field{sortinit}{K}
-      \field{sortinithash}{d3edc18d54b9438a72c24c925bfb38f4}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{The Rust Programming Language}
@@ -156,7 +156,7 @@
       \strng{authorfullhash}{e2d6cc0cf49d363084c5ab92add7b56f}
       \field{extraname}{2}
       \field{sortinit}{K}
-      \field{sortinithash}{d3edc18d54b9438a72c24c925bfb38f4}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{The Rust Programming Language}
@@ -166,21 +166,21 @@
     \endentry
     \entry{npm}{misc}{}
       \field{sortinit}{R}
-      \field{sortinithash}{b9c68a358aea118dfa887b6e902414a7}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{labeltitlesource}{title}
       \field{note}{on-line at: \url{https://www.rust-lang.org/static/pdfs/Rust-npm-Whitepaper.pdf}}
       \field{title}{{Rust Case Study: Community makes Rust an easy choice for npm}}
     \endentry
     \entry{thanks_rust}{misc}{}
       \field{sortinit}{R}
-      \field{sortinithash}{b9c68a358aea118dfa887b6e902414a7}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{labeltitlesource}{title}
       \field{note}{on-line at: \url{https://thanks.rust-lang.org/}}
       \field{title}{{Rust contributors}}
     \endentry
     \entry{mostloved_so}{misc}{}
       \field{sortinit}{S}
-      \field{sortinithash}{c319cff79d99c853d775f88277d4e45f}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{labeltitlesource}{title}
       \field{note}{on-line at: \url{https://insights.stackoverflow.com/survey/2020}}
       \field{title}{{Stack Overflow Developer Survey}}
@@ -216,7 +216,7 @@
       \strng{authornamehash}{a51e9b911755c3da68ca5db2b112b220}
       \strng{authorfullhash}{0380b21ad6350eab9a7de53ef99e81a0}
       \field{sortinit}{W}
-      \field{sortinithash}{1af34bd8c148ffb32de1494636b49713}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{note}{on-line at: \url{https://www.python.org/dev/peps/pep-0001/}}
@@ -238,7 +238,7 @@
       \strng{authornamehash}{efbd0d9c82f8417a4ac61a60a14db85d}
       \strng{authorfullhash}{efbd0d9c82f8417a4ac61a60a14db85d}
       \field{sortinit}{W}
-      \field{sortinithash}{1af34bd8c148ffb32de1494636b49713}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{note}{on-line at: \url{https://foundation.rust-lang.org/posts/2021-02-08-hello-world/}}
