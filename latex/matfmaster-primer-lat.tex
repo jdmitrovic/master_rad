@@ -110,34 +110,35 @@ je dobio veliku pažnju u svetu programiranja, čemu svedoči i činjenica da je
 \emph{Rust} bio proglašen za "omiljeni programski jezik" već petu godinu za redom
 u anketi koju je sprovela popularna veb-stranica \emph{Stack Overflow}~\cite{mostloved_so}.
 
-Danas se \emph{Rust} koristi na velikom broju ozbiljnih projekata. Na primer:
+Danas se \emph{Rust} koristi na velikom broju komercijalnih projekata. Na primer:
 
 \begin{itemize}
-    \item AWS servisima firme Amazon, poput \emph{Lambda}, \emph{EC2}
+    \item U AWS servisima firme Amazon, poput \emph{Lambda}, \emph{EC2}
         i \emph{Cloudfront}~\cite{aws},
     \item U okviru operativnog sistema kompanije Gugl (engl. \emph{Google})
         \emph{ChromeOS}~\cite{crosvm},
-    \item Određenim komponentama Majkrosoftove platforme \emph{Azure}, uključujući i
+    \item U određenim komponentama Majkrosoftove platforme \emph{Azure}, uključujući i
         IoT sigurnosni servis \emph{edgelet}~\cite{edgelet},
-    \item Registru \emph{JavaScript} paketa \emph{npm},
+    \item U registru \emph{JavaScript} paketa \emph{npm},
         kod procedura koje prouzrokuju veliko CPU opterećenje~\cite{npm},
-    \item Mozilinom veb-brauzeru Fajerfoks (engl. \emph{Firefox})~\cite{firefox_rust}.
+    \item U Mozilinom (engl. \emph{Mozilla}) veb-brauzeru Fajerfoks
+        (engl. \emph{Firefox})~\cite{firefox_rust}.
 \end{itemize}
 
 \section{Razvoj jezika \emph{Rust}}
 Programski jezik \emph{Rust} je dizajnirao Grejdon Hor
 (engl. \emph{Graydon Hoare}) koji je, u to vreme, bio zaposlen u kompaniji
-Mozila (engl. \emph{Mozilla}).
-Hor je rad na ovom jeziku započeo 2006. godine kao svoj lični projekat,
+Mozila.
+Hor je rad na ovom jeziku započeo 2006.\ godine kao svoj lični projekat,
 na kojem je samostalno radio naredne tri godine.
-Sredinom 2010. godine, u projekat se
+Sredinom 2010.\ godine, u projekat se
 uključila i sama Mozila, koja i danas sponzoriše njegov razvoj.
 Pored zaposlenih Mozile, pošto je u pitanju programski jezik otvorenog koda,
 svoj doprinos je dalo i preko 5000 dobrovoljaca~\cite{thanks_rust}.
 
 Pre nego što se Mozila priključila projektu, \emph{Rust} je izgledao dosta
 drugačije nego danas. U svojoj početnoj fazi, \emph{Rust} je bio čist funkcionalni jezik,
-tj. nije imao bočne efekte; takođe, postojala je i analiza stanja tipa
+tj.\ nije imao bočne efekte; takođe, postojala je i analiza stanja tipa
 (engl. \emph{typestate analysis}), koja je omogućavala proveru operacija
 koje se mogu izvoditi nad specifičnim tipom podataka pri kompiliranju. Za
 razliku od ove dve osobine, neka dizajnerska rešenja su ostala do danas, kao
@@ -268,14 +269,14 @@ u okviru jednog stila programiranja. Zastupljeno je nekoliko programskih paradig
 \end{itemize}
 
 \subsection{Promenljive i konstante}
-Promenljive se mogu definisati korišćenjem kljucne reči \texttt{let}, čime se podrazumeva da
+Promenljive se mogu definisati korišćenjem ključne reči \texttt{let}, čime se podrazumeva da
 je takva promenljiva zapravo imutabilna, tj.\ ona se ne može menjati. Imutabilnost
 promenljivih omogućava kompilatoru da prepozna razne vrste grešaka već u fazi kompilacije.
 Ipak, Rust dozvoljava i definisanje mutabilnih promenljivih korišćenjem ključnih reči \texttt{let mut}.
 
 Pored promenljivih, \emph{Rust} dozvoljava i definisanje konstanti
 upotrebom ključne reči \texttt{const}.
-Konstante se razlikuju od imutabilnih promeljivih po tome što se
+Konstante se razlikuju od imutabilnih promenljivih po tome što se
 mogu definisati u bilo kom opsegu, uključujući i globalni, i po
 tome što konstante samo mogu imati vrednost konstantnog izraza,
 ali ne i vrednost izvršavanja funkcije.
