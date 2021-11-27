@@ -107,7 +107,7 @@
 \emph{Rust} je statički tipiziran jezik  fokusiran na bezbednost i
 performanse. Od svog nastanka, ovaj jezik
 je dobio veliku pažnju u svetu programiranja, čemu svedoči i činjenica da je
-\emph{Rust} bio proglašen za "omiljeni programski jezik" već petu godinu za redom
+\emph{Rust} proglašen za "omiljeni programski jezik" već petu godinu za redom
 u anketi koju je sprovela popularna veb-stranica \emph{Stack Overflow}~\cite{mostloved_so}.
 
 Danas se \emph{Rust} koristi na velikom broju komercijalnih projekata. Na primer:
@@ -120,7 +120,7 @@ Danas se \emph{Rust} koristi na velikom broju komercijalnih projekata. Na primer
     \item U određenim komponentama Majkrosoftove platforme \emph{Azure}, uključujući i
         IoT sigurnosni servis \emph{edgelet}~\cite{edgelet},
     \item U registru \emph{JavaScript} paketa \emph{npm},
-        kod procedura koje prouzrokuju veliko CPU opterećenje~\cite{npm},
+        kod procedura koje prouzrokuju veliko opterećenje procesora~\cite{npm},
     \item U Mozilinom (engl. \emph{Mozilla}) veb-brauzeru Fajerfoks
         (engl. \emph{Firefox})~\cite{firefox_rust}.
 \end{itemize}
@@ -138,11 +138,11 @@ svoj doprinos je dalo i preko 5000 dobrovoljaca~\cite{thanks_rust}.
 
 Pre nego što se Mozila priključila projektu, \emph{Rust} je izgledao dosta
 drugačije nego danas. U svojoj početnoj fazi, \emph{Rust} je bio čist funkcionalni jezik,
-tj.\ nije imao bočne efekte; takođe, postojala je i analiza stanja tipa
+tj.\ nije imao bočne efekte; takođe, postojala je i analiza promene stanja
 (engl. \emph{typestate analysis}), koja je omogućavala proveru operacija
 koje se mogu izvoditi nad specifičnim tipom podataka pri kompiliranju. Za
 razliku od ove dve osobine, neka dizajnerska rešenja su ostala do danas, kao
-što je imutabilnost i kontrola pristupa memoriji.~\cite{history_rust}
+što je imutabilnost i kontrola pristupa memoriji~\cite{history_rust}.
 
 Nedugo nakon priključivanja Mozile, Grejdon Hor napušta projekat
 2012.\ godine. U ovom periodu \emph{Rust} dobija svoj menadžer
@@ -152,16 +152,16 @@ Proces \emph{RFC}, inspirisan procesom \emph{PEP} programskog jezika
 osniva 2014.\ godine u svrhu strogog kontrolisanja novina u samom jeziku.
 
 Prva verzija programskog jezika \emph{Rust}, odnosno \emph{Rust} 1.0, objavljena je 2015.
-godine~\cite{stable_rust}. Od tad, u \emph{Rust} zajednici je formiran model izbacivanja novih
-verzija gde se one distribuiraju svakih šest nedelja, što je dinamičniji pristup
+godine~\cite{stable_rust}. U \emph{Rust} zajednici je formiran model izbacivanja novih
+verzija svakih šest nedelja. To je dinamičniji pristup
 u odnosu na većinu programskih jezika gde je taj period minimalno godinu dana.
 Ovom odlukom se stavlja akcenat na stabilnost jezika time što će svaka nova
 verzija biti slična svom prethodniku, dok se kod jezika sa dugim periodom
 između verzija očekuju velike promene, što može da šteti kompatibilnosti.
 
-U februaru 2021.\ godine ozvaničen je nastanak \emph{Rust} fondacije (engl.
+U februaru 2021.\ godine ozvaničen je nastanak fondacije \emph{Rust} (engl.
 \texttt{Rust Foundation}), neprofitne organizacije osnovane u svrhe daljeg razvoja programskog
-jezika Rust~\cite{rust_foundation}. Pored Mozile, sponzori \emph{Rust} fondacije su i kompanije
+jezika Rust~\cite{rust_foundation}. Pored Mozile, sponzori fondacije \emph{Rust} su i kompanije
 \emph{Google}, \emph{AWS}, \emph{Huawei}, \emph{Facebook} i \emph{Microsoft}.
 
 \section{Instalacija i korišćenje sistema \emph{Cargo}}
@@ -211,7 +211,7 @@ inicijalizuje i novi \emph{Git} repozitorijum.
 Generisana \texttt{Cargo.toml} datoteka je prikazana na listingu~\ref{inst:cargo}.
 
 \begin{lstlisting}[language=TOML,
-                   caption={Inicijalna \emph{Cargo.toml} datoteka}
+                   caption={Inicijalna \emph{Cargo.toml} datoteka},
                    label={inst:cargo}]
 [package]
 name = "novi_projekat"
@@ -283,18 +283,20 @@ ali ne i vrednost izvršavanja funkcije.
 
 U okviru jezika dozvoljeno je i tzv.\ sakrivanje (engl. \emph{shadowing}).
 Sakrivanje je ponovno definisanje promenljivih. Za razliku od
-korišćenja ključne reči \texttt{mut}, prilikom sakrivanja je
+korišćenja ključne reči \texttt{mut}, koja omogućava promenu vrednosti promenljive, prilikom sakrivanja je
 moguće promeniti tip promenljive koja se ponovo definiše.
 
 \subsection{Tipovi}
 Programski jezik \emph{Rust} je statički tipiziran jezik, ali
-ne zaheva pisanje tipa uz svaku promenljivu, osim ako je to
-neophodno; primer je korišćenje funkcije \texttt{parse}:
+ne zahteva pisanje tipa uz svaku promenljivu, osim ako je to
+neophodno; primer je korišćenje funkcije \texttt{parse}, koja je data na listingu~\ref{ty:parse}:
 
-\lstinputlisting[language=Rust]{parse.rs}
+\lstinputlisting[language=Rust,
+                 caption={Korišćenje funkcije \texttt{parse}},
+                 label={ty:parse}]{parse.rs}
 
 \noindent
-Ukoliko se pokuša prevođenje ovog koda, \emph{Cargo} će
+Ukoliko se pokuša prevođenje koda sa listinga~\ref{ty:parse}, \emph{Cargo} će
 pokazati grešku:
 
 \begin{lstlisting}[language={}, style=text]
@@ -327,9 +329,10 @@ jezika \emph{C} su tipovi \texttt{f32} i \texttt{f64}. Tip
 
 Osnovni složeni tipovi u programskom jeziku \emph{Rust} su torke
 i nizovi. Torke se predstavljaju navođenjem liste tipova, razdvojene zarazima u okviru
-zagrada. Naredni primer ilustruje upotrebu torki:
+zagrada. Primer sa listinga~\ref{ty:tuple} ilustruje upotrebu torki:
 
-\lstinputlisting[language=Rust]{tuples_arrays.rs}
+\lstinputlisting[language=Rust
+                label={ty:tuple}]{tuples_arrays.rs}
 
 Torke mogu sadržati vrednosti različitog tipa, a može im se pristupiti
 ili korišćenjem novih promenljivih, ili korišćenjem \texttt{.i} sintakse,
@@ -341,7 +344,7 @@ fiksne su veličine. Obeležavaju se sa uglastim zagradama, unutra kojih su elem
 razdvojeni zarezima.
 
 Niske se u programskom jeziku \emph{Rust} javljaju u dva oblika:
-u obliku literala i obliku niske promenljive dužine
+u obliku literala i u obliku niske promenljive dužine
 (u \emph{Rust}-u se one zovu \emph{string}, odnosno \emph{String}).
 Literalima se veličina zna pre kompilacije i njihov sadržaj se ne može promeniti,
 pa se one mogu čuvati na steku, dok se niske promenljive dužine moraju čuvati na hipu.
@@ -362,7 +365,7 @@ Pored standardnog korišćenja ključne reči \texttt{return} kao oznake za povr
 funkcija će vratiti vrednost poslednje naredbe koja se ne završava delimiterom.
 
 \subsection{Kontrola toka}
-\emph{Rust} podržava klasične načine kontrole toka sa \texttt{if},
+\emph{Rust} podržava klasične imperativne načine kontrole toka sa \texttt{if},
 \texttt{while} i \texttt{for} komandama. Postoji par dodatnih mogućosti
 koje \emph{Rust} takođe nudi:
 
@@ -466,7 +469,7 @@ u drugim programskim jezicima, može postojati samo jedna mutabilna referenca za
 promenljivu u istom dosegu u kojem ne sme postojati ni imutabilna referenca te promenljive.
 
 U \emph{Rust}-u je nemoguće napraviti ``zalutalu'' referencu (engl. \emph{dangling reference}),
-tj.\ referencu koja referiše na prostor u memoriji koji se već oslobodio. Prilikom prevođenja
+tj.\ referencu koja referiše na prostor u memoriji koji je već oslobođen. Prilikom prevođenja
 koda, kompilator će dati preporuku za korišćenje statičke reference uz pomoć sintakse
 \texttt{\&'static}. Ukoliko bi se pokušalo prevođenje koda iz listinga~\ref{poz:dangle},
 kompilator ne bi dozvolio prevođenje bez \texttt{static} oznaka. Konvencija je da imena
@@ -561,17 +564,17 @@ mogla rezervisati adekvatna količina memorije.
 \subsubsection{Heš mape}
 
 Za razliku od vektora, deo standardne biblioteke koja implementira heš mape
-se mora ručno uključiti u program naredbom \texttt{use}. Funkcija insert će uneti
+se mora ručno uključiti u program naredbom \texttt{use}. Funkcija \texttt{insert} će uneti
 odgovarajući par u mapu, ali će postaviti novu vrednost, bez obzira da li se ključ već
 nalazi u mapi.
 
 Korišćenjem funkcije \texttt{entry}, može se dobiti enumerator \texttt{Entry} koji ukazuje
 da li vrednost za dati ključ postoji u mapi. Ako se na \texttt{Entry} nadoveže funkcija
-\texttt{or\_insert}, koja će uneti odgovarajući par u mapu samo ako taj ključ ne postoji u
+\texttt{or\_insert}, ona će uneti odgovarajući par u mapu samo ako taj ključ ne postoji u
 mapi. Nakon toga, \texttt{or\_insert} će vratiti referencu na par koji je napravljen, ili koji
 je nađen u mapi, kao u listingu~\ref{hmap:insert}. U istom listingu se koristi naredba
 \texttt{println!} sa argumentom \texttt{\{:?\}}, koja ispisuje odgovarajuće informacije
-za debagiranje; u ovom slučaju, biće ispisano \texttt{\{„Pas”: 7, „Macka”: 3\}}.
+za debagovanje; u ovom slučaju, biće ispisano \texttt{\{„Pas”: 7, „Macka”: 3\}}.
 
 \lstinputlisting[language=Rust,
                  caption={Inicijalizacija heš mape i korišćenje \texttt{insert} i \texttt{or\_insert} funkcija},
@@ -599,7 +602,7 @@ podrazumeva pretvaranje generičkih tipova u konkretne tipove koji se koriste u
 programu, time garantujući da će prevedeni kôd biti podjednako efikasan kao
 i kôd koji ne koristi generičke tipove.
 
-Interfejsi (engl. \emph{Traits}) predstavljaju način definisanja zajedničkog ponašanja
+Interfejsi (engl. \emph{traits}) predstavljaju način definisanja zajedničkog ponašanja
 struktura i enumeratora. U listingu~\ref{gen:trait_def} je definisan novi
 interfejs \texttt{Objekat2D} koji obavezuje objekte da sadrže implementaciju
 funkcije \texttt{povrsina}.
@@ -647,10 +650,10 @@ karaktera \texttt{<} i \texttt{>} zajedno sa generičkim tipovima.
                  caption={Definisanje funkcije čiji parametri imaju ekplicitno navedene životne vekove},
                  label={life:fn_def_lifespan}]{fn_def_lifespan.rs}
 
-Nije uvek neophodno eksplicitno deklarisati sve životne vekove referenci prilikom
+Nije uvek neophodno eksplicitno deklarisati životni vek svake reference prilikom
 definisanja funkcije, zato što
-postoje \textbf{pravila elizije životnih vekova} (engl. \emph{lifetime elision rules}).
-U pravila elizije se ubrajaju tri
+postoje \textbf{pravila spajanja životnih vekova} (engl. \emph{lifetime elision rules}).
+U pravila spajanja se ubrajaju tri
 pravila po kojima kompilator automatski određuje životni vek reference:
 
 \begin{enumerate}
@@ -667,9 +670,9 @@ pravila po kojima kompilator automatski određuje životni vek reference:
 
 U listingu~\ref{life:fn_def_lifespan} funkcija \texttt{duza\_rec} ima navedene životne
 vekove jer kompilator nije u mogućnosti da izvede sve životne vekove samo iz
-pravila elizije. Da životni vekovi nisu eksplicitno napisani, oba parametra funkcije
+pravila spajanja. Da životni vekovi nisu eksplicitno napisani, oba parametra funkcije
 bi imala jedinstveni životni vek, a životni vek povratne vrednosti bi ostao nepoznat
-jer se nijedno pravilo elizije ne odnosi na njega.
+jer se nijedno pravilo spajanja ne odnosi na njega.
 
 
 % ------------------------------------------------------------------------------
