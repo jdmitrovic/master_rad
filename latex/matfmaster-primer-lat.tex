@@ -676,6 +676,36 @@ bi imala jedinstveni životni vek, a životni vek povratne vrednosti bi ostao ne
 jer se nijedno pravilo spajanja ne odnosi na njega.
 
 
+\section{Prilagodljiva radiks stabla}
+
+Razvoj računarske memorije je doveo do situacije da se baze podataka
+mogu u potpunosti smestiti u radnu sistemsku memoriju. Ovakve baze podataka se nazivaju
+\textbf{memorisane baze podataka} (engl. \emph{in-memory databases}), a njihovi predstavnici su
+\emph{Apache Ignite}, \emph{VoltDB} i \emph{Redis}. Korišćenjem radne umesto sekundarne
+memorije dobijaju se značajna poboljšanja u vidu smanjenja odziva, jer odziv sistemske memorije
+ima za šest redova veličine brže vreme odziva od sekundarne memorije bazirane na magnetnim diskovima.
+
+Za memorisane baze podataka je neophodna struktura podataka koja podržava upite dometa
+(engl. \emph{range queries}) ali da istovremeno optimalno koristi procesor, pošto
+vreme odziva više nije problem. Strukture koje se tradicionalno koriste u bazama podataka jesu
+stabla i druge drvolike strukture. Međutim, problem je u njihovoj neefikasnosti, jer
+funkcije dodavanja i brisanja elemenata u najboljem slučaju ima asimptotsko vreme izvršavanja
+$ \mathcal{O}(n\log{}n) $. U ove svrhe su stvorene nadograđene varijante stabala,
+kao što je struktura podataka FAST
+(engl. \emph{\textbf{F}ast \textbf{A}rchitecture \textbf{S}ensitive \textbf{T}ree})~\cite{fast}
+koja se oslanja na SIMD instrukcije koje omogućavaju paralelno izručunavanje na delu memorije.
+FAST je efikasniji prilikom pretrage podataka koji su već uneti,
+ali gubi na robusnosti, pošto se podaci ne mogu efikasno dodavati niti brisati.
+
+Pored stabala i drugih drvolikih struktura, u ove svrhe se koriste i heš mape. Nasuprot
+stablima, heš mape su efikasne za sve osnovne operacije (dodavanje, brisanje, pretraživanje),
+sa asimptotskim vremonom izvršavanja $ \mathcal{O}(1) $. Uprkos efikasnosti heš mapa, one nisu
+dobro rešenje za baze podataka zbog upita dometa. U heš mapama podaci nisu nužno sortirani ili
+grupisani na bilo koji način, što čini upite dometa, koji dohvataju više podataka
+sa sličnim ključem, neefikasnim.
+Takođe, povećavanje kapaciteta heš mape je skupo i podrazumeva reorganizaciju
+čitave mape, sa linearnom vremenskom složenošću.
+
 % ------------------------------------------------------------------------------
 \chapter{Razrada}
 \label{chp:razrada}
