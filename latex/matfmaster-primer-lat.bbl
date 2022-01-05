@@ -25,6 +25,7 @@
       \field{labeltitlesource}{title}
       \field{note}{on-line at: \url{https://blog.rust-lang.org/2015/05/15/Rust-1.0.html}}
       \field{title}{{Announcing Rust 1.0}}
+      \field{year}{2015}
     \endentry
     \entry{aws}{misc}{}
       \name{author}{1}{}{%
@@ -47,6 +48,113 @@
       \field{note}{on-line at: \url{https://aws.amazon.com/blogs/opensource/why-aws-loves-rust-and-how-wed-like-to-help/}}
       \field{title}{{Why AWS loves Rust, and how we’d like to help}}
       \field{year}{2020}
+    \endentry
+    \entry{gpt}{inproceedings}{}
+      \name{author}{6}{}{%
+        {{hash=c6b56588d1129e1a122d2ab0846ea415}{%
+           family={Boehm},
+           familyi={B\bibinitperiod},
+           given={Matthias},
+           giveni={M\bibinitperiod}}}%
+        {{hash=592fb36355ad22406ad78ffeffbb6d34}{%
+           family={Schlegel},
+           familyi={S\bibinitperiod},
+           given={Benjamin},
+           giveni={B\bibinitperiod}}}%
+        {{hash=803633a8807287ffd0b46fd3207761f2}{%
+           family={Volk},
+           familyi={V\bibinitperiod},
+           given={Peter\bibnamedelima Benjamin},
+           giveni={P\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=d6d562299dfc8afecf465b99cb1b455d}{%
+           family={Fischer},
+           familyi={F\bibinitperiod},
+           given={Ulrike},
+           giveni={U\bibinitperiod}}}%
+        {{hash=d081c9a763d7e03bf756f8763f76737e}{%
+           family={Habich},
+           familyi={H\bibinitperiod},
+           given={Dirk},
+           giveni={D\bibinitperiod}}}%
+        {{hash=69b1ffd40d606bf86bedca673816fde6}{%
+           family={Lehner},
+           familyi={L\bibinitperiod},
+           given={Wolfgang},
+           giveni={W\bibinitperiod}}}%
+      }
+      \name{editor}{5}{}{%
+        {{hash=a4b6b075c63952eafa0316bb893d5578}{%
+           family={Härder},
+           familyi={H\bibinitperiod},
+           given={Theo},
+           giveni={T\bibinitperiod}}}%
+        {{hash=69b1ffd40d606bf86bedca673816fde6}{%
+           family={Lehner},
+           familyi={L\bibinitperiod},
+           given={Wolfgang},
+           giveni={W\bibinitperiod}}}%
+        {{hash=0d10631afbd60e9c5e01446f59e3cd99}{%
+           family={Mitschang},
+           familyi={M\bibinitperiod},
+           given={Bernhard},
+           giveni={B\bibinitperiod}}}%
+        {{hash=3816286e81d4642753e9877b60cc0f3c}{%
+           family={Schöning},
+           familyi={S\bibinitperiod},
+           given={Harald},
+           giveni={H\bibinitperiod}}}%
+        {{hash=924265e1b9d7012e050405f01a100c09}{%
+           family={Schwarz},
+           familyi={S\bibinitperiod},
+           given={Holger},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Bonn}%
+      }
+      \list{publisher}{1}{%
+        {Gesellschaft für Informatik e.V.}%
+      }
+      \strng{namehash}{716aca43b8da45094c4d785f5b181652}
+      \strng{fullhash}{a3b67af02b67988985c149111cb4e11a}
+      \strng{bibnamehash}{716aca43b8da45094c4d785f5b181652}
+      \strng{authorbibnamehash}{716aca43b8da45094c4d785f5b181652}
+      \strng{authornamehash}{716aca43b8da45094c4d785f5b181652}
+      \strng{authorfullhash}{a3b67af02b67988985c149111cb4e11a}
+      \strng{editorbibnamehash}{be3597d093f7706e4baa2185f66d0182}
+      \strng{editornamehash}{be3597d093f7706e4baa2185f66d0182}
+      \strng{editorfullhash}{2880d98e0453da1ab892e43a5b769e76}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Datenbanksysteme für Business, Technologie und Web (BTW)}
+      \field{title}{Efficient in-memory indexing with generalized prefix trees}
+      \field{year}{2011}
+      \field{pages}{227\bibrangedash 246}
+      \range{pages}{20}
+    \endentry
+    \entry{lrt}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=729670cd9d39b9b575390147a29d51d7}{%
+           family={Corbet},
+           familyi={C\bibinitperiod},
+           given={Jonathan},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{729670cd9d39b9b575390147a29d51d7}
+      \strng{fullhash}{729670cd9d39b9b575390147a29d51d7}
+      \strng{bibnamehash}{729670cd9d39b9b575390147a29d51d7}
+      \strng{authorbibnamehash}{729670cd9d39b9b575390147a29d51d7}
+      \strng{authornamehash}{729670cd9d39b9b575390147a29d51d7}
+      \strng{authorfullhash}{729670cd9d39b9b575390147a29d51d7}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{on-line at: \url{https://lwn.net/Articles/175432/}}
+      \field{title}{{Trees I: Radix trees}}
+      \field{year}{2006}
     \endentry
     \entry{crosvm}{misc}{}
       \field{sortinit}{c}

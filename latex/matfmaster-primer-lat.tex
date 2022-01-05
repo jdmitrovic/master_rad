@@ -676,7 +676,7 @@ bi imala jedinstveni životni vek, a životni vek povratne vrednosti bi ostao ne
 jer se nijedno pravilo spajanja ne odnosi na njega.
 
 
-\section{Prilagodljiva radiks stabla}
+\chapter{Prilagodljiva radiks stabla}
 
 Razvoj računarske memorije je doveo do situacije da se baze podataka
 mogu u potpunosti smestiti u radnu sistemsku memoriju. Ovakve baze podataka se nazivaju
@@ -699,12 +699,83 @@ ali gubi na robusnosti, pošto se podaci ne mogu efikasno dodavati niti brisati.
 
 Pored stabala i drugih drvolikih struktura, u ove svrhe se koriste i heš mape. Nasuprot
 stablima, heš mape su efikasne za sve osnovne operacije (dodavanje, brisanje, pretraživanje),
-sa asimptotskim vremonom izvršavanja $ \mathcal{O}(1) $. Uprkos efikasnosti heš mapa, one nisu
+sa prosečnom vremenskom složenošću $ \mathcal{O}(1) $. Uprkos efikasnosti heš mapa, one nisu
 dobro rešenje za baze podataka zbog upita dometa. U heš mapama podaci nisu nužno sortirani ili
 grupisani na bilo koji način, što čini upite dometa, koji dohvataju više podataka
 sa sličnim ključem, neefikasnim.
 Takođe, povećavanje kapaciteta heš mape je skupo i podrazumeva reorganizaciju
 čitave mape, sa linearnom vremenskom složenošću.
+
+Da bi se ispunili zahtevi memorisanih baza podataka, pojavljuju se tzv.
+\textbf{radiks stabla} (engl. \emph{radix tree}). Radiks stabla su drvolika struktura koja,
+za razliku od stabala pretrage koja porede ključeve, koristi reprezentaciju ključa u
+binarnom sistemu brojeva. Svaki unutrašnji čvor stabla predstavlja, na primer,
+jedan bajt ključa,
+dok se u listovima nalaze vrednosti. Ovom metodom skladištenja sličnih ključeva u
+istom podstablu rezultuje vremenskom složenošću koja ne zavisi od broja elemenata
+unetih u strukturu niti od veličine same strukture, već od
+dužine ključa reprezentovanog u binarnom sistemu. Iako je vremenska složenost linearna,
+osobina da efikasnost ne zavisi od broja unetih elemenata je pogodna za primenu
+u memorisanim bazama podataka. Prednost radiks stabala je i u činjenici da ona,
+za razliku od stabala pretrage, ne zahtevaju rebalansiranje zarad
+održavanja visine stabla.
+
+Problem koji se javlja kod radiks stabala jeste neoptimalno korišćenje memorije.
+Ukoliko svaki unutrašnji čvor predstavlja jedan bajt ključa, to znači da
+svaki unutrašnji čvor može imati do $ 2^{8} $, odnosno 256 pokazivača na decu.
+Kako svaki čvor neće imati maksimalan broj dece, rezervisanje memorijskog prostora
+za najgori slučaj rezultuje prekomernim korišćenjem memorije u prosečnom slučaju.
+Jedno rešenje ovog problema jesu prilagodljiva radiks stabla, skraćeno nazvana
+\textbf{ART}
+(engl. \emph{\textbf{A}daptive \textbf{R}adix \textbf{T}ree}), koja dinamički
+prilagođavaju veličinu unutrašnjih čvorova u odnosu na broj dece.
+
+\section{Struktura prilagodljivih radiks stabala}
+
+Unutrašnji čvorovi radiks stabla ne moraju nužno memorisati jedan bajt ključa.
+Broj bitova koji se reprezentuje se naziva \textbf{opseg} (engl. \emph{span}).
+To znači da, u svom osnovnom obliku, radiks stabla imaju visinu koja zavisi od
+dužine ključa $k$ i od opsega $s$, i ona iznosi $ \lceil \frac{k}{s} \rceil $.
+
+Odabir opsega ima uticaja i na vremensku i na memorijsku složenost radiks
+stabla. Ukoliko je opseg mali, onda je potencijalni broj dece po unutrašnjem
+čvoru manji, pa je memorija bolje iskorišćena, ali visina stabla je velika,
+te su operacije na stablu sporije. I suprotno važi: ukoliko je opseg veliki,
+onda je visina stabla mala i operacije se vrše brzo, ali je memorijska složenost
+prevelika. Implementacije radiks stabala GPT~\cite{gpt} i LRT~\cite{lrt}
+koriste četiri, odnosno šest bitova opsega.
+
+ART ima opseg od osam bita, odnosno jedan bajt. Da bi se sprečila prekomerna
+upotreba memorije, koriste se četiri različita tipa unutrašnjih čvorova u odnosu
+na maksimalan broj pokazivača na decu:
+
+\begin{itemize}
+
+  \item \textbf{\texttt{Node4}} je najjednostavniji oblik unutrašnjeg čvora
+        i sastoji se od
+        dva vektora dužine 4 za bajtove ključa i pokazivače. Vektor ključeva
+        održava sortirani poredak, zbog mogućnosti korišćenja upita dometa.
+  \item \textbf{\texttt{Node16}} koristi dva vektora dužine 16.
+        Na tipu \texttt{Node4}
+        se koristi binarna pretraga zato što je vektor na kome se pretraga vrši
+        relativno male veličine, ali nije adekvatno rešenje za vektor od 16
+        elemenata. Zbog toga se koriste pomenute SIMD instrukcije koje su
+        hardverski podržane od strane procesora.
+  \item \textbf{\texttt{Node48}} ne može koristiti SIMD instrukcije zato što su one
+        hardverski ograničene po broju bitova koji vektor može imati. Stoga se
+        koristi vektor ključeva koji sadrži maksimalnih 256 elemenata.
+        Vektor ključeva čuva indekse odgovarajućih elemenata u vektoru
+        pokazivača koji ima kapacitet od 48 elemenata.
+  \item \textbf{\texttt{Node256}} koristi samo jedan vektor koji sadrži pokazivače,
+        dok se bajtovi ključeva indirektno čuvaju kao indeksi vektora
+        pokazivača. Ovaj tip koristi više memorije od \texttt{Node48},
+        zato što pokazivači zauzimaju više memorije od čuvanja indeksa
+        koji nisu veći od jednog bajta.
+
+\end{itemize}
+
+\noindent Ukoliko čvor popuni svoj kapacitet, onda se on transformiše u naredni
+čvor po veličini.
 
 % ------------------------------------------------------------------------------
 \chapter{Razrada}
