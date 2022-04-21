@@ -336,6 +336,43 @@
       \field{title}{{Functional Language Features: Iterators and Closures}}
       \field{year}{2019}
     \endentry
+    \entry{artful}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=963c74f650ce23bb4617efc8276c5afb}{%
+           family={Leis},
+           familyi={L\bibinitperiod},
+           given={Viktor},
+           giveni={V\bibinitperiod}}}%
+        {{hash=2466c24cd22361559679d58bb1d8da60}{%
+           family={Kemper},
+           familyi={K\bibinitperiod},
+           given={Alfons},
+           giveni={A\bibinitperiod}}}%
+        {{hash=856106a72d787bcea4281fca718cd7d7}{%
+           family={Neumann},
+           familyi={N\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{ec1b22a6643420e5e2c8b675f3e0c5d1}
+      \strng{fullhash}{ec1b22a6643420e5e2c8b675f3e0c5d1}
+      \strng{bibnamehash}{ec1b22a6643420e5e2c8b675f3e0c5d1}
+      \strng{authorbibnamehash}{ec1b22a6643420e5e2c8b675f3e0c5d1}
+      \strng{authornamehash}{ec1b22a6643420e5e2c8b675f3e0c5d1}
+      \strng{authorfullhash}{ec1b22a6643420e5e2c8b675f3e0c5d1}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2013 IEEE 29th International Conference on Data Engineering (ICDE)}
+      \field{title}{The adaptive radix tree: ARTful indexing for main-memory databases}
+      \field{year}{2013}
+      \field{pages}{38\bibrangedash 49}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1109/ICDE.2013.6544812
+      \endverb
+    \endentry
     \entry{npm}{misc}{}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}

@@ -48,6 +48,7 @@
 \usepackage{listings}
 \usepackage{listings-rust}
 \lstset{
+  escapeinside={(*@}{@*)},
   style=boxed,
   inputpath=../rust_primeri/examples
 }
@@ -676,7 +677,7 @@ bi imala jedinstveni životni vek, a životni vek povratne vrednosti bi ostao ne
 jer se nijedno pravilo spajanja ne odnosi na njega.
 
 
-\chapter{Prilagodljiva radiks stabla}
+\chapter{Prilagodljiva radiks-stabla}
 
 Razvoj računarske memorije je doveo do situacije da se baze podataka
 mogu u potpunosti smestiti u radnu sistemsku memoriju. Ovakve baze podataka se nazivaju
@@ -707,7 +708,7 @@ Takođe, povećavanje kapaciteta heš mape je skupo i podrazumeva reorganizaciju
 čitave mape, sa linearnom vremenskom složenošću.
 
 Da bi se ispunili zahtevi memorisanih baza podataka, pojavljuju se tzv.
-\textbf{radiks stabla} (engl. \emph{radix tree}). Radiks stabla su drvolika struktura koja,
+\textbf{radiks-stabla} (engl. \emph{radix tree}). Radiks-stabla su drvolika struktura koja,
 za razliku od stabala pretrage koja porede ključeve, koristi reprezentaciju ključa u
 binarnom sistemu brojeva. Svaki unutrašnji čvor stabla predstavlja, na primer,
 jedan bajt ključa,
@@ -716,25 +717,26 @@ istom podstablu rezultuje vremenskom složenošću koja ne zavisi od broja eleme
 unetih u strukturu niti od veličine same strukture, već od
 dužine ključa reprezentovanog u binarnom sistemu. Iako je vremenska složenost linearna,
 osobina da efikasnost ne zavisi od broja unetih elemenata je pogodna za primenu
-u memorisanim bazama podataka. Prednost radiks stabala je i u činjenici da ona,
+u memorisanim bazama podataka. Prednost radiks-stabala je i u činjenici da ona,
 za razliku od stabala pretrage, ne zahtevaju rebalansiranje zarad
 održavanja visine stabla.
 
-Problem koji se javlja kod radiks stabala jeste neoptimalno korišćenje memorije.
+Problem koji se javlja kod radiks-stabala jeste neoptimalno korišćenje memorije.
 Ukoliko svaki unutrašnji čvor predstavlja jedan bajt ključa, to znači da
 svaki unutrašnji čvor može imati do $ 2^{8} $, odnosno 256 pokazivača na decu.
 Kako svaki čvor neće imati maksimalan broj dece, rezervisanje memorijskog prostora
 za najgori slučaj rezultuje prekomernim korišćenjem memorije u prosečnom slučaju.
-Jedno rešenje ovog problema jesu prilagodljiva radiks stabla, skraćeno nazvana
-\textbf{ART}
-(engl. \emph{\textbf{A}daptive \textbf{R}adix \textbf{T}ree}), koja dinamički
+Na IEEE konferenciji 2013.\ godine su predstavljena prilagodljiva radiks-stabla,
+skraćeno nazvana \textbf{ART}~\cite{artful}
+(engl. \emph{\textbf{A}daptive \textbf{R}adix \textbf{T}ree})
+kao potencijalno novo rešenje, zato što ona dinamički
 prilagođavaju veličinu unutrašnjih čvorova u odnosu na broj dece.
 
-\section{Struktura prilagodljivih radiks stabala}
+\section{Struktura prilagodljivih radiks-stabala}
 
-Unutrašnji čvorovi radiks stabla ne moraju nužno memorisati jedan bajt ključa.
+Unutrašnji čvorovi radiks-stabla ne moraju nužno memorisati jedan bajt ključa.
 Broj bitova koji se reprezentuje se naziva \textbf{opseg} (engl. \emph{span}).
-To znači da, u svom osnovnom obliku, radiks stabla imaju visinu koja zavisi od
+To znači da, u svom osnovnom obliku, radiks-stabla imaju visinu koja zavisi od
 dužine ključa $k$ i od opsega $s$, i ona iznosi $ \lceil \frac{k}{s} \rceil $.
 
 Odabir opsega ima uticaja i na vremensku i na memorijsku složenost radiks
@@ -742,7 +744,7 @@ stabla. Ukoliko je opseg mali, onda je potencijalni broj dece po unutrašnjem
 čvoru manji, pa je memorija bolje iskorišćena, ali visina stabla je velika,
 te su operacije na stablu sporije. I suprotno važi: ukoliko je opseg veliki,
 onda je visina stabla mala i operacije se vrše brzo, ali je memorijska složenost
-prevelika. Implementacije radiks stabala GPT~\cite{gpt} i LRT~\cite{lrt}
+prevelika. Implementacije radiks-stabala GPT~\cite{gpt} i LRT~\cite{lrt}
 koriste četiri, odnosno šest bitova opsega.
 
 ART ima opseg od osam bita, odnosno jedan bajt. Da bi se sprečila prekomerna
@@ -776,6 +778,148 @@ na maksimalan broj pokazivača na decu:
 
 \noindent Ukoliko čvor popuni svoj kapacitet, onda se on transformiše u naredni
 čvor po veličini.
+
+\section{Memorijska optimizacija unutrašnjih čvorova}
+
+Osnovni oblik radiks-stabla podrazumeva korišćenje jednog unutrašnjeg čvora za
+reprezentaciju jednog bajta ključa. Time se ključevi implicitno čuvaju u samoj
+strukturi stabla, tj.\ put od korena stabla do lista predstavlja parcijalni ključ
+tog lista. Međutim, samo korišćenje jednog unutrašnjeg čvora za svaki bajt ključa
+ukazuje na neoptimalno iskorišćenu memoriju.
+
+Da bi se memorijska iskorišćenost optimizovala, koristi se metoda
+\textbf{sažimanja puteva} (engl. \emph{path compression}) koja udružuje unutrašnje
+čvorove koji imaju samo jedno dete sa tim detetom. Korišćenjem ove metode se
+gubi svojstvo implicitno sačuvanih parcijalnih ključeva, pa se oni moraju čuvati
+eksplicitno. Postoje dva metoda čuvanja parcijalnih ključeva:
+
+\begin{itemize}
+  \item \textbf{Pesimističan}: svaki unutrašnji čvor ima odgovarajući vektor
+        u kome se čuvaju bajtovi parcijalnih ključeva.
+  \item \textbf{Optimističan}: svaki unutrašnji čvor čuva informaciju o dužini
+        parcijalnog ključa. Prilikom pretraživanja stabla preskače se dužina
+        parcijalnog ključa u ključu pretrage i pretraga se nastavlja dalje.
+        Kad pretraga stigne do lista, tad se ceo ključ proverava.
+\end{itemize}
+
+Pesimističan metod daje brzu proveru korektnosti putanje, ali sa sobom nosi
+fragmentaciju memorije. Nasuprot tome, optimističan metod nema problem sa
+fragmentacijom, ali pretraga može da preduzme pogrešan korak, gde se
+pretraga mora vratiti unazad, što otežava implementaciju i ima negativan
+uticaj na performanse. Postoji i hibridan način čuvanja parcijalnih ključeva,
+gde u unutrašnjim čvorovima čuva fiksni broj bajtova parcijalnog ključa. Sve
+preko unapred određenog broja bajtova tog vektora ne memoriše, već se koristi
+optimističan metod čuvanja.
+
+\section{Algoritmi pretrage i umetanja}
+
+U svom radu iz 2013.\ godine, autori prilagodljivih radiks-stabala su
+objavili i algoritme pretrage i umetanja. Algoritam pretrage je dat na
+listingu~\ref{art:algoritam_pretrage}.
+
+\begin{lstlisting}[language=C++,
+                   caption={Algoritam pretrage strukture podataka ART},
+                   label={art:algoritam_pretrage}]
+search(node, key, depth):
+    if node == NULL
+        return NULL
+    if isLeaf(node)
+        if leafMatches(node, key, depth)(*@\label{line:leafMatches}@*)
+            return node
+        return NULL
+    if checkPrefix(node, key, depth) != node.prefixLen
+        return NULL
+    depth += node.prefixLen
+    next = findChild(node, key[depth])
+    return search(next, key, depth + 1)
+\end{lstlisting}
+
+Funkcija \texttt{search} ima tri parametra: trenutni čvor pretrage, ključ
+pretrage i dubinu trenutnog čvora. Kako je ovaj algoritam rekurzivan,
+prvo se proverava bazni slučaj kada je trenutni čvor ili prazan ili
+list, gde se rezultat vraća samo ukoliko je čvor list i ključ u tom listu
+se poklapa sa ključem pretrage. U drugom slučaju, ako je pretraga trenutno
+u unutrašnjem čvoru, prvo se proverava poklapanje parcijalnog prefiksa
+u čvoru u liniji~\ref{line:leafMatches} i pretraga se završava ako dođe
+do nejednakosti parcijalnih ključeva. Zatim se koriguje dubina pretrage,
+zato što parametar dubine se odnosi na broj poređenih bajtova u tom trenutku.
+Na kraju, nalazi se idući čvor funkcijom \texttt{findChild} prosleđivanjem
+trenutnog čvora i odgovarajućeg bajta i pretraga se
+nastavlja rekurzivno. Algoritam funkcije \texttt{findChild} je dat u
+listingu~\ref{art:algoritam_findChild}.
+
+\begin{lstlisting}[language=C++,
+                   caption={Algoritam pronalaska idućeg čvora pretrage},
+                   label={art:algoritam_findChild}]
+findChild(node, byte):
+    if node.type == Node4
+        for (i = 0; i < node.count; i = i + 1)
+            if node.key[i] == byte
+                return node.child[i]
+        return NULL
+    if node.type == Node16
+        for (i = 0; i < node.count; i = i + 1)
+            key = _mm_set1_epi8(byte)
+            cmp = _mm_cmpeq_epi8(key, node.key)
+            mask = (1 << node.count) - 1 (*@\label{line:mask}@*)
+            bitfield = _mm_movemask_epi8(cmp) & mask
+            if bitfield
+                return node.child[ctz(bitfield)]
+            else
+                return NULL
+    if node.type == Node48
+        if node.childIndex[byte] != EMPTY
+            return node.child[node.childIndex[byte]]
+        else
+            return NULL
+    if node.type == Node256
+        return node.child[byte]
+\end{lstlisting}
+
+\noindent Naredni čvor se nalazi na četiri različita načina, u odnosu na
+tip trenutnog čvora koji je poslat kao parametar funkciji
+\texttt{findChild}:
+
+\begin{itemize}
+  \item \textbf{Node4}: naredni čvor se nalazi pretragom svih elemenata
+        vektora ključeva. U ovom slučaju je moguće koristiti i binarnu
+        pretragu, s tim da je poboljšanje zanemarljivo, a niz se, u tom
+        slučaju mora održavati u sortiranom poretku.
+  \item \textbf{Node16}: u ovom slučaju se koriste SIMD instrukcije.
+        Prvo se, funkcijom \texttt{\_mm\_set1\_epi8} inicijalizuje SIMD vektor
+        od 128 bita, odnosno, 16 elemenata veličine jednog bajta. Svi
+        elementi tog vektora biće jednaki bajtu koji je unet kao parametar.
+        Posle inicijalizacije se porede svi elementi novog vektora i
+        vektora ključeva trenutnog čvora funkcijom
+        \texttt{\_mm\_cmpeq\_epi8}. Kao rezultat se dobija vektor iste
+        dužine, ali čiji elementi su heksadekadne vrednosti \texttt{0}
+        i \texttt{FF}, u zavisnosti da li su elementi na odgovarajućoj
+        poziciji jednaki ili ne. U liniji~\ref{line:mask} se pravi
+        maska zato što vektor elemenata nije nužno pun, ali postoji
+        mogućnost poklapanja bajta pretrage sa bajtovima koji nisu
+        u upotrebi, zato što SIMD vektor mora biti inicijalizovan
+        u potpunosti prilikom njegovog definisanja.
+        Maska je veličine
+        32 bita, pa se vektor \texttt{cmp} šalje funkciji
+        \texttt{\_mm\_movemask\_epi8} koja vraća 32-bitnu vrednost
+        gde je svaki element vektora (ukupno ih je 32) reprezentovan
+        svojim najznačajnijim bitom. Kada se primeni maska na dobijenu
+        vrednost, dobija se 32-bitna vrednost \texttt{bitfield},
+        a ključ se nalazi u mestu kojem odgovara bit sa vrednošću
+        1. Da bi se našao indeks prvog bita sa vrednošću 1, koristi
+        se funkcija \texttt{ctz}
+        (engl.\ \textit{\textbf{c}ount \textbf{t}railing \textbf{z}eros})
+        koja broji nule na kraju vrednosti zapisane u binarnom
+        sistemu.
+  \item \textbf{Node48}: indeks narednog čvora je upisan u vektoru
+        \texttt{childIndex} koji ima 256 elemenata, za svaku
+        vrednost bajta pretrage. Ukoliko taj ključ nije unet,
+        u vektor \texttt{childIndex} se piše fiksirana
+        vrednost \texttt{EMPTY} koja je veća od 48 (maksimalnog
+        broja elemenata u nizu potomaka).
+  \item \textbf{Node256}: koristi se niz maksimalne veličine od 256 elemenata
+        gde se bajt ključa direktno koristi za indeksiranje.
+\end{itemize}
 
 % ------------------------------------------------------------------------------
 \chapter{Razrada}
