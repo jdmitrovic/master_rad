@@ -892,8 +892,8 @@ tip trenutnog čvora koji je poslat kao parametar funkciji
         Posle inicijalizacije se porede svi elementi novog vektora i
         vektora ključeva trenutnog čvora funkcijom
         \texttt{\_mm\_cmpeq\_epi8}. Kao rezultat se dobija vektor iste
-        dužine, ali čiji elementi su heksadekadne vrednosti \texttt{0}
-        i \texttt{FF}, u zavisnosti da li su elementi na odgovarajućoj
+        dužine, ali čiji elementi su binarne vrednosti \texttt{0}
+        i \texttt{11111111}, u zavisnosti da li su elementi na odgovarajućoj
         poziciji jednaki ili ne. U liniji~\ref{line:mask} se pravi
         maska zato što vektor elemenata nije nužno pun, ali postoji
         mogućnost poklapanja bajta pretrage sa bajtovima koji nisu
@@ -913,13 +913,80 @@ tip trenutnog čvora koji je poslat kao parametar funkciji
         sistemu.
   \item \textbf{Node48}: indeks narednog čvora je upisan u vektoru
         \texttt{childIndex} koji ima 256 elemenata, za svaku
-        vrednost bajta pretrage. Ukoliko taj ključ nije unet,
+        vrednost bajta pretrage. Ukoliko vrednost za
+        taj ključ nije uneta,
         u vektor \texttt{childIndex} se piše fiksirana
         vrednost \texttt{EMPTY} koja je veća od 48 (maksimalnog
         broja elemenata u nizu potomaka).
   \item \textbf{Node256}: koristi se niz maksimalne veličine od 256 elemenata
         gde se bajt ključa direktno koristi za indeksiranje.
 \end{itemize}
+
+Algoritam za umetanje novih parova ključ-vrednost u stablo je dat
+na listingu~\ref{art:algoritam_insert}, dok je algoritam brisanja
+parova, po rečima autora, simetričan ovom algoritmu. Ponovo je u pitanju
+rekurzivni algoritam, te se prvo obrađuje bazni slučaj, odnosno kad
+se praznom podstablu dodaje list. Ako je čvor kome se dodaje
+element list, onda se pravi novi unutrašnji čvor funkcijom
+\texttt{makeNode4} koji će da sadrži čvor koji se dodaje
+kao i stari list. Pre toga, mora se utvrditi dužina prefiksa
+u petlji u liniji~\ref{line:prefix_len}.
+
+Ukoliko stablo nije prazno, niti je u pitanju list, onda je
+prosleđeni čvor unutrašnji. Ako prefiks unutrašnjeg
+čvora ne odgovara traženom ključu, onda dolazi do račvanja
+stabla na dve grane gde se ponavlja slična procedura
+kao i kod stabla koje sadrži samo jedan list. Na kraju, ako se
+prefiksi poklapaju, onda se traži sledeći čvor gde bi se
+pretraga mogla nastaviti. Ako naredni čvor u pretrazi postoji,
+onda se pretraga rekurzivno nastavlja. U suprotnom, pretraga se
+zaustavlja i novi list se dodaje trenutnom unutrašnjem čvoru.
+Trenutni unutrašnji čvor može biti popunjen, pa se njegov
+kapacitet mora proširiti pretvaranjem trenutnog
+unutrašnjeg čvora u sledeći čvor u hijerarhiji funkcijom
+\texttt{grow} (iz \texttt{Node4}
+u \texttt{Node16}, iz \texttt{Node16} u \texttt{Node48} ili
+iz \texttt{Node48} u \texttt{Node256}).
+
+\begin{lstlisting}[language=C++,
+                   caption={Algoritam umetanja novih elemenata u stablo},
+                   label={art:algoritam_insert}]
+insert (node, key, leaf, depth):
+ if node == NULL
+    replace(node, leaf)
+    return
+ if isLeaf(node)
+    newNode=makeNode4()
+    key2=loadKey(node)
+    for (i = depth; key[i] == key2[i]; i = i + 1) (*@\label{line:prefix_len}@*)
+        newNode.prefix[i - depth] = key[i]
+    newNode.prefixLen = i - depth
+    depth = depth + newNode.prefixLen
+    addChild(newNode, key[depth], leaf)
+    addChild(newNode, key2[depth], node)
+    replace(node, newNode)
+    return
+ p=checkPrefix(node, key, depth)
+ if p != node.prefixLen
+    newNode = makeNode4()
+    addChild(newNode, key[depth + p], leaf)
+    addChild(newNode, node.prefix[p], node)
+    newNode.prefixLen = p
+    memcpy(newNode.prefix, node.prefix, p)
+    node.prefixLen = node.prefixLen-(p + 1)
+    memmove(node.prefix,node.prefix + p + 1,node.prefixLen)
+    replace(node, newNode)
+    return
+ depth = depth + node.prefixLen
+ next = findChild(node, key[depth])
+ if next
+    insert(next, key, leaf, depth + 1)
+ else
+    if isFull(node)
+        grow(node)
+ addChild(node, key[depth], leaf)
+\end{lstlisting}
+
 
 % ------------------------------------------------------------------------------
 \chapter{Razrada}
