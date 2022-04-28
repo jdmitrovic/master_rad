@@ -116,14 +116,13 @@ Danas se \emph{Rust} koristi na velikom broju komercijalnih projekata. Na primer
 \begin{itemize}
     \item U AWS servisima firme Amazon, poput \emph{Lambda}, \emph{EC2}
         i \emph{Cloudfront}~\cite{aws},
-    \item U okviru operativnog sistema kompanije Gugl (engl. \emph{Google})
+    \item U okviru operativnog sistema kompanije \textit{Google}
         \emph{ChromeOS}~\cite{crosvm},
-    \item U određenim komponentama Majkrosoftove platforme \emph{Azure}, uključujući i
+    \item U određenim komponentama \textit{Microsoft} platforme \emph{Azure}, uključujući i
         IoT sigurnosni servis \emph{edgelet}~\cite{edgelet},
     \item U registru \emph{JavaScript} paketa \emph{npm},
         kod procedura koje prouzrokuju veliko opterećenje procesora~\cite{npm},
-    \item U Mozilinom (engl. \emph{Mozilla}) veb-brauzeru Fajerfoks
-        (engl. \emph{Firefox})~\cite{firefox_rust}.
+    \item U veb-brauzeru \textit{Firefox}~\cite{firefox_rust}.
 \end{itemize}
 
 \section{Razvoj jezika \emph{Rust}}
@@ -161,7 +160,7 @@ verzija biti slična svom prethodniku, dok se kod jezika sa dugim periodom
 između verzija očekuju velike promene, što može da šteti kompatibilnosti.
 
 U februaru 2021.\ godine ozvaničen je nastanak fondacije \emph{Rust} (engl.
-\texttt{Rust Foundation}), neprofitne organizacije osnovane u svrhe daljeg razvoja programskog
+\textit{Rust Foundation}), neprofitne organizacije osnovane u svrhe daljeg razvoja programskog
 jezika Rust~\cite{rust_foundation}. Pored Mozile, sponzori fondacije \emph{Rust} su i kompanije
 \emph{Google}, \emph{AWS}, \emph{Huawei}, \emph{Facebook} i \emph{Microsoft}.
 
@@ -230,7 +229,9 @@ popisuju svi paketi koji su neophodni za rad sa novim paketom,
 tako da ih \emph{Cargo} može dopremiti.
 
 Na listingu~\ref{inst:main} je prikazana \texttt{main.rs} datoteka. U njoj se, po osnovnim
-podešavanjima, nalazi \emph{Hello World} program.
+podešavanjima, nalazi \emph{Hello World} program. Kao što se na listingu može videti,
+sintaksa programskog jezika \textit{Rust} podseća na sintaksu programskog jezika
+\textit{C}.
 
 \lstinputlisting[language=Rust,
                  caption={Inicijalna \emph{main.rs} datoteka},
@@ -290,7 +291,11 @@ moguće promeniti tip promenljive koja se ponovo definiše.
 \subsection{Tipovi}
 Programski jezik \emph{Rust} je statički tipiziran jezik, ali
 ne zahteva pisanje tipa uz svaku promenljivu, osim ako je to
-neophodno; primer je korišćenje funkcije \texttt{parse}, koja je data na listingu~\ref{ty:parse}:
+neophodno; primer je korišćenje funkcije \texttt{parse}, data na listingu~\ref{ty:parse},
+koja prevodi nisku u odgovarajuću brojčanu vrednost. Buduči da
+\texttt{parse} može vratiti i nepostojeću vrednost kada niska nije napisana
+u odgovarajućem formatu, ulančava se i funkcija \texttt{expect} koja
+prinudno zaustavlja program i ispisuje prosleđenu poruku.
 
 \lstinputlisting[language=Rust,
                  caption={Korišćenje funkcije \texttt{parse}},
@@ -364,7 +369,7 @@ Primer funkcije koja izračunava zbir kvadrata dva broja je dat u okviru listing
 
 \noindent
 Pored standardnog korišćenja ključne reči \texttt{return} kao oznake za povratnu vrednost funkcije,
-funkcija će vratiti vrednost poslednje naredbe koja se ne završava delimiterom.
+funkcija će vratiti vrednost poslednje naredbe koja se ne završava karakterom \texttt{;}.
 
 \subsection{Kontrola toka}
 \emph{Rust} podržava klasične imperativne načine kontrole toka sa \texttt{if},
@@ -376,16 +381,20 @@ koje \emph{Rust} takođe nudi:
         \texttt{while} naredbu sa uvek tačnim uslovom, već se može koristiti
         ključna reč \texttt{loop}, kao u listingu~\ref{fc:let_for}, gde se
         \emph{loop} koristi u svrhe nalaženja najvećeg zajedničkog delioca
-        dva broja,
+        dva broja.
   \item I \texttt{while} i \texttt{for} se mogu naći u okviru \texttt{let}
         naredbe, s tim da se u telu petlje mora naći \texttt{break} naredba
         uz koju se dopisuje povratna vrednosti kao u primeru~\ref{fc:let_for},
         analogno korišćenju \texttt{return}
-        naredbe u funkcijama,
+        naredbe u funkcijama.
   \item Iteriranje kroz kolekciju pomoću \texttt{for} petlje se može vršiti ili
         preko indeksa trenutnog elementa, ili pomoću \texttt{iter} funkcije.
-        Za iteriranje od kraja kolekcije, na \texttt{iter} se nadovezuje
-        funkcija \texttt{rev} kao u listingu~\ref{fc:for}.
+        U listingu~\ref{fc:for}, u \texttt{for} petlji se nad
+        vektorom \texttt{a} pravi iterator funkcijom \texttt{iter},
+        na koji se primenjuje funkcija \texttt{rev} koja
+        menja smer čitanja elemenata iteratora. Brojevi
+        koji će biti ispisani na standardni izlaz su, redom, \texttt{3},
+        \texttt{2} i \texttt{1}.
 \end{itemize}
 
 \lstinputlisting[language=Rust,
@@ -483,7 +492,8 @@ promenljivih sa statičkim životnim vekom počinju velikim početnim slovom.
 
 \subsection{Strukture}
 Definisanje struktura se vrši na uobičajen način, ali \emph{Rust} nudi mogućnosti koje skraćuju
-sintaksu, kao u listingu~\ref{stc:sdef}.
+sintaksu, kao u listingu~\ref{stc:sdef}, gde je dat primer stukture podataka koja modeluje
+studente.
 
 \lstinputlisting[language=Rust,
                  caption={Kreiranje novih struktura},
@@ -500,7 +510,8 @@ im se pristupati \texttt{.} notacijom. Strukture definisane na ovaj način ne mo
 polja, već im se struktura i ponašanje može postaviti putem interfejsa.
 
 Da bi se implementirali metodi u okviru struktura, koristi se ključna reč \texttt{impl} kao u
-listingu~\ref{stc:met}.
+listingu~\ref{stc:met}, gde se menja e-mail adresa strukture \texttt{Student} iz
+listinga~\ref{stc:sdef}.
 
 \lstinputlisting[language=Rust,
                  caption={Definisanje metoda},
@@ -514,7 +525,7 @@ Mogu se implementirati i metodi koji ne uzimaju instancu kao argument; njima se 
 Enumeratori u programskom jeziku \emph{Rust} imaju dodatne mogućnosti u odnosu na enumeratore u
 drugim programskim jezicima: svaki ``tip'' u enumeratoru može se posmatrati kao torka vrednosti.
 Ovime se, na primer, postiže ponašanje enumeratora \texttt{Option} koji premošćava izostanak vrednosti
-\texttt{null}. \texttt{Option} je definisan na sledeći način:
+\texttt{null}. \texttt{Option} je definisan na listingu~\ref{enum:def}.
 
 \lstinputlisting[language=Rust,
                  caption={Definisanje enumeratora},
@@ -599,7 +610,8 @@ izračunati kada su koordinate zapisane u pokretnom zarezu.
                  label={gen:struct}]{generic.rs}
 
 Korišćenje generičkih tipova ne prouzrokuje pad performansi, zato što će
-se prilikom prevođenja koda izvršiti monomorfizacija. Monomorfizacija
+se prilikom prevođenja koda, kao i u programskom jeziku \textit{C++}
+izvršiti \textit{monomorfizacija}. Monomorfizacija
 podrazumeva pretvaranje generičkih tipova u konkretne tipove koji se koriste u
 programu, time garantujući da će prevedeni kôd biti podjednako efikasan kao
 i kôd koji ne koristi generičke tipove.
@@ -643,10 +655,13 @@ eksplicitno naveden. U sekciji~\ref{subsec:pozajmljivanje} su pomenute zalutale 
 odnosno reference koje referišu na već oslobođeni prostor. U istoj sekciji je predstavljen
 i jedan od načina na koji se problem zalutalih referenci može zaobići:
 korišćenjem statičkog životnog veka. Drugi način rešavanja ovog problema jeste korišćenjem
-eksplicitno navedenih životnih vekova kao u listingu~\ref{life:fn_def_lifespan}.
+eksplicitno navedenih životnih vekova.
 Životni vekovi referenci se obeležavaju sa apostrofom i identifikatorom životnog veka posle
 znaka \texttt{\&} i pre tipa reference. Prilikom definisanja funkcije se navode između
 karaktera \texttt{<} i \texttt{>} zajedno sa generičkim tipovima.
+U listingu~\ref{life:fn_def_lifespan} je eksplicitno naveden životni vek referenci
+\texttt{s1} i \texttt{s2}. Kako je životni vek ove dve reference obeležen istim
+identifikatorom \texttt{a}, funkcija \texttt{duza\_rec} očekuje parametre sa istim životnim vekom.
 
 \lstinputlisting[language=Rust,
                  caption={Definisanje funkcije čiji parametri imaju ekplicitno navedene životne vekove},
@@ -708,7 +723,9 @@ Takođe, povećavanje kapaciteta heš mape je skupo i podrazumeva reorganizaciju
 čitave mape, sa linearnom vremenskom složenošću.
 
 Da bi se ispunili zahtevi memorisanih baza podataka, pojavljuju se tzv.
-\textbf{radiks-stabla} (engl. \emph{radix tree}). Radiks-stabla su drvolika struktura koja,
+\textbf{radiks-stabla} (engl. \emph{radix tree}), odnosno
+\textbf{PATRICIA stabla}~\cite{patricia}, kako su prvobitno bila nazvana.
+Radiks-stabla su drvolika struktura koja,
 za razliku od stabala pretrage koja porede ključeve, koristi reprezentaciju ključa u
 binarnom sistemu brojeva. Svaki unutrašnji čvor stabla predstavlja, na primer,
 jedan bajt ključa,

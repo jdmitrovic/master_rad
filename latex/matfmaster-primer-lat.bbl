@@ -373,6 +373,50 @@
       \verb 10.1109/ICDE.2013.6544812
       \endverb
     \endentry
+    \entry{patricia}{article}{}
+      \name{author}{1}{}{%
+        {{hash=f35a3a3c4e4f3ccff62cf6671d8342e1}{%
+           family={Morrison},
+           familyi={M\bibinitperiod},
+           given={Donald\bibnamedelima R.},
+           giveni={D\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York, NY, USA}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{f35a3a3c4e4f3ccff62cf6671d8342e1}
+      \strng{fullhash}{f35a3a3c4e4f3ccff62cf6671d8342e1}
+      \strng{bibnamehash}{f35a3a3c4e4f3ccff62cf6671d8342e1}
+      \strng{authorbibnamehash}{f35a3a3c4e4f3ccff62cf6671d8342e1}
+      \strng{authornamehash}{f35a3a3c4e4f3ccff62cf6671d8342e1}
+      \strng{authorfullhash}{f35a3a3c4e4f3ccff62cf6671d8342e1}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{PATRICIA is an algorithm which provides a flexible means of storing, indexing, and retrieving information in a large file, which is economical of index space and of reindexing time. It does not require rearrangement of text or index as new material is added. It requires a minimum restriction of format of text and of keys; it is extremely flexible in the variety of keys it will respond to. It retrieves information in response to keys furnished by the user with a quantity of computation which has a bound which depends linearly on the length of keys and the number of their proper occurrences and is otherwise independent of the size of the library. It has been implemented in several variations as FORTRAN programs for the CDC-3600, utilizing disk file storage of text. It has been applied to several large information-retrieval problems and will be applied to others.}
+      \field{issn}{0004-5411}
+      \field{journaltitle}{J. ACM}
+      \field{month}{10}
+      \field{number}{4}
+      \field{title}{PATRICIA—Practical Algorithm To Retrieve Information Coded in Alphanumeric}
+      \field{volume}{15}
+      \field{year}{1968}
+      \field{pages}{514\bibrangedash 534}
+      \range{pages}{21}
+      \verb{doi}
+      \verb 10.1145/321479.321481
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/321479.321481
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/321479.321481
+      \endverb
+    \endentry
     \entry{npm}{misc}{}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
