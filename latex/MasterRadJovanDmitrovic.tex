@@ -694,7 +694,7 @@ jer se nijedno pravilo spajanja ne odnosi na njega.
 
 \chapter{Prilagodljiva radiks-stabla}
 
-Razvoj računarske memorije je doveo do situacije da se baze podataka
+Razvoj računarske memorije je doprineo da se baze podataka
 mogu u potpunosti smestiti u radnu sistemsku memoriju. Ovakve baze podataka se nazivaju
 \textbf{memorisane baze podataka} (engl. \emph{in-memory databases}), a njihovi predstavnici su
 \emph{Apache Ignite}~\cite{apacheIgnite}, \emph{VoltDB}~\cite{voltDB} i
@@ -713,7 +713,8 @@ $ \mathcal{O}(n\log{}n) $, gde je $n$ ukupan broj elemenata unet u stablo.
 U ove svrhe su stvorene nadograđene varijante stabala,
 kao što je struktura podataka FAST
 (engl. \emph{\textbf{F}ast \textbf{A}rchitecture \textbf{S}ensitive \textbf{T}ree})~\cite{fast}
-koja se oslanja na SIMD instrukcije koje omogućavaju paralelno izručunavanje na delu memorije.
+koja se oslanja na SIMD instrukcije~\cite{simd}
+koje omogućavaju paralelno izručunavanje na delu memorije.
 FAST je efikasniji prilikom pretrage podataka koji su već uneti,
 ali gubi na efikasnosti umetanja i brisanja elemenata.
 
@@ -1029,7 +1030,7 @@ insert (node, key, leaf, depth):
     replace(node, leaf)
     return
  if isLeaf(node)
-    newNode=makeNode4()
+    newNode = makeNode4()
     key2=loadKey(node)
     for (i = depth; key[i] == key2[i]; i = i + 1) (*@\label{line:prefix_len}@*)
         newNode.prefix[i - depth] = key[i]
