@@ -53,20 +53,20 @@
   inputpath=../rust_primeri/examples
 }
 % Datoteka sa literaturom u BibTex tj. BibLaTeX/Biber formatu
-\bib{matfmaster-primer}
+\bib{MasterRadJovanDmitrovic}
 
 % Ime kandidata na srpskom jeziku (u odabranom pismu)
 \autor{Jovan Dmitrović}
 % Naslov teze na srpskom jeziku (u odabranom pismu)
-\naslov{Master iz matematike ili računarstva čiji je naslov jako dugačak}
+\naslov{Implementacija prilagodljivog radiks-stabla u programskom jeziku \textit{Rust}}
 % Godina u kojoj je teza predana komisiji
-\godina{2021}
+\godina{2022}
 % Ime i afilijacija mentora (u odabranom pismu)
-\mentor{dr Mika \textsc{Mikić}, redovan profesor\\ Univerzitet u Beogradu, Matematički fakultet}
+\mentor{dr Milena \textsc{Vujošević Janičić}, redovan profesor\\ Univerzitet u Beogradu, Matematički fakultet}
 % Ime i afilijacija prvog člana komisije (u odabranom pismu)
-\komisijaA{dr Ana \textsc{Anić}, vanredni profesor\\ University of Disneyland, Nedođija}
+\komisijaA{dr Vesna \textsc{Marinković}, docent\\ Univerzitet u Beogradu, Matematički fakultet}
 % Ime i afilijacija drugog člana komisije (u odabranom pismu)
-\komisijaB{dr Laza \textsc{Lazić}, docent\\ Univerzitet u Beogradu, Matematički fakultet}
+\komisijaB{dr Nina \textsc{Radojičić Matić}, docent\\ Univerzitet u Beogradu, Matematički fakultet}
 % Ime i afilijacija trećeg člana komisije (opciono)
 % \komisijaC{}
 % Ime i afilijacija četvrtog člana komisije (opciono)
@@ -90,7 +90,7 @@
 % Strana sa podacima o mentoru i članovima komisije
 \komisija
 % Strana sa posvetom (u odabranom pismu)
-\posveta{Mami, tati i dedi}
+\posveta{Mami, tati}
 % Strana sa podacima o disertaciji na srpskom jeziku
 \apstrakt
 % Sadržaj teze
@@ -697,23 +697,27 @@ jer se nijedno pravilo spajanja ne odnosi na njega.
 Razvoj računarske memorije je doveo do situacije da se baze podataka
 mogu u potpunosti smestiti u radnu sistemsku memoriju. Ovakve baze podataka se nazivaju
 \textbf{memorisane baze podataka} (engl. \emph{in-memory databases}), a njihovi predstavnici su
-\emph{Apache Ignite}, \emph{VoltDB} i \emph{Redis}. Korišćenjem radne umesto sekundarne
+\emph{Apache Ignite}~\cite{apacheIgnite}, \emph{VoltDB}~\cite{voltDB} i
+\emph{Redis}~\cite{redis}. Korišćenjem radne umesto sekundarne
 memorije dobijaju se značajna poboljšanja u vidu smanjenja odziva, jer odziv sistemske memorije
 ima za šest redova veličine brže vreme odziva od sekundarne memorije bazirane na magnetnim diskovima.
 
 Za memorisane baze podataka je neophodna struktura podataka koja podržava upite dometa
-(engl. \emph{range queries}) ali da istovremeno optimalno koristi procesor, pošto
+(engl. \emph{range queries}), tj.\ upite kod kojih je ključ delimično unet, pa
+se dohvata više podataka istovremeno.
+Glavni cilj ove struktura podataka je da koristi procesor što je efikasnije moguće, jer
 vreme odziva više nije problem. Strukture koje se tradicionalno koriste u bazama podataka jesu
-stabla i druge drvolike strukture. Međutim, problem je u njihovoj neefikasnosti, jer
+drvolike strukture podataka. Međutim, problem je u njihovoj neefikasnosti, jer
 funkcije dodavanja i brisanja elemenata u najboljem slučaju ima asimptotsko vreme izvršavanja
-$ \mathcal{O}(n\log{}n) $. U ove svrhe su stvorene nadograđene varijante stabala,
+$ \mathcal{O}(n\log{}n) $, gde je $n$ ukupan broj elemenata unet u stablo.
+U ove svrhe su stvorene nadograđene varijante stabala,
 kao što je struktura podataka FAST
 (engl. \emph{\textbf{F}ast \textbf{A}rchitecture \textbf{S}ensitive \textbf{T}ree})~\cite{fast}
 koja se oslanja na SIMD instrukcije koje omogućavaju paralelno izručunavanje na delu memorije.
 FAST je efikasniji prilikom pretrage podataka koji su već uneti,
-ali gubi na robusnosti, pošto se podaci ne mogu efikasno dodavati niti brisati.
+ali gubi na efikasnosti umetanja i brisanja elemenata.
 
-Pored stabala i drugih drvolikih struktura, u ove svrhe se koriste i heš mape. Nasuprot
+Pored drvolikih struktura, u ove svrhe se koriste i heš mape. Nasuprot
 stablima, heš mape su efikasne za sve osnovne operacije (dodavanje, brisanje, pretraživanje),
 sa prosečnom vremenskom složenošću $ \mathcal{O}(1) $. Uprkos efikasnosti heš mapa, one nisu
 dobro rešenje za baze podataka zbog upita dometa. U heš mapama podaci nisu nužno sortirani ili
@@ -725,12 +729,41 @@ Takođe, povećavanje kapaciteta heš mape je skupo i podrazumeva reorganizaciju
 Da bi se ispunili zahtevi memorisanih baza podataka, pojavljuju se tzv.
 \textbf{radiks-stabla} (engl. \emph{radix tree}), odnosno
 \textbf{PATRICIA stabla}~\cite{patricia}, kako su prvobitno bila nazvana.
-Radiks-stabla su drvolika struktura koja,
-za razliku od stabala pretrage koja porede ključeve, koristi reprezentaciju ključa u
-binarnom sistemu brojeva. Svaki unutrašnji čvor stabla predstavlja, na primer,
-jedan bajt ključa,
-dok se u listovima nalaze vrednosti. Ovom metodom skladištenja sličnih ključeva u
-istom podstablu rezultuje vremenskom složenošću koja ne zavisi od broja elemenata
+Radiks-stabla su drvolika struktura koja koriste reprezentaciju ključa u
+binarnom sistemu brojeva, gde svaki čvor stabla predstavlja jedan deo
+ključa. Time se pravi stablo koje implicitno
+čuva ključeve svakog čvora prateći put od korena.
+
+Na slici~\ref{fig:radiks} predstavljeno je radiks-stablo
+čiji čvorovi predstavljaju po jedan bajt ključa i gde su uneti parovi sa
+ključevima \texttt{CAT}, \texttt{CAR} i \texttt{ANT} u
+UTF-8 formatu~\cite{unicode}.
+Kako se svaki karakter engleskog alfabeta u UTF-8 formatu predstavlja
+jednim bajtom, svakom čvoru u stablu odgovara jedan karakter
+ključa. Svaki čvor u stablu izuzev korena može sadržati i vrednost,
+uključujući i unutrašnje čvorove. Na primeru su čvorovi koji
+sadrže vrednosti obeleženi žutom bojom.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{images/radiks_stablo.png}
+  \caption{Primer radiks-stabla}
+  \label{fig:radiks}
+\end{figure}
+
+Ukoliko bi se u primeru na
+slici~\ref{fig:radiks} dodao par sa ključem \texttt{AN},
+stablo ne bi menjalo svoju strukturu, već
+bi se samo čvoru \texttt{N} dodala nedostajuća vrednost.
+Pri dodavanju para sa ključem \texttt{CUB}, pretraga bi prilikom prolaska
+kroz stablo došla do čvora \texttt{C} i tu bi stala,
+pošto ne postoji dete \texttt{U}. Tada se dodaje novo podstablo
+čvoru \texttt{C}, gde se dobija novo stablo kao na slici~\ref{fig:radiks2}.
+
+
+Ovom metodom skladištenja parova sličnih ključeva u
+istom podstablu rezultuje vremenskom složenošću čitanja, umetanja i brisanja
+elemenata koja ne zavisi od broja elemenata
 unetih u strukturu niti od veličine same strukture, već od
 dužine ključa reprezentovanog u binarnom sistemu. Iako je vremenska složenost linearna,
 osobina da efikasnost ne zavisi od broja unetih elemenata je pogodna za primenu
@@ -738,12 +771,21 @@ u memorisanim bazama podataka. Prednost radiks-stabala je i u činjenici da ona,
 za razliku od stabala pretrage, ne zahtevaju rebalansiranje zarad
 održavanja visine stabla.
 
-Problem koji se javlja kod radiks-stabala jeste neoptimalno korišćenje memorije.
-Ukoliko svaki unutrašnji čvor predstavlja jedan bajt ključa, to znači da
-svaki unutrašnji čvor može imati do $ 2^{8} $, odnosno 256 pokazivača na decu.
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{images/radiks_stablo_2.png}
+  \caption{Radiks-stablo dobijeno dodavanjem ključeva \texttt{AN} i \texttt{CUB}}
+  \label{fig:radiks2}
+\end{figure}
+
+Problem koji se javlja kod radiks-stabala jeste prevelik utrošak memorije.
+Ukoliko svaki čvor predstavlja jedan bajt ključa, to znači da
+svaki čvor može imati, u najgorem slučaju, $ 2^{8} $ dece,
+odnosno 256 pokazivača na decu.
 Kako svaki čvor neće imati maksimalan broj dece, rezervisanje memorijskog prostora
 za najgori slučaj rezultuje prekomernim korišćenjem memorije u prosečnom slučaju.
-Na IEEE konferenciji 2013.\ godine su predstavljena prilagodljiva radiks-stabla,
+Na IEEE internacionalnoj konferenciji inženjeringa podataka 2013.\ godine
+su predstavljena prilagodljiva radiks-stabla,
 skraćeno nazvana \textbf{ART}~\cite{artful}
 (engl. \emph{\textbf{A}daptive \textbf{R}adix \textbf{T}ree})
 kao potencijalno novo rešenje, zato što ona dinamički
@@ -751,15 +793,16 @@ prilagođavaju veličinu unutrašnjih čvorova u odnosu na broj dece.
 
 \section{Struktura prilagodljivih radiks-stabala}
 
-Unutrašnji čvorovi radiks-stabla ne moraju nužno memorisati jedan bajt ključa.
+Čvorovi radiks-stabla ne moraju nužno memorisati jedan bajt ključa.
 Broj bitova koji se reprezentuje se naziva \textbf{opseg} (engl. \emph{span}).
 To znači da, u svom osnovnom obliku, radiks-stabla imaju visinu koja zavisi od
 dužine ključa $k$ i od opsega $s$, i ona iznosi $ \lceil \frac{k}{s} \rceil $.
 
-Odabir opsega ima uticaja i na vremensku i na memorijsku složenost radiks
-stabla. Ukoliko je opseg mali, onda je potencijalni broj dece po unutrašnjem
-čvoru manji, pa je memorija bolje iskorišćena, ali visina stabla je velika,
-te su operacije na stablu sporije. I suprotno važi: ukoliko je opseg veliki,
+Odabir opsega ima uticaja i na vremensku i na memorijsku složenost
+radiks-stabla. Ukoliko je opseg mali, onda je potencijalni broj dece po
+unutrašnjem čvoru manji, pa je memorija bolje iskorišćena. S druge strane,
+visina stabla je velika, te su operacije na stablu sporije.
+I suprotno važi: ukoliko je opseg veliki,
 onda je visina stabla mala i operacije se vrše brzo, ali je memorijska složenost
 prevelika. Implementacije radiks-stabala GPT~\cite{gpt} i LRT~\cite{lrt}
 koriste četiri, odnosno šest bitova opsega.
@@ -768,56 +811,58 @@ ART ima opseg od osam bita, odnosno jedan bajt. Da bi se sprečila prekomerna
 upotreba memorije, koriste se četiri različita tipa unutrašnjih čvorova u odnosu
 na maksimalan broj pokazivača na decu:
 
-\begin{itemize}
+\begin{description}
 
-  \item \textbf{\texttt{Node4}} je najjednostavniji oblik unutrašnjeg čvora
+  \item[Node4] Najjednostavniji oblik unutrašnjeg čvora
         i sastoji se od
         dva vektora dužine 4 za bajtove ključa i pokazivače. Vektor ključeva
         održava sortirani poredak, zbog mogućnosti korišćenja upita dometa.
-  \item \textbf{\texttt{Node16}} koristi dva vektora dužine 16.
-        Na tipu \texttt{Node4}
-        se koristi binarna pretraga zato što je vektor na kome se pretraga vrši
-        relativno male veličine, ali nije adekvatno rešenje za vektor od 16
-        elemenata. Zbog toga se koriste pomenute SIMD instrukcije koje su
+  \item[Node16] Koristi dva vektora dužine 16.
+        Kako su vektori većeg kapaciteta, tako linearna ili binarna
+        pretraga predstavljaju nezanemarljiv utrošak procesorskog
+        vremena. Zbog toga se koriste pomenute SIMD instrukcije koje su
         hardverski podržane od strane procesora.
-  \item \textbf{\texttt{Node48}} ne može koristiti SIMD instrukcije zato što su one
-        hardverski ograničene po broju bitova koji vektor može imati. Stoga se
-        koristi vektor ključeva koji sadrži maksimalnih 256 elemenata.
+  \item[Node48]
+        Koristi vektor ključeva koji sadrži maksimalnih 256 elemenata.
         Vektor ključeva čuva indekse odgovarajućih elemenata u vektoru
         pokazivača koji ima kapacitet od 48 elemenata.
-  \item \textbf{\texttt{Node256}} koristi samo jedan vektor koji sadrži pokazivače,
+        SIMD instrukcije se u ovom slučaju ne mogu koristiti zato što su
+        SIMD vektori hardverski ograničeni po broju bitova koje mogu sadržati.
+  \item[Node256] Koristi samo jedan vektor koji sadrži pokazivače,
         dok se bajtovi ključeva indirektno čuvaju kao indeksi vektora
         pokazivača. Ovaj tip koristi više memorije od \texttt{Node48},
         zato što pokazivači zauzimaju više memorije od čuvanja indeksa
         koji nisu veći od jednog bajta.
 
-\end{itemize}
+\end{description}
 
 \noindent Ukoliko čvor popuni svoj kapacitet, onda se on transformiše u naredni
 čvor po veličini.
 
 \section{Memorijska optimizacija unutrašnjih čvorova}
 
-Osnovni oblik radiks-stabla podrazumeva korišćenje jednog unutrašnjeg čvora za
-reprezentaciju jednog bajta ključa. Time se ključevi implicitno čuvaju u samoj
+Osnovni oblik radiks-stabla podrazumeva korišćenje čvorova za
+reprezentaciju fiksiranog broja bitova ključa.
+Time se ključevi implicitno čuvaju u samoj
 strukturi stabla, tj.\ put od korena stabla do lista predstavlja parcijalni ključ
-tog lista. Međutim, samo korišćenje jednog unutrašnjeg čvora za svaki bajt ključa
-ukazuje na neoptimalno iskorišćenu memoriju.
+tog lista. Međutim, fiksirana veličina parcijalnog ključa
+znači da nivo iskorišćenja memorije zavisi od strukture stabla.
 
 Da bi se memorijska iskorišćenost optimizovala, koristi se metoda
 \textbf{sažimanja puteva} (engl. \emph{path compression}) koja udružuje unutrašnje
-čvorove koji imaju samo jedno dete sa tim detetom. Korišćenjem ove metode se
+čvorove koji imaju samo jedno dete sa tim detetom, ukoliko nijedan
+od tih čvorova ne sadrži vrednosti. Korišćenjem ove metode se
 gubi svojstvo implicitno sačuvanih parcijalnih ključeva, pa se oni moraju čuvati
 eksplicitno. Postoje dva metoda čuvanja parcijalnih ključeva:
 
-\begin{itemize}
-  \item \textbf{Pesimističan}: svaki unutrašnji čvor ima odgovarajući vektor
+\begin{description}
+  \item[Pesimističan] Svaki unutrašnji čvor ima odgovarajući vektor
         u kome se čuvaju bajtovi parcijalnih ključeva.
-  \item \textbf{Optimističan}: svaki unutrašnji čvor čuva informaciju o dužini
+  \item[Optimističan] Svaki unutrašnji čvor čuva informaciju o dužini
         parcijalnog ključa. Prilikom pretraživanja stabla preskače se dužina
         parcijalnog ključa u ključu pretrage i pretraga se nastavlja dalje.
         Kad pretraga stigne do lista, tad se ceo ključ proverava.
-\end{itemize}
+\end{description}
 
 Pesimističan metod daje brzu proveru korektnosti putanje, ali sa sobom nosi
 fragmentaciju memorije. Nasuprot tome, optimističan metod nema problem sa

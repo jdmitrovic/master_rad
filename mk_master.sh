@@ -1,10 +1,9 @@
 #!/bin/bash
 
-base="cd latex && latexmk -pdfxe matfmaster-primer-lat && mv matfmaster-primer-lat.pdf ../"
+eval "cd latex && latexmk -pdfxe MasterRadJovanDmitrovic && mv MasterRadJovanDmitrovic.pdf ../"
 
-if [ $1 != "-nc" ]
+if [[ $1 != "-nc" ]]
 then
-   base+=" && latexmk -c matfmaster-primer-lat"
+   eval "latexmk -c MasterRadJovanDmitrovic"
 fi
 
-eval $base
