@@ -734,7 +734,7 @@ binarnom sistemu brojeva, gde svaki čvor stabla predstavlja jedan deo
 ključa. Time se pravi stablo koje implicitno
 čuva ključeve svakog čvora prateći put od korena.
 
-Na slici~\ref{fig:radiks} predstavljeno je radiks-stablo
+Na slici~\ref{fig:radix} predstavljeno je radiks-stablo
 čiji čvorovi predstavljaju po jedan bajt ključa i gde su uneti parovi sa
 ključevima \texttt{CAT}, \texttt{CAR} i \texttt{ANT} u
 UTF-8 formatu~\cite{unicode}.
@@ -746,19 +746,19 @@ sadrže vrednosti obeleženi žutom bojom.
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=0.5\textwidth]{images/radiks_stablo.png}
+  \includegraphics[width=0.5\textwidth]{images/radix_tree.eps}
   \caption{Primer radiks-stabla}
-  \label{fig:radiks}
+  \label{fig:radix}
 \end{figure}
 
 Ukoliko bi se u primeru na
-slici~\ref{fig:radiks} dodao par sa ključem \texttt{AN},
+slici~\ref{fig:radix} dodao par sa ključem \texttt{AN},
 stablo ne bi menjalo svoju strukturu, već
 bi se samo čvoru \texttt{N} dodala nedostajuća vrednost.
 Pri dodavanju para sa ključem \texttt{CUB}, pretraga bi prilikom prolaska
 kroz stablo došla do čvora \texttt{C} i tu bi stala,
 pošto ne postoji dete \texttt{U}. Tada se dodaje novo podstablo
-čvoru \texttt{C}, gde se dobija novo stablo kao na slici~\ref{fig:radiks2}.
+čvoru \texttt{C}, gde se dobija novo stablo kao na slici~\ref{fig:radix2}.
 
 
 Ovom metodom skladištenja parova sličnih ključeva u
@@ -773,9 +773,9 @@ održavanja visine stabla.
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=0.7\textwidth]{images/radiks_stablo_2.png}
+  \includegraphics[width=0.7\textwidth]{images/radix_tree_2.eps}
   \caption{Radiks-stablo dobijeno dodavanjem ključeva \texttt{AN} i \texttt{CUB}}
-  \label{fig:radiks2}
+  \label{fig:radix2}
 \end{figure}
 
 Problem koji se javlja kod radiks-stabala jeste prevelik utrošak memorije.
@@ -857,12 +857,23 @@ eksplicitno. Postoje dva metoda čuvanja parcijalnih ključeva:
 
 \begin{description}
   \item[Pesimističan] Svaki unutrašnji čvor ima odgovarajući vektor
-        u kome se čuvaju bajtovi parcijalnih ključeva.
+        u kome se čuvaju bajtovi parcijalnih ključeva. Primer pesimističnog
+        sažimanja puteva dat je na slici~\ref{fig:radix_compression},
+        gde je sažimanje puteva primenjeno na primeru sa
+        slike~\ref{fig:radix2}.
   \item[Optimističan] Svaki unutrašnji čvor čuva informaciju o dužini
         parcijalnog ključa. Prilikom pretraživanja stabla preskače se dužina
         parcijalnog ključa u ključu pretrage i pretraga se nastavlja dalje.
         Kad pretraga stigne do lista, tad se ceo ključ proverava.
 \end{description}
+
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{images/radix_compression.eps}
+  \caption{Pesimistično sažimanje puteva radiks-stabla}
+  \label{fig:radix_compression}
+\end{figure}
 
 Pesimističan metod daje brzu proveru korektnosti putanje, ali sa sobom nosi
 fragmentaciju memorije. Nasuprot tome, optimističan metod nema problem sa
