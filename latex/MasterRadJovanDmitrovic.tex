@@ -705,9 +705,11 @@ od sekundarne memorije bazirane na magnetnim diskovima.
 
 Za memorisane baze podataka je neophodna struktura podataka koja kodira parove
 ključ-vrednost tako da se za odgovarajući ključ može naći vrednost koja mu
-je pridružena i koja podržava upite dometa
-(engl. \emph{range queries}), tj.\ upite kod kojih je ključ delimično unet, pa
-se dohvata više podataka istovremeno.
+je pridružena. Takođe, ova struktura bi trebalo da podrži upite opsega
+(engl. \emph{range queries}), tj.\ upite kod kojih se dohvata više podataka
+čiji se ključevi nalaze u nekom datom opsegu.
+Na primer, taj opseg mogu biti niske koje počinju sa karakterima između
+\texttt{A} i \texttt{D}.
 Glavni cilj ove struktura podataka je da koristi procesor što je efikasnije moguće, jer
 vreme odziva više nije problem. Strukture koje se tradicionalno koriste u bazama podataka jesu
 drvolike strukture podataka. Međutim, problem je u njihovoj neefikasnosti, jer
@@ -725,8 +727,8 @@ ali gubi na efikasnosti umetanja i brisanja elemenata.
 Pored drvolikih struktura, u ove svrhe se koriste i heš mape. Nasuprot
 stablima, heš mape su efikasne za sve osnovne operacije (dodavanje, brisanje, pretraživanje),
 sa prosečnom vremenskom složenošću $ \mathcal{O}(1) $. Uprkos efikasnosti heš mapa, one nisu
-dobro rešenje za baze podataka zbog upita dometa. U heš mapama podaci nisu nužno sortirani ili
-grupisani na bilo koji način, što čini upite dometa, koji dohvataju više podataka
+dobro rešenje za baze podataka zbog upita opsega. U heš mapama podaci nisu nužno sortirani ili
+grupisani na bilo koji način, što čini upite opsega, koji dohvataju više podataka
 sa sličnim ključem, neefikasnim.
 Takođe, povećavanje kapaciteta heš mape je skupo i podrazumeva reorganizaciju
 čitave mape, sa linearnom vremenskom složenošću.
@@ -799,20 +801,20 @@ prilagođavaju veličinu unutrašnjih čvorova u odnosu na broj dece.
 \section{Struktura prilagodljivih radiks-stabala}
 
 Čvorovi radiks-stabla ne moraju nužno memorisati jedan bajt ključa.
-Broj bitova koji unutrašnji čvorovi memorišu se naziva \textbf{opseg} (engl. \emph{span}).
+Broj bitova koji unutrašnji čvorovi memorišu se naziva \textbf{raspon} (engl. \emph{span}).
 To znači da, u svom osnovnom obliku, radiks-stabla imaju visinu koja zavisi od
-dužine ključa $k$ i od opsega $s$, i ona iznosi $ \lceil \frac{k}{s} \rceil $.
+dužine ključa $k$ i od raspona $s$, i ona iznosi $ \lceil \frac{k}{s} \rceil $.
 
-Odabir opsega ima uticaja i na vremensku i na memorijsku složenost
-radiks-stabla. Ukoliko je opseg mali, onda je potencijalni broj dece po
+Odabir raspona ima uticaja i na vremensku i na memorijsku složenost
+radiks-stabla. Ukoliko je raspon mali, onda je potencijalni broj dece po
 unutrašnjem čvoru manji, pa je memorija bolje iskorišćena. S druge strane,
 visina stabla je velika, te su operacije na stablu sporije.
-I suprotno važi: ukoliko je opseg veliki,
+I suprotno važi: ukoliko je raspon veliki,
 onda je visina stabla mala i operacije se vrše brzo, ali je memorijska složenost
 prevelika. Implementacije radiks-stabala GPT~\cite{gpt} i LRT~\cite{lrt}
-koriste četiri, odnosno šest bitova opsega.
+koriste četiri, odnosno šest bitova raspona.
 
-ART ima opseg od osam bita, odnosno jedan bajt. Da bi se sprečila prekomerna
+ART ima raspon od osam bita, odnosno jedan bajt. Da bi se sprečila prekomerna
 upotreba memorije, koriste se četiri različita tipa unutrašnjih čvorova u odnosu
 na maksimalan broj pokazivača na decu:
 
@@ -1073,7 +1075,7 @@ insert (node, key, leaf, depth):
 
 Vremenska složenost funkcija \texttt{search} i \texttt{insert}
 zavisi od dubine stabla, koje iznosi
-$ \lceil \frac{k}{s} \rceil $. Kako je opseg $s$ konstantan i
+$ \lceil \frac{k}{s} \rceil $. Kako je raspon $s$ konstantan i
 iznosi osam bita, vremenska složenost je
 $ \mathcal{O}(k) $, gde je $k$ dužina ključa.
 
