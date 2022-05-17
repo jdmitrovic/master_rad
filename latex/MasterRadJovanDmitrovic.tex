@@ -52,6 +52,7 @@
   style=boxed,
   inputpath=../rust_primeri/examples
 }
+\graphicspath{{images/}}
 % Datoteka sa literaturom u BibTex tj. BibLaTeX/Biber formatu
 \bib{MasterRadJovanDmitrovic}
 
@@ -733,7 +734,7 @@ sa sličnim ključem, neefikasnim.
 Takođe, povećavanje kapaciteta heš mape je skupo i podrazumeva reorganizaciju
 čitave mape, sa linearnom vremenskom složenošću.
 
-Da bi se ispunili zahtevi memorisanih baza podataka, pojavljuju se tzv.
+Da bi se ispunili zahtevi memorisanih baza podataka koriste se tzv.
 \textbf{radiks-stabla} (engl. \emph{radix tree}), odnosno
 \textbf{PATRICIA stabla}~\cite{patricia}, kako su prvobitno bila nazvana.
 Radiks-stablo je drvolika struktura koja koristi reprezentaciju ključa u
@@ -748,12 +749,12 @@ UTF-8 formatu~\cite{unicode}.
 Kako se svaki karakter engleskog alfabeta u UTF-8 formatu predstavlja
 jednim bajtom, svakom čvoru u stablu odgovara jedan karakter
 ključa. Svaki unutrašnji čvor u stablu izuzev korena može sadržati i vrednost.
-S druge strane, listovi moraju sadržati vrednost, u suprotnom su suvišni.
+S druge strane, svaki list mora sadržati vrednost, u suprotnom je suvišan.
 Na primeru su čvorovi koji sadrže vrednosti obeleženi žutom bojom.
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=0.4\textwidth]{images/radix_tree.eps}
+  \includegraphics[width=0.43\textwidth]{radix_tree.eps}
   \caption{Primer radiks-stabla}
   \label{fig:radix}
 \end{figure}
@@ -780,7 +781,7 @@ održavanja visine stabla.
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=0.55\textwidth]{images/radix_tree_2.eps}
+  \includegraphics[width=0.55\textwidth]{radix_tree_2.eps}
   \caption{Radiks-stablo dobijeno dodavanjem ključeva \texttt{PO} i \texttt{MAK}}
   \label{fig:radix2}
 \end{figure}
@@ -813,6 +814,26 @@ I suprotno važi: ukoliko je raspon veliki,
 onda je visina stabla mala i operacije se vrše brzo, ali je memorijska složenost
 prevelika. Implementacije radiks-stabala GPT~\cite{gpt} i LRT~\cite{lrt}
 koriste četiri, odnosno šest bitova raspona.
+
+Na slikama~\ref{fig:radix_span2}
+i~\ref{fig:radix_span3} su prikazani primeri radiks-stabala sa vrednostima
+raspona 2 i 3. U oba stabla su uneti parovi sa istim šestobitnim ključevima:
+\texttt{001110}, \texttt{001111} i \texttt{100001}.
+
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.43\textwidth]{radix_span2.eps}
+  \caption{Primer radiks-stabla sa rasponom 2}
+  \label{fig:radix_span2}
+\end{figure}
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.45\textwidth]{radix_span3.eps}
+  \caption{Primer radiks-stabla sa rasponom 3}
+  \label{fig:radix_span3}
+\end{figure}
 
 ART ima raspon od osam bita, odnosno jedan bajt. Da bi se sprečila prekomerna
 upotreba memorije, koriste se četiri različita tipa unutrašnjih čvorova u odnosu
@@ -880,7 +901,7 @@ Postoje dva metoda čuvanja parcijalnih ključeva:
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=0.55\textwidth]{images/radix_compression.eps}
+  \includegraphics[width=0.55\textwidth]{radix_compression.eps}
   \caption{Pesimistično sažimanje puteva radiks-stabla}
   \label{fig:radix_compression}
 \end{figure}
@@ -892,7 +913,7 @@ nije dokazala jednakost parcijalnih ključeva. Tada se
 pretraga mora vratiti unazad, što otežava implementaciju i ima negativan
 uticaj na performanse. Postoji i hibridan način čuvanja parcijalnih ključeva,
 gde se u unutrašnjim čvorovima čuva fiksni broj bajtova parcijalnog ključa.
-Sve preko unapred određenog broja bajtova tog vektora ne memoriše,
+Sve preko unapred određenog broja bajtova tog vektora se ne memoriše,
 već se koristi optimističan metod čuvanja.
 
 \section{Algoritmi pretrage i umetanja}
@@ -931,8 +952,9 @@ zato što se on odnosi na indeks bajtova koji se
 porede u tom trenutku.
 Na kraju, nalazi se idući čvor funkcijom \texttt{findChild} prosleđivanjem
 trenutnog čvora i odgovarajućeg bajta i pretraga se
-nastavlja rekurzivno. Algoritam funkcije \texttt{findChild} je dat u
-listingu~\ref{art:algoritam_findChild}.
+nastavlja rekurzivno. Isti algoritam pretrage se može primeniti i za
+radiks-stabla u osnovnom obliku. Algoritam funkcije
+\texttt{findChild} je dat na listingu~\ref{art:algoritam_findChild}.
 
 \begin{lstlisting}[language=C++,
                    caption={Algoritam pronalaska idućeg čvora pretrage},
@@ -962,7 +984,7 @@ findChild(node, byte):
         return node.child[byte]
 \end{lstlisting}
 
-\noindent Naredni čvor se nalazi na četiri različita načina, u odnosu na
+Naredni čvor se nalazi na četiri različita načina, u odnosu na
 tip trenutnog čvora koji je poslat kao parametar funkciji
 \texttt{findChild}:
 
@@ -972,8 +994,8 @@ tip trenutnog čvora koji je poslat kao parametar funkciji
         pretragu, s tim da je poboljšanje zanemarljivo, a vektor ključeva se
         u tom slučaju mora održavati u sortiranom poretku.
   \item[Node16] U ovom slučaju se koriste SIMD instrukcije.
-        Prvo se, funkcijom \texttt{\_mm\_set1\_epi8} inicijalizuje SIMD vektor
-        od 128 bita, odnosno, 16 elemenata veličine jednog bajta. Svi
+        Prvo se, pomoću funkcije \texttt{\_mm\_set1\_epi8} inicijalizuje
+        SIMD vektor od 128 bita, odnosno, 16 elemenata veličine jednog bajta. Svi
         elementi tog vektora biće jednaki bajtu koji je unet kao parametar.
         Posle inicijalizacije se porede svi elementi novog vektora i
         vektora ključeva trenutnog čvora funkcijom
@@ -1004,9 +1026,17 @@ tip trenutnog čvora koji je poslat kao parametar funkciji
         u vektor \texttt{childIndex} se piše fiksirana
         vrednost \texttt{EMPTY} koja je veća od 48 (maksimalnog
         broja elemenata u nizu potomaka).
-  \item[Node25] Koristi se niz maksimalne veličine od 256 elemenata
+  \item[Node256] Koristi se niz maksimalne veličine od 256 elemenata
         gde se bajt ključa direktno koristi za indeksiranje.
 \end{description}
+
+U slučaju osnovnih radiks-stabala, algoritam \texttt{findChild}
+je sličan \texttt{Node256} grani iz
+algoritma sa listinga~\ref{art:algoritam_findChild} koja
+se prilagođava za različite vrednosti raspona $s$.
+Veličina vektora koji se nalaze u unutrašnjim
+čvorovima je uslovljena odabirom vrednosti raspona
+i ona iznosi $2^{s}$.
 
 Algoritam za umetanje novih parova ključ-vrednost u stablo je dat
 na listingu~\ref{art:algoritam_insert}, dok je algoritam brisanja
@@ -1032,7 +1062,10 @@ kapacitet mora proširiti pretvaranjem trenutnog
 unutrašnjeg čvora u sledeći čvor u hijerarhiji funkcijom
 \texttt{grow} (iz \texttt{Node4}
 u \texttt{Node16}, iz \texttt{Node16} u \texttt{Node48} ili
-iz \texttt{Node48} u \texttt{Node256}).
+iz \texttt{Node48} u \texttt{Node256}). Funkcija \texttt{grow}
+je jedina suštinska razlika između algoritma sa
+listinga~\ref{art:algoritam_insert} i algoritma za umetanje u
+radiks-stablo.
 
 \begin{lstlisting}[language=C++,
                    caption={Algoritam umetanja novih elemenata u stablo},
