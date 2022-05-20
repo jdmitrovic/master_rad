@@ -706,23 +706,26 @@ od sekundarne memorije bazirane na magnetnim diskovima.
 
 Za memorisane baze podataka je neophodna struktura podataka koja kodira parove
 ključ-vrednost tako da se za odgovarajući ključ može naći vrednost koja mu
-je pridružena. Takođe, ova struktura bi trebalo da podrži upite opsega
+je pridružena, gde i ključevi i vrednosti mogu biti bilo koji tip podataka.
+Takođe, ova struktura bi trebalo da podrži upite opsega
 (engl. \emph{range queries}), tj.\ upite kod kojih se dohvata više podataka
 čiji se ključevi nalaze u nekom datom opsegu.
 Na primer, taj opseg mogu biti niske koje počinju sa karakterima između
 \texttt{A} i \texttt{D}.
-Glavni cilj ove struktura podataka je da koristi procesor što je efikasnije moguće, jer
-vreme odziva više nije problem. Strukture koje se tradicionalno koriste u bazama podataka jesu
+Glavni cilj ove strukture podataka je da koristi procesor što je efikasnije moguće, jer
+vreme odziva više nije problem.
+
+Strukture koje se tradicionalno koriste u bazama podataka jesu
 drvolike strukture podataka. Međutim, problem je u njihovoj neefikasnosti, jer
 funkcije dodavanja i brisanja elemenata u najboljem slučaju ima asimptotsko vreme izvršavanja
-$ \mathcal{O}(n\log{}n) $, gde je $n$ ukupan broj elemenata unet u stablo.
+$ \mathcal{O}(n\log{}n) $, gde je $n$ ukupan broj unetih elemenata.
 U ove svrhe su stvorene nadograđene varijante stabala,
 kao što je struktura podataka FAST
 (engl. \emph{\textbf{F}ast \textbf{A}rchitecture \textbf{S}ensitive \textbf{T}ree})~\cite{fast}
 koja se oslanja na hardverski implemententirane SIMD instrukcije~\cite{simd},
 uz pomoć kojih je moguće izvršiti paralelne operacije nad podacima koji su
 sekvencionalno smešteni u memoriji.
-FAST je efikasniji prilikom pretrage podataka koji su već uneti,
+FAST je efikasniji prilikom pretrage unetih podataka,
 ali gubi na efikasnosti umetanja i brisanja elemenata.
 
 Pored drvolikih struktura, u ove svrhe se koriste i heš mape. Nasuprot
@@ -737,10 +740,11 @@ Takođe, povećavanje kapaciteta heš mape je skupo i podrazumeva reorganizaciju
 Da bi se ispunili zahtevi memorisanih baza podataka koriste se tzv.
 \textbf{radiks-stabla} (engl. \emph{radix tree}), odnosno
 \textbf{PATRICIA stabla}~\cite{patricia}, kako su prvobitno bila nazvana.
-Radiks-stablo je drvolika struktura koja koristi reprezentaciju ključa u
-binarnom sistemu brojeva, gde svaki čvor stabla predstavlja jedan deo
-ključa. Time se pravi stablo koje implicitno
-čuva ključeve svakog čvora prateći put od korena.
+Radiks-stablo je drvolika struktura koja koristi binarnu reprezentaciju ključa.
+Svaki čvor stabla predstavlja jedan deo ključa, a neki čvorovi
+sadrže i vrednosti. Posmatrajući put od korena do čvora koji
+sadrži vrednost dobija se ključ koji je uparen sa tom
+vrednošću.
 
 Na slici~\ref{fig:radix} predstavljeno je radiks-stablo
 čiji čvorovi predstavljaju po jedan bajt ključa i gde su uneti parovi sa
@@ -750,12 +754,16 @@ Kako se svaki karakter engleskog alfabeta u UTF-8 formatu predstavlja
 jednim bajtom, svakom čvoru u stablu odgovara jedan karakter
 ključa. Svaki unutrašnji čvor u stablu izuzev korena može sadržati i vrednost.
 S druge strane, svaki list mora sadržati vrednost, u suprotnom je suvišan.
-Na primeru su čvorovi koji sadrže vrednosti obeleženi žutom bojom.
+Na primeru su čvorovi koji sadrže vrednosti obeleženi žutom bojom,
+a kako različite vrednosti u čvorovima ne utiču na strukturu
+radiks-stabla, vrednosti nisu prikazane na slici.
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=0.43\textwidth]{radix_tree.eps}
-  \caption{Primer radiks-stabla}
+  \includegraphics[width=0.40\textwidth]{radix_tree.eps}
+  \caption{Primer radiks-stabla, gde su čvorovi koji sadrže vrednosti
+    obeleženi žutom bojom, a crvenom bojom su napisani ključevi koji im
+    odgovaraju}
   \label{fig:radix}
 \end{figure}
 
@@ -773,7 +781,7 @@ Ovom metodom grupisanja sličnih ključeva u
 istom podstablu rezultuje vremenskom složenošću čitanja, umetanja i brisanja
 elemenata koja ne zavisi od broja elemenata
 unetih u strukturu niti od veličine same strukture, već od
-dužine ključa reprezentovanog u binarnom sistemu. Iako je vremenska složenost linearna,
+dužine ključa u njegovoj binarnoj reprezenaciji. Iako je vremenska složenost linearna,
 osobina da efikasnost ne zavisi od broja unetih elemenata je pogodna za primenu
 u memorisanim bazama podataka. Prednost radiks-stabala je i u činjenici da ona,
 za razliku od stabala pretrage, ne zahtevaju rebalansiranje zarad
@@ -870,45 +878,51 @@ na maksimalan broj pokazivača na decu:
 
 \section{Memorijska optimizacija unutrašnjih čvorova}
 
-Osnovni oblik radiks-stabla podrazumeva korišćenje čvorova za
-reprezentaciju fiksiranog broja bitova ključa.
-Time se ključevi implicitno čuvaju u samoj
-strukturi stabla, tj.\ put od korena stabla do bilo kog drugog čvora
-predstavlja parcijalni ključ
-tog čvora. Međutim, fiksirana veličina parcijalnog ključa
-znači da nivo iskorišćenja memorije zavisi od strukture stabla.
+Parcijalni ključ čvora radiks-stabla se odnosi na deo ključa
+koji taj čvor reprezentuje.
+Nadovezujući parcijalne ključeve čvorova na putu od korena stabla
+do bilo kog drugog čvora predstavlja konkretan ključ tog čvora.
+U svom osnovnom obliku, u radiks-stablu su parcijalni ključevi
+fiksirane dužine.
 
 Da bi se memorijska iskorišćenost optimizovala, koristi se metoda
 \textbf{sažimanja puteva} (engl. \emph{path compression}) koja udružuje unutrašnje
-čvorove koji imaju samo jedno dete sa tim detetom, ukoliko nijedan
-od tih čvorova ne sadrži vrednosti. Prilikom udruživanja dva čvora,
-njihovi parcijalni ključevi se nadovezuju. U ovom slučaju se parcijalni ključevi,
-za razliku od radiks-stabla u osnovnom obliku, moraju čuvati eksplicitno.
-Postoje dva metoda čuvanja parcijalnih ključeva:
+čvorove koji imaju samo jedno dete sa tim detetom, ukoliko roditelj ne sadrži
+vrednost. Prilikom udruživanja dva čvora,
+parcijalni ključevi tih čvorova se nadovezuju.
+Kako broj bitova parcijalnih ključeva reprezentuju nije više
+fiksirana veličina, svaki bit izvan raspona stabla se mora čuvati
+eksplicitno.
 
 \begin{description}
   \item[Pesimističan] Svaki unutrašnji čvor ima odgovarajući vektor
-        u kome se čuvaju bajtovi parcijalnih ključeva. Primer pesimističnog
+        u kome se čuvaju bitovi parcijalnog ključa. Primer pesimističnog
         sažimanja puteva dat je na slici~\ref{fig:radix_compression},
         gde je sažimanje puteva primenjeno na primeru sa
         slike~\ref{fig:radix2}.
   \item[Optimističan] Svaki unutrašnji čvor čuva informaciju o dužini
-        parcijalnog ključa. Prilikom pretraživanja stabla preskače se dužina
-        parcijalnog ključa u ključu pretrage i pretraga se nastavlja dalje.
-        Kad pretraga stigne do lista, tad se ceo ključ proverava.
+        parcijalnog ključa $d$. Prilikom pretraživanja stabla preskače se
+        $d$ bitova ključa pretrage bez provere jednakosti,
+        i pretraga se nastavlja dalje.
+        Kad pretraga stigne do lista, tada se ceo ključ proverava.
 \end{description}
 
 
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.55\textwidth]{radix_compression.eps}
-  \caption{Pesimistično sažimanje puteva radiks-stabla}
+  \caption{Pesimistično sažimanje puteva radiks-stabla, gde su samo
+    čvorovi \texttt{A} i \texttt{K}, kao i \texttt{P} i \texttt{O} sažeti,
+    dok \texttt{PO} i \texttt{D} nisu, jer čvor \texttt{PO}
+    sadrži vrednost}
   \label{fig:radix_compression}
 \end{figure}
 
 Pesimističan metod daje brzu proveru korektnosti putanje, ali sa sobom nosi
-fragmentaciju memorije. Nasuprot tome, optimističan metod nema problem sa
-fragmentacijom, ali pretraga može da ode pogrešnom granom zato što se
+povećanu potrošnju memorije. Uz to, može doći i do fragmentacije
+memorije kada se vektori parcijalnih ključeva menjaju.
+Nasuprot tome, optimističan metod nema
+problema vezanih za memoriju, ali pretraga može da ode pogrešnom granom zato što se
 nije dokazala jednakost parcijalnih ključeva. Tada se
 pretraga mora vratiti unazad, što otežava implementaciju i ima negativan
 uticaj na performanse. Postoji i hibridan način čuvanja parcijalnih ključeva,
@@ -919,8 +933,10 @@ već se koristi optimističan metod čuvanja.
 \section{Algoritmi pretrage i umetanja}
 
 U svom radu iz 2013.\ godine, autori prilagodljivih radiks-stabala su
-objavili i algoritme pretrage i umetanja. Algoritam pretrage je dat na
-listingu~\ref{art:algoritam_pretrage}.
+objavili i algoritme pretrage i umetanja. Ovi algoritmi su veoma slični
+algoritmima za radiks-stabla u osnovnom obliku, i zato će biti navedeni
+i objašnjeni samo algoritmi za rad sa strukturom podataka ART.\
+Algoritam pretrage je dat na listingu~\ref{art:algoritam_pretrage}.
 
 \begin{lstlisting}[language=C++,
                    caption={Algoritam pretrage strukture podataka ART},
@@ -1065,7 +1081,10 @@ u \texttt{Node16}, iz \texttt{Node16} u \texttt{Node48} ili
 iz \texttt{Node48} u \texttt{Node256}). Funkcija \texttt{grow}
 je jedina suštinska razlika između algoritma sa
 listinga~\ref{art:algoritam_insert} i algoritma za umetanje u
-radiks-stablo.
+radiks-stablo i njena implemenacija zavisi od specifičnosti
+konkretnog programskog jezika u kome se ona implementira.
+Usled toga, pseudokod funkcije \texttt{grow} će izostati
+iz ovog poglavlja.
 
 \begin{lstlisting}[language=C++,
                    caption={Algoritam umetanja novih elemenata u stablo},
