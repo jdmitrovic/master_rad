@@ -845,13 +845,14 @@ raspona 2 i 3. U oba stabla su uneti parovi sa istim šestobitnim ključevima:
 
 ART ima raspon od osam bita, odnosno jedan bajt. Da bi se sprečila prekomerna
 upotreba memorije, koriste se četiri različita tipa unutrašnjih čvorova u odnosu
-na maksimalan broj pokazivača na decu:
+na maksimalan broj pokazivača na decu, koji su ilustrovani na
+slici~\ref{fig:radix_nodes}:
 
 \begin{description}
 
   \item[Node4] Najjednostavniji oblik unutrašnjeg čvora
         i sastoji se od
-        dva vektora dužine 4 za bajtove ključa i pokazivače.
+        dva vektora dužine 4 za bajtove ključa i pokazivača na decu.
         Budući da je vektor ključeva male veličine, on se pretražuje
         linearnom pretragom.
   \item[Node16] Koristi dva vektora dužine 16.
@@ -862,7 +863,7 @@ na maksimalan broj pokazivača na decu:
   \item[Node48]
         Koristi vektor ključeva koji sadrži maksimalnih 256 elemenata.
         Vektor ključeva čuva indekse odgovarajućih elemenata u vektoru
-        pokazivača koji ima kapacitet od 48 elemenata.
+        dece koji ima kapacitet od 48 elemenata.
         SIMD instrukcije se u ovom slučaju ne mogu koristiti zato što su
         SIMD vektori hardverski ograničeni po broju bitova koje mogu sadržati.
   \item[Node256] Sastoji se od samo jednog vektora koji sadrži pokazivače,
@@ -872,6 +873,17 @@ na maksimalan broj pokazivača na decu:
         koji nisu veći od jednog bajta.
 
 \end{description}
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.75\textwidth]{radix_nodes.eps}
+  \caption{Četiri tipa unutrašnjeg čvora u strukturi ART.\ Strelicama su povezani
+    odgovarajući parovi elemenata u vektorima ključeva i dece. Sa tri tačke
+    su obeleženi elementi koji nisu prikazani na slici. Crvenom bojom su obeleženi
+    bajtovi pretrage, dok su pokazivači na decu predstavljeni zelenim slovima.
+  }
+  \label{fig:radix_nodes}
+\end{figure}
 
 \noindent Ukoliko čvor popuni svoj kapacitet, onda se on transformiše u naredni
 čvor po veličini.
@@ -892,7 +904,8 @@ vrednost. Prilikom udruživanja dva čvora,
 parcijalni ključevi tih čvorova se nadovezuju.
 Kako broj bitova parcijalnih ključeva reprezentuju nije više
 fiksirana veličina, svaki bit izvan raspona stabla se mora čuvati
-eksplicitno.
+eksplicitno. Postoje dva metoda čuvanja parcijalnih ključeva unutrašnjih
+čvorova:
 
 \begin{description}
   \item[Pesimističan] Svaki unutrašnji čvor ima odgovarajući vektor
@@ -1041,7 +1054,7 @@ tip trenutnog čvora koji je poslat kao parametar funkciji
         taj ključ nije uneta,
         u vektor \texttt{childIndex} se piše fiksirana
         vrednost \texttt{EMPTY} koja je veća od 48 (maksimalnog
-        broja elemenata u nizu potomaka).
+        broja elemenata u nizu dece).
   \item[Node256] Koristi se niz maksimalne veličine od 256 elemenata
         gde se bajt ključa direktno koristi za indeksiranje.
 \end{description}
@@ -1083,8 +1096,10 @@ je jedina suštinska razlika između algoritma sa
 listinga~\ref{art:algoritam_insert} i algoritma za umetanje u
 radiks-stablo i njena implemenacija zavisi od specifičnosti
 konkretnog programskog jezika u kome se ona implementira.
-Usled toga, pseudokod funkcije \texttt{grow} će izostati
-iz ovog poglavlja.
+Usled toga, funkcija \texttt{grow} će
+biti prikazana u narednom poglavlju, gde se opisuje
+implemenacija strukture ART u okviru programskog jezika
+\textit{Rust}.
 
 \begin{lstlisting}[language=C++,
                    caption={Algoritam umetanja novih elemenata u stablo},
