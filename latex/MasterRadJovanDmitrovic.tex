@@ -806,6 +806,18 @@ skraćeno nazvana \textbf{ART}~\cite{artful}
 (engl. \emph{\textbf{A}daptive \textbf{R}adix \textbf{T}ree})
 kao potencijalno novo rešenje, zato što ona dinamički
 prilagođavaju veličinu unutrašnjih čvorova u odnosu na broj dece.
+Na slici~\ref{fig:radix_v_art} je ilustrovana razlika između radiks-stabla i
+prilagodljivog radiks-stabla.
+
+\hspace{10pt}
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.95\textwidth]{radix_v_art.eps}
+  \caption{
+    Radiks-stablo (levo) i prilagodljivo radiks-stablo (desno)
+  }
+  \label{fig:radix_v_art}
+\end{figure}
 
 \section{Struktura prilagodljivih radiks-stabala}
 
@@ -831,14 +843,14 @@ raspona 2 i 3. U oba stabla su uneti parovi sa istim šestobitnim ključevima:
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=0.43\textwidth]{radix_span2.eps}
+  \includegraphics[width=0.40\textwidth]{radix_span2.eps}
   \caption{Primer radiks-stabla sa rasponom 2}
   \label{fig:radix_span2}
 \end{figure}
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=0.45\textwidth]{radix_span3.eps}
+  \includegraphics[width=0.42\textwidth]{radix_span3.eps}
   \caption{Primer radiks-stabla sa rasponom 3}
   \label{fig:radix_span3}
 \end{figure}
@@ -852,32 +864,38 @@ slici~\ref{fig:radix_nodes}:
 
   \item[Node4] Najjednostavniji oblik unutrašnjeg čvora
         i sastoji se od
-        dva vektora dužine 4 za bajtove ključa i pokazivača na decu.
+        dva vektora dužine 4: vektor ključeva koji sadrži bajtove ključa i
+        vektor dece koji sadrži pokazivače na decu. Svaki element vektora
+        ključeva odgovara elementu na istoj poziciji u vektoru dece.
         Budući da je vektor ključeva male veličine, on se pretražuje
         linearnom pretragom.
   \item[Node16] Koristi dva vektora dužine 16.
+        Kao i kod \texttt{Node4}, elementi dva vektora su upareni.
         Kako su vektori većeg kapaciteta, tako linearna
         pretraga predstavlja nezanemarljiv utrošak procesorskog
         vremena. Zbog toga se koriste pomenute SIMD instrukcije koje su
-        hardverski podržane od strane procesora.
+        hardverski podržane od strane procesora i koje
+        omogućavaju paralelnu pretragu svih elemenata vektora ključeva.
   \item[Node48]
-        Koristi vektor ključeva koji sadrži maksimalnih 256 elemenata.
-        Vektor ključeva čuva indekse odgovarajućih elemenata u vektoru
-        dece koji ima kapacitet od 48 elemenata.
+        Koristi vektor ključeva koji sadrži maksimalnih 256 elemenata
+        kao i vektor dece koji sadrži 48 elemenata.
+        Bajtovi pretrage su implicitno pohranjeni kao indeksi
+        vektora ključeva. U vektoru ključeva se nalaze indeksi elemenata
+        vektora dece, koji odgovaraju datom bajtu pretrage.
         SIMD instrukcije se u ovom slučaju ne mogu koristiti zato što su
         SIMD vektori hardverski ograničeni po broju bitova koje mogu sadržati.
-  \item[Node256] Sastoji se od samo jednog vektora koji sadrži pokazivače,
-        dok se bajtovi ključeva indirektno čuvaju kao indeksi vektora
-        pokazivača. Ovaj tip koristi više memorije od \texttt{Node48},
+  \item[Node256] Sastoji se od samo jednog vektora koji sadrži pokazivače na decu,
+        dok se bajtovi pretrage implicitno čuvaju kao indeksi vektora
+        dece. Ovaj tip koristi više memorije od \texttt{Node48},
         zato što pokazivači zauzimaju više memorije od čuvanja indeksa
-        koji nisu veći od jednog bajta.
-
+        koji se predstavljaju jednim bajtom.
 \end{description}
 
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.75\textwidth]{radix_nodes.eps}
-  \caption{Četiri tipa unutrašnjeg čvora u strukturi ART.\ Strelicama su povezani
+  \caption{Četiri tipa unutrašnjeg čvora u strukturi ART.\
+    Strelicama su povezani
     odgovarajući parovi elemenata u vektorima ključeva i dece. Sa tri tačke
     su obeleženi elementi koji nisu prikazani na slici. Crvenom bojom su obeleženi
     bajtovi pretrage, dok su pokazivači na decu predstavljeni zelenim slovima.
@@ -1018,10 +1036,9 @@ tip trenutnog čvora koji je poslat kao parametar funkciji
 \texttt{findChild}:
 
 \begin{description}
-  \item[Node4] Naredni čvor se nalazi pretragom svih elemenata
-        vektora ključeva. U ovom slučaju je moguće koristiti i binarnu
-        pretragu, s tim da je poboljšanje zanemarljivo, a vektor ključeva se
-        u tom slučaju mora održavati u sortiranom poretku.
+  \item[Node4] Naredni čvor se nalazi linearnom
+        pretragom svih elemenata
+        vektora ključeva.
   \item[Node16] U ovom slučaju se koriste SIMD instrukcije.
         Prvo se, pomoću funkcije \texttt{\_mm\_set1\_epi8} inicijalizuje
         SIMD vektor od 128 bita, odnosno, 16 elemenata veličine jednog bajta. Svi
