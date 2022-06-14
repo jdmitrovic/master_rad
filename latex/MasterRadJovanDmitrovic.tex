@@ -819,7 +819,7 @@ prilagodljivog radiks-stabla.
   \label{fig:radix_v_art}
 \end{figure}
 
-\section{Struktura prilagodljivih radiks-stabala}
+\section{Struktura prilagodljivih radiks-stabala}~\label{sec:struktura_art}
 
 Čvorovi radiks-stabla ne moraju nužno memorisati jedan bajt ključa.
 Broj bitova koji unutrašnji čvorovi memorišu se naziva \textbf{raspon} (engl. \emph{span}).
@@ -1163,9 +1163,94 @@ $ \lceil \frac{k}{s} \rceil $. Kako je raspon $s$ konstantan i
 iznosi osam bita, vremenska složenost je
 $ \mathcal{O}(k) $, gde je $k$ dužina ključa.
 
-% ------------------------------------------------------------------------------
-\chapter{Razrada}
-\label{chp:razrada}
+\chapter{ART u programskom jeziku \textit{Rust}}
+Implementacija prilagodljivih radiks-stabala podrazumeva
+kreiranje strukture koja podržava četiri različite operacije:
+umetanje (engl.\ \textit{insert}), ažuriranje (engl.\ \textit{update}),
+pretraživanje (engl.\ \textit{find}) i brisanje (engl.\ \textit{delete})
+parova ključ-vrednost.
+
+Umetanje i menjanje parova se spaja u jednu funkciju koja umeće dati par
+u strukturu ukoliko ne postoji drugi par sa istim ključem u toj strukturi.
+U suprotnom, vrednost za taj par se ažurira i funkcija vraća staru vrednost.
+
+Struktura koja predstavlja prilagodljiva radiks-stabla se zove \texttt{ARTree}
+i data je u listingu~\ref{kod:artree}. Definisana je u datoteci \texttt{lib.rs},
+gde su definisane sve osnovne strukture za rad sa prilagodljivim radiks-stablima.
+U definiciju \texttt{ARTree} ulaze dva generička tipa: tip ključa i tip vredosti
+parova koji se unose u stablo. Prvo polje strukture je \texttt{root}, koje se odnosi
+na koren prilagodljivog radiks-stabla. Da je koren i jedino polje ove strukture,
+kompilator ne bi dopustio korišćenje generičkog tipa \texttt{K} koje se ne pominje
+unutar same strukture. Zbog toga, mora se koristiti tzv.\ \textbf{fantomski marker},
+koji kao generički tip uzima \texttt{K}. Ovaj tip podataka se naziva ``fantomskim''
+zato što ne koristi memoriju, već je samo vrsta indikatora za kompilator.
+
+\begin{lstlisting}[language=Rust,
+                   caption={Definicija strukture \texttt{ARTree}},
+                   label={kod:artree}]
+pub struct ARTree<K: ARTKey, V> {
+    root: ARTLink<V>,
+    _marker: PhantomData<K>,
+}
+\end{lstlisting}
+
+U listingu~\ref{kod:artree} generički tip \texttt{K} ima svojsvo \texttt{ARTKey}.
+Ovo svojstvo, dato na listingu~\ref{kod:artkey} je takođe definisano u
+datoteci \texttt{lib.rs}.
+
+\begin{lstlisting}[language=Rust,
+                   caption={Definicija svojstva \texttt{ARTKey}},
+                   label={kod:artkey}]
+pub trait ARTKey {
+    fn convert_to_bytes(self) -> Vec<u8>;
+}
+\end{lstlisting}
+
+\texttt{ARTKey} sadrži samo jednu funkciju: funkciju koja može dati ključ
+prevesti u vektor bajtova, odnosno \texttt{Vec<u8>}. Da bi se vrednost
+bilo kog tipa mogla koristiti kao ključ u \texttt{ARTree}, taj tip mora prvo
+implementirati ovo svojstvo. U datoteci \texttt{key.rs} su date
+implementacije ovog svojstva za primitivne tipove (celi brojevi, brojevi zapisani
+u pokretnom zarezu), kao i za niske. Funkcija standardne biblioteke
+\texttt{to\_be\_bytes} je definisana za sve brojeve i ona prevodi brojeve u
+njihovu reprezentaciju u bajtovima u \textit{big-endian}~\cite{endianness}
+sistemu. \textit{Big-endian} se odnosi na poredak bajtova smeštenih u memoriji,
+odnosno na činjenicu da su bajtovi u memoriji smešteni po značajnosti.
+Funkcija \texttt{to\_be\_bytes} smešta bajtove u niz,
+koji se mora prevesti u vektor funkcijom \texttt{into\_vec}.
+Standardna biblioteka takođe sadrži odgovarajuću funkciju za prevođenje
+niski u bajtove koja se naziva \texttt{into\_bytes}.
+
+\section{Struktura čvorova}
+Definicije tipova čvorova se nalaze u datoteci \texttt{node.rs}.
+Osnovni tip čvora se naziva \texttt{ARTNode} i on je enumerator.
+
+U definiciji strukture \texttt{ARTree} na listingu~\ref{kod:artree}
+koren stabla ima tip~\texttt{ARTLink<V>}. Ovaj tip je
+pseudonim tipa \texttt{Option<Box<ARTNode<V>>>} koji predstavlja
+pokazivače na decu.
+\texttt{Box} pokazivač je ovde neophodan zato što je \texttt{ARTNode}
+rekurzivna struktura, i kompilator bez njega ne bi znao
+koliko memorije treba rezervisati.
+
+\texttt{ARTNode} razlikuje dve vrste čvorova: unutrašnje \texttt{Inner} i
+listove \texttt{Leaf}. U \texttt{Leaf} se smešta struktura \texttt{ARTLeaf}
+koja sadrži vrednost i ključ dok se u \texttt{Inner} se smeštaju tri podatka:
+enumerator \texttt{ARTInnerNode}, parcijalni ključ i vrednost. Vrednost se ovde
+nalazi u \texttt{Option} omotaču, jer unutrašnji čvorovi
+ne moraju nužno imati vrednosti.
+
+\texttt{ARTInnerNode} sadrži četiri vrste unutrašnjeg čvora:
+\texttt{Inner4}, \texttt{Inner16}, \texttt{Inner48} i
+\texttt{Inner256} gde su, redom, smeštene odgovarajuće strukture
+\texttt{ARTInner4}, \texttt{ARTInner16}, \texttt{ARTInner48} i
+\texttt{ARTInner256}. Struktura ovih čvorova se suštinski ne razlikuje od
+njihovog opisa u sekciji~\ref{sec:struktura_art}, s tim da su dodati
+podaci o dužini parcijalnog čvora i broju smeštene dece.
+Svi pomenuti tipovi čvorova imaju jedan generičan
+tip: tip vrednosti. Generičan tip ključa nije neophodan nakon njegovog
+transformisanja u vektor bajtova.
+
 
 % ------------------------------------------------------------------------------
 \chapter{Zaključak}
