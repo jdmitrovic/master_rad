@@ -63,7 +63,7 @@
 % Godina u kojoj je teza predana komisiji
 \godina{2022}
 % Ime i afilijacija mentora (u odabranom pismu)
-\mentor{dr Milena \textsc{Vujošević Janičić}, redovan profesor\\ Univerzitet u Beogradu, Matematički fakultet}
+\mentor{dr Milena \textsc{Vujošević Janičić}, neredovan profesor\\ Univerzitet u Beogradu, Matematički fakultet}
 % Ime i afilijacija prvog člana komisije (u odabranom pismu)
 \komisijaA{dr Vesna \textsc{Marinković}, docent\\ Univerzitet u Beogradu, Matematički fakultet}
 % Ime i afilijacija drugog člana komisije (u odabranom pismu)
@@ -425,7 +425,7 @@ Sistem vlasništva se može svesti na tri pravila:
 
 Primer funkcionisanja ovog sistema se može dati uz pomoć pomenutih niski promenljive dužine,
 odnosno tipa \texttt{String}: ako se, kao u listingu~\ref{vl:str}, pokuša
-ulančavanje pokazivača na istu vrednost, \texttt{Rust} kompilator će prikazati sledeću grešku:
+ulančavanje pokazivača na istu vrednost, \textit{Rust} kompilator će prikazati sledeću grešku:
 
 \begin{lstlisting}[language={}, style=text]
 error[E0382]: borrow of moved value: `niska1`
@@ -961,17 +961,17 @@ gde se u unutrašnjim čvorovima čuva fiksni broj bajtova parcijalnog ključa.
 Sve preko unapred određenog broja bajtova tog vektora se ne memoriše,
 već se koristi optimističan metod čuvanja.
 
-\section{Algoritmi pretrage i umetanja}
+\section{Algoritmi pretrage i umetanja}~\label{sec:algoritmi_pretraga_umetanje}
 
 U svom radu iz 2013.\ godine, autori prilagodljivih radiks-stabala su
 objavili i algoritme pretrage i umetanja. Ovi algoritmi su veoma slični
 algoritmima za radiks-stabla u osnovnom obliku, i zato će biti navedeni
 i objašnjeni samo algoritmi za rad sa strukturom podataka ART.\
-Algoritam pretrage je dat na listingu~\ref{art:algoritam_pretrage}.
+Algoritam pretrage je dat na listingu~\ref{kod:algoritam_pretrage}.
 
 \begin{lstlisting}[language=C++,
                    caption={Algoritam pretrage strukture podataka ART},
-                   label={art:algoritam_pretrage}]
+                   label={kod:algoritam_pretrage}]
 search(node, key, depth):
     if node == NULL
         return NULL
@@ -1001,11 +1001,11 @@ Na kraju, nalazi se idući čvor funkcijom \texttt{findChild} prosleđivanjem
 trenutnog čvora i odgovarajućeg bajta i pretraga se
 nastavlja rekurzivno. Isti algoritam pretrage se može primeniti i za
 radiks-stabla u osnovnom obliku. Algoritam funkcije
-\texttt{findChild} je dat na listingu~\ref{art:algoritam_findChild}.
+\texttt{findChild} je dat na listingu~\ref{kod:algoritam_findChild}.
 
 \begin{lstlisting}[language=C++,
                    caption={Algoritam pronalaska idućeg čvora pretrage},
-                   label={art:algoritam_findChild}]
+                   label={kod:algoritam_findChild}]
 findChild(node, byte):
     if node.type == Node4
         for (i = 0; i < node.count; i = i + 1)
@@ -1078,14 +1078,14 @@ tip trenutnog čvora koji je poslat kao parametar funkciji
 
 U slučaju osnovnih radiks-stabala, algoritam \texttt{findChild}
 je sličan \texttt{Node256} grani iz
-algoritma sa listinga~\ref{art:algoritam_findChild} koja
+algoritma sa listinga~\ref{kod:algoritam_findChild} koja
 se prilagođava za različite vrednosti raspona $s$.
 Veličina vektora koji se nalaze u unutrašnjim
 čvorovima je uslovljena odabirom vrednosti raspona
 i ona iznosi $2^{s}$.
 
 Algoritam za umetanje novih parova ključ-vrednost u stablo je dat
-na listingu~\ref{art:algoritam_insert}, dok je algoritam brisanja
+na listingu~\ref{kod:algoritam_insert}, dok je algoritam brisanja
 parova, po rečima autora, simetričan ovom algoritmu. Ponovo je u pitanju
 rekurzivni algoritam, te se prvo obrađuje bazni slučaj, odnosno kad
 se praznom podstablu dodaje list. Ako je čvor kome se dodaje
@@ -1110,7 +1110,7 @@ unutrašnjeg čvora u sledeći čvor u hijerarhiji funkcijom
 u \texttt{Node16}, iz \texttt{Node16} u \texttt{Node48} ili
 iz \texttt{Node48} u \texttt{Node256}). Funkcija \texttt{grow}
 je jedina suštinska razlika između algoritma sa
-listinga~\ref{art:algoritam_insert} i algoritma za umetanje u
+listinga~\ref{kod:algoritam_insert} i algoritma za umetanje u
 radiks-stablo i njena implemenacija zavisi od specifičnosti
 konkretnog programskog jezika u kome se ona implementira.
 Usled toga, funkcija \texttt{grow} će
@@ -1120,7 +1120,7 @@ implemenacija strukture ART u okviru programskog jezika
 
 \begin{lstlisting}[language=C++,
                    caption={Algoritam umetanja novih elemenata u stablo},
-                   label={art:algoritam_insert}]
+                   label={kod:algoritam_insert}]
 insert (node, key, leaf, depth):
  if node == NULL
     replace(node, leaf)
@@ -1164,19 +1164,34 @@ iznosi osam bita, vremenska složenost je
 $ \mathcal{O}(k) $, gde je $k$ dužina ključa.
 
 \chapter{ART u programskom jeziku \textit{Rust}}
-Implementacija prilagodljivih radiks-stabala podrazumeva
-kreiranje strukture koja podržava četiri različite operacije:
-umetanje (engl.\ \textit{insert}), ažuriranje (engl.\ \textit{update}),
-pretraživanje (engl.\ \textit{find}) i brisanje (engl.\ \textit{delete})
-parova ključ-vrednost.
 
-Umetanje i menjanje parova se spaja u jednu funkciju koja umeće dati par
-u strukturu ukoliko ne postoji drugi par sa istim ključem u toj strukturi.
-U suprotnom, vrednost za taj par se ažurira i funkcija vraća staru vrednost.
+U okviru ovog rada je implementirana biblioteka \textbf{rustART}
+koja implementira prilagodljiva radiks-stabla u programskom
+jeziku \textit{Rust}. Biblioteke napisane u \textit{Rust}-u
+imaju osnovnu datoteku koja se zove \texttt{lib.rs},
+koju je moguće deliti u manje datoteke koje se nazivaju
+moduli. U biblioteci \textit{rustART} postoje
+tri modula:
+
+\begin{description}
+  \item{\textbf{\texttt{tree.rs}}} Sadrži implementacije osnovnih operacija:
+        umetanja (engl.\ \textit{insert}), ažuriranja (engl.\ \textit{update}),
+        pretraživanja (engl.\ \textit{find}) i brisanja (engl.\ \textit{delete})
+        parova ključ-vrednost.
+
+  \item{\textbf{\texttt{keys.rs}}} Sadrži sve strukture i funkcije za rad sa ključevima.
+
+  \item{\textbf{\texttt{node.rs}}} Sadrži unutrašnju strukturu prilagodljivih
+        radiks-stabala, odnosno strukturu unutrašnjih čvorova i listova,
+        kao i njihovo ponašanje.
+\end{description}
+
+
+\section{Struktura \texttt{ARTree} i svojstvo \texttt{ARTKey}}
 
 Struktura koja predstavlja prilagodljiva radiks-stabla se zove \texttt{ARTree}
 i data je u listingu~\ref{kod:artree}. Definisana je u datoteci \texttt{lib.rs},
-gde su definisane sve osnovne strukture za rad sa prilagodljivim radiks-stablima.
+tako da je brzo dostupna krajnjem korisniku koji koristi ovu biblioteku.
 U definiciju \texttt{ARTree} ulaze dva generička tipa: tip ključa i tip vredosti
 parova koji se unose u stablo. Prvo polje strukture je \texttt{root}, koje se odnosi
 na koren prilagodljivog radiks-stabla. Da je koren i jedino polje ove strukture,
@@ -1195,8 +1210,8 @@ pub struct ARTree<K: ARTKey, V> {
 \end{lstlisting}
 
 U listingu~\ref{kod:artree} generički tip \texttt{K} ima svojsvo \texttt{ARTKey}.
-Ovo svojstvo, dato na listingu~\ref{kod:artkey} je takođe definisano u
-datoteci \texttt{lib.rs}.
+Ovo svojstvo, dato na listingu~\ref{kod:artkey} je definisano u
+modulu \texttt{keys.rs}.
 
 \begin{lstlisting}[language=Rust,
                    caption={Definicija svojstva \texttt{ARTKey}},
@@ -1224,6 +1239,8 @@ niski u bajtove koja se naziva \texttt{into\_bytes}.
 \section{Struktura čvorova}
 Definicije tipova čvorova se nalaze u datoteci \texttt{node.rs}.
 Osnovni tip čvora se naziva \texttt{ARTNode} i on je enumerator.
+Na listingu~\ref{kod:artnode} je prikazan deo koda sadrži definicije
+svih tipova čvorova.
 
 U definiciji strukture \texttt{ARTree} na listingu~\ref{kod:artree}
 koren stabla ima tip~\texttt{ARTLink<V>}. Ovaj tip je
@@ -1232,6 +1249,51 @@ pokazivače na decu.
 \texttt{Box} pokazivač je ovde neophodan zato što je \texttt{ARTNode}
 rekurzivna struktura, i kompilator bez njega ne bi znao
 koliko memorije treba rezervisati.
+
+
+\begin{lstlisting}[language=Rust,
+                   caption={Definicije čvorova
+                            koji se nalaze u strukturi \texttt{ARTree}},
+                   label={kod:artnode}]
+pub enum ARTInnerNode<V> {
+    Inner4(ARTInner4<V>),
+    Inner16(ARTInner16<V>),
+    Inner48(ARTInner48<V>),
+    Inner256(ARTInner256<V>),
+}
+
+pub struct ARTInner4<V> {
+    pkey_size: u8,
+    keys: [Option<u8>; 4],
+    children: [ARTLink<V>; 4],
+    children_num: u8,
+}
+
+pub struct ARTInner16<V> {
+    pkey_size: u8,
+    keys: __m128i,
+    children: [ARTLink<V>; 16],
+    children_num: u8,
+}
+
+pub struct ARTInner48<V> {
+    pkey_size: u8,
+    keys: [Option<u8>; 256],
+    children: [ARTLink<V>; 48],
+    children_num: u8,
+}
+
+pub struct ARTInner256<V> {
+    pkey_size: u8,
+    children: [ARTLink<V>; 256],
+    children_num: u8,
+}
+
+pub struct ARTLeaf<V>{
+    key: ByteKey,
+    value: V,
+}
+\end{lstlisting}
 
 \texttt{ARTNode} razlikuje dve vrste čvorova: unutrašnje \texttt{Inner} i
 listove \texttt{Leaf}. U \texttt{Leaf} se smešta struktura \texttt{ARTLeaf}
@@ -1251,6 +1313,120 @@ Svi pomenuti tipovi čvorova imaju jedan generičan
 tip: tip vrednosti. Generičan tip ključa nije neophodan nakon njegovog
 transformisanja u vektor bajtova.
 
+\section{Implementacija osnovnih operacija}
+
+U datoteci \texttt{tree.rs} se nalaze funkcije koje implementiraju
+osnovne operacije.
+Umetanje i ažuriranje parova se spaja u jednu funkciju,
+nazvanu \texttt{insert\_or\_update}, koja umeće dati par
+u strukturu ukoliko ne postoji drugi par sa istim ključem u toj strukturi.
+U suprotnom, vrednost za taj par se ažurira i funkcija vraća staru vrednost.
+
+Za razliku od algoritama predstavljenih u
+sekciji~\ref{sec:algoritmi_pretraga_umetanje}, njihove implementacije u
+biblioteci \textit{rustART} nisu napisane kao rekurzivne funkcije,
+budući da rekurzija sa sobom donosi mogućnost prekoračenja
+steka. Funkcija \texttt{find} je \textit{Rust} ekvivalent funkciji
+\texttt{search} sa listinga~\ref{kod:algoritam_pretrage}.
+Rekurzija je zamenjena beskonačnom petljom iz koje se izlazi samo
+ako se nađe par sa traženim ključem ili se utvrdi da takav par
+ne postoji.
+
+Funkcija \texttt{find\_child} je pandan funkciji \texttt{findChild}
+sa listinga~\ref{kod:algoritam_findChild}. Međutim, usled
+pravila pozajmljivanja, ova funkcija ima svog mutabilnog dvojnika
+sa nazivom \texttt{find\_child\_mut}. Obe funkcije su sastavni
+deo strukture \texttt{ARTInnerNode}.
+
+\subsection{Umetanje i ažuriranje}~\label{subsec:umetanje_azururanje}
+
+Implementacija funkcije \texttt{insert\_or\_update} je složenija
+zato što ova funkcija, za razliku od funkcije pretrage, zahteva
+menjanje same strukture, koje mora biti u skladu sa pravilima
+pozajmljivanja i vlasništva. Rad ove funkcije je podeljen u
+dva koraka:
+
+\begin{enumerate}
+  \item Nalaženje poslednjeg
+        čvora koji se poklapa za zadatim ključem.
+
+  \item Dodavanje para na mesto nađeno u prvom koraku.
+\end{enumerate}
+
+Prvi korak je implementiran u vidu petlje koja se kreće od korena
+niz stablo sve dok se kreće po unutrašnjim čvorovima i dok se ključ
+pretrage i parcijalni ključevi unutrašnjih čvorova u potpunosti slažu.
+Ovo znači da se u petlju ne ulazi ako je stablo prazno.
+Pretraga se prekida kada se dođe do lista ili pretraga u unutrašnjem
+čvoru vodi ka nedostajućoj vrednost.
+Takođe, u ovom koraku se proverava da li je pretraga došla do kraja,
+odnosno, da li je neophodno uneti vrednost u trenutni unutrašnji čvor
+i vratiti staru vrednost, ako ona postoji.
+
+Drugi korak zavisi od toga gde se prekinula pretraga u prvom koraku.
+Ukoliko je u pitanju nedostajuća vrednost, stablo je prazno i nedostajuću
+vrednost treba zameniti listom koji sadrži dati par.
+Ukoliko je u pitanju list, proverava se ključ pretrage i ključ u tom listu.
+Ako dođe do potpunog poklapanja, potrebno
+je ažurirati vrednost u listu i vratiti staru vrednost.
+U suprotnom, ako je došlo do parcijalnog poklapanja ključa,
+potrebno je napraviti novi unutrašnji čvor koji menja
+stari list. Parcijalni ključ novog unutrašnjeg čvora
+je deo ključa pretrage koji se poklapa sa ključem u listu.
+U novonastali čvor treba dodati stari list kao i novi list,
+u kome se nalazi uneti par ključ-vrednost.
+
+Ukoliko je u pitanju unutrašnji čvor, neophodno je utvrditi zašto je došlo
+do prekida petlje u prvom koraku. Ako je došlo do parcijalnog poklapanja
+ključa pretrage i parcijalnog ključa
+neophodno je napraviti novi unutrašnji čvor čiji parcijalni ključ
+je deo ključa pretrage koji se poklapa sa
+parcijalnim ključem unutrašnjeg čvora.
+U novonapravljeni čvor treba dodati stari čvor kao i list sa novim parom.
+Ako nije u pitanju parcijalno poklapanje, onda pretraga vodi u nedostajuću
+vrednost, odnosno pretraga je došla do kraja puta koji može da prati u
+dosadašnjem stablu.
+Tada je samo potrebno dodati list sa novim parom u unutrašnji
+čvor, koji se, po potrebi, može proširiti funkcijom \texttt{grow}.
+
+\subsection{Brisanje}
+Operacija brisanja briše par ključ-vrednost iz strukture
+i vraća staru vrednost ukoliko traženi par postoji.
+Slično operaciji umetanja i ažuriranja iz
+potsekcije~\ref{subsec:umetanje_azururanje}, operacija brisanja se
+takođe sastoji iz dva koraka:
+
+\begin{enumerate}
+  \item Nalaženje poslednjeg unutrašnjeg čvora čiji se prefiksni ključ
+        poklapa sa odgovarajućim delom ključa pretrage.
+  \item Brisanje para ključ-vrednost sa mesta nađenog u prvom koraku.
+\end{enumerate}
+
+Prvi korak je takođe realizovan beskonačnom petljom, gde se pretraga
+kreće po unutrašnjim čvorovima niz stablo. Ako pretpostavimo da je
+traženi par u listu, neophodno je naći njegovog roditelja zato što
+je potrebno izbrisati podatak o ključu lista koji se briše.
+Uz to, potrebno je i umanjiti brojač dece i smanjiti taj
+unutrašnji čvor ako je to moguće.
+
+Ako se vrednost koja se briše
+ne nalazi u listu, već u unutrašnjem čvoru, u prvom koraku
+če se ta vrednost naći i izbrisati.
+Ovaj par se ne ulazi u broj dece koji se čuva u unutrašnjem čvoru,
+pa se broj dece ne koriguje prilikom brisanja vrednosti, niti
+se čvor smanjuje.
+Nađeni unutrašnji čvor se ne briše zato što on sadrži
+decu, pa bi se time obrisao i deo stabla koji ne treba
+brisati.
+
+Po završetku prvog koraka se ne dobija unutrašnji čvor ako je
+stablo prazno (u ovom slučaju se funkcija prekida) ili se
+sastoji od jednog lista (list se briše samo ukoliko se njegov ključ
+u potpunosti poklapa sa ključem pretrage). Uz pretpostavku da se u prvom
+koraku dobija unutrašnji čvor, briše se odgovarajući list iz dobijenog
+čvora funkcijom \texttt{remove\_node}. Potom se, po potrebi,
+unutrašnji čvor smanjuje funkcijom \texttt{shrink}
+i vraća se vrednost obrisanog lista.
 
 % ------------------------------------------------------------------------------
 \chapter{Zaključak}
