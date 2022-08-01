@@ -1613,6 +1613,43 @@ fn art_find(art: &mut ARTree<u64, u64>, keys: &Vec<u64>) {
 }
 \end{lstlisting}
 
+Merenje je izvršeno na procesoru \textit{AMD Ryzen 7 3700U}. Rezultati merenja
+operacija umetanja su prikazani na slici~\ref{fig:bench_insert}.
+Vreme izvršavanja za \texttt{ARTree} i \texttt{BTreeMap} je gotovo identično
+sve do tri miliona unetih parova, nakon toga \texttt{ARTree} ima značajno
+bolje rezultate. Heš mape imaju značajno bolje rezultate, što je i očekivano
+s obzirom da je vremenska složenost njihovih operacija konstantna.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.90\textwidth]{lines_insert.eps}
+  \caption{
+    Rezultati merenja za operaciju umetanja. Apscisa predstavlja broj
+    unetih parova, dok ordinata predstavlja prosečno vreme izvršavanja u sekundama.
+    Crvenom bojom je predstavljena struktura
+    \texttt{ARTree}, zelenom \texttt{BTreeMap}, a plavom \texttt{HashMap}.
+  }
+  \label{fig:bench_insert}
+\end{figure}
+
+Na slici~\ref{fig:bench_find} se nalaze rezultati merenja operacije
+pretraživanja. Rezultati se ne razlikuju u velikoj meri od rezulata sa
+slike~\ref{fig:bench_insert}, s tim da se razlika između \texttt{ARTree}
+i \texttt{BTreeMap} ispoljava ranije, od dva miliona pretraženih
+parova.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.90\textwidth]{lines_find.eps}
+  \caption{
+    Rezultati merenja za operaciju pretraživanja. Apscisa predstavlja broj
+    pretraživanih parova, dok ordinata predstavlja prosečno vreme izvršavanja u sekundama.
+    Crvenom bojom je predstavljena struktura
+    \texttt{ARTree}, zelenom \texttt{BTreeMap}, a plavom \texttt{HashMap}.
+  }
+  \label{fig:bench_find}
+\end{figure}
+
 
 % ------------------------------------------------------------------------------
 \chapter{Zaključak}
