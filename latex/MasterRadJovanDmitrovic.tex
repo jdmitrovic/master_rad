@@ -76,10 +76,22 @@
 % \datumodbrane{}
 
 % Apstrakt na srpskom jeziku (u odabranom pismu)
-\apstr{Apstrakt ide ovde}
+\apstr{
+  Radiks-stabla (engl. \textit{radix tree}) su drvolika struktura koja
+  poranjuju parove ključ-vrednost. Prilagodljiva radiks-stabla
+  (engl. \textit{Adaptive Radix Tree}) predstavljaju nadogradnju radiks-stabala,
+  optimizujući potrošnju memorije. Programski jezik \textit{Rust} je moderan i
+  popularan jezik, ali za koji ne postoji potpuna podrška za rad sa prilagodljivim
+  radiks-stablima. Cilj rada je predstavljanje
+  implementacije prilagodljivih radiks-stabala u programskom jeziku \textit{Rust},
+  koja podržava osnovne operacije: umetanje, čitanje, ažuriranje i brisanje.
+  Na kraju rada je prikazano testiranje implementirane strukture podataka,
+  kao i poređenje performansi sa drugim strukturama podataka implementiranih
+  u programskom jeziku \textit{Rust}.
+}
 
 % Ključne reči na srpskom jeziku (u odabranom pismu)
-\kljucnereci{programiranje, programski jezici}
+\kljucnereci{programiranje, programski jezici, strukture podataka}
 
 \begin{document}
 % ==============================================================================
@@ -91,7 +103,7 @@
 % Strana sa podacima o mentoru i članovima komisije
 \komisija
 % Strana sa posvetom (u odabranom pismu)
-\posveta{Mami, tati}
+\posveta{Majci, ocu i bratu}
 % Strana sa podacima o disertaciji na srpskom jeziku
 \apstrakt
 % Sadržaj teze
@@ -1177,14 +1189,14 @@ moduli. U biblioteci \textit{rustART} postoje
 tri modula:
 
 \begin{description}
-  \item{\textbf{\texttt{tree.rs}}} Sadrži implementacije osnovnih operacija:
+  \item{\textbf{\texttt{tree.rs}}} --- Sadrži implementacije osnovnih operacija:
         umetanja (engl.\ \textit{insert}), ažuriranja (engl.\ \textit{update}),
         pretraživanja (engl.\ \textit{find}) i brisanja (engl.\ \textit{delete})
         parova ključ-vrednost.
 
-  \item{\textbf{\texttt{keys.rs}}} Sadrži sve strukture i funkcije za rad sa ključevima.
+  \item{\textbf{\texttt{keys.rs}}} --- Sadrži sve strukture i funkcije za rad sa ključevima.
 
-  \item{\textbf{\texttt{node.rs}}} Sadrži unutrašnju strukturu prilagodljivih
+  \item{\textbf{\texttt{node.rs}}} --- Sadrži unutrašnju strukturu prilagodljivih
         radiks-stabala, odnosno strukturu unutrašnjih čvorova i listova,
         kao i njihovo ponašanje.
 \end{description}
@@ -1313,7 +1325,7 @@ podaci o dužini parcijalnog čvora i broju smeštene dece.
 rekurzivna struktura, i kompilator bez njega ne bi znao
 koliko memorije treba rezervisati.
 Svi pomenuti tipovi čvorova imaju jedan generičan
-tip: tip vrednosti. Generičan tip ključa nije neophodan nakon njegovog
+tip: tip vrednosti. Generički tip ključa nije neophodan nakon njegovog
 transformisanja u vektor bajtova.
 
 \section{Implementacija osnovnih operacija}
@@ -1321,7 +1333,7 @@ transformisanja u vektor bajtova.
 U datoteci \texttt{tree.rs} se nalaze funkcije koje implementiraju
 osnovne operacije.
 Umetanje i ažuriranje parova se spaja u jednu funkciju,
-nazvanu \texttt{insert\_or\_update}, koja umeće dati par
+nazvanu \texttt{insert}, koja umeće dati par
 u strukturu ukoliko ne postoji drugi par sa istim ključem u toj strukturi.
 U suprotnom, vrednost za taj par se ažurira i funkcija vraća staru vrednost.
 
@@ -1330,7 +1342,7 @@ sekciji~\ref{sec:algoritmi_pretraga_umetanje}, njihove implementacije u
 biblioteci \textit{rustART} nisu napisane kao rekurzivne funkcije,
 budući da rekurzija sa sobom donosi mogućnost prekoračenja
 steka. Implementirana je
-funkcija \texttt{find} kao \textit{Rust} ekvivalent funkciji
+funkcija \texttt{get} kao \textit{Rust} ekvivalent funkciji
 \texttt{search} sa listinga~\ref{kod:algoritam_pretrage}.
 Rekurzija je zamenjena beskonačnom petljom iz koje se izlazi samo
 ako se nađe par sa traženim ključem ili se utvrdi da takav par
@@ -1346,7 +1358,7 @@ deo strukture \texttt{ARTInnerNode}.
 
 \subsection{Umetanje i ažuriranje}~\label{subsec:umetanje_azururanje}
 
-Implementacija funkcije \texttt{insert\_or\_update} je složenija
+Implementacija funkcije \texttt{insert} je složenija
 zato što ova funkcija, za razliku od funkcije pretrage, zahteva
 menjanje same strukture, koje mora biti u skladu sa pravilima
 pozajmljivanja i vlasništva. Rad ove funkcije je podeljen u
@@ -1448,8 +1460,9 @@ unutrašnji čvor ako je to moguće.
 Ako se vrednost koja se briše
 ne nalazi u listu, već u unutrašnjem čvoru, u prvom koraku
 će se ta vrednost naći i izbrisati.
-Ovaj par se ne ulazi u broj dece koji se čuva u unutrašnjem čvoru,
-pa se broj dece ne koriguje prilikom brisanja vrednosti, niti
+Par kome pripada vrednost koja se nalazi u unutrašnjem čvoru
+se ne ubraja u decu tog čvora,
+pa se broj dece ne koriguje prilikom brisanja ove vrednosti, niti
 se čvor smanjuje.
 Nađeni unutrašnji čvor se ne briše zato što on sadrži
 decu, pa bi se time obrisao i deo stabla koji ne treba
@@ -1469,8 +1482,8 @@ U datoteci \texttt{lib.rs} nalaze se dva testa koji proveravaju
 valjanost osnovnih operacija. Testovi su napisani u vidu funkcija
 pre kojih je napisana anotacija \texttt{\#\lbrack test\rbrack}.
 
-Prvi test je \texttt{insert\_update\_delete\_find}, prikazan na
-listingu~\ref{kod:iudf_test}`, gde se
+Prvi test je \texttt{insert\_update\_delete\_get}, prikazan na
+listingu~\ref{kod:iudf_test}, gde se
 u ART unosi proizvoljno velika količina parova.
 Za generisanje ključeva se koristi generator
 pseudoslučajnih brojeva PCG~\cite{pcg} koji generiše niz
@@ -1478,8 +1491,8 @@ pseudoslučajnih brojeva PCG~\cite{pcg} koji generiše niz
 Jednostavnosti radi, parovi se prave tako da
 za svaku vrednost $v$ koja je uparena sa ključem $k$
 važi da je $v = k + 1$. Nakon unosa svih parova u ART funkcijom
-\texttt{insert\_or\_update}, postojanje tih parova u samoj strukturi
-se proverava funkcijom \texttt{find}. Sledi provera funkcionalnosti
+\texttt{insert}, postojanje tih parova u samoj strukturi
+se proverava funkcijom \texttt{get}. Sledi provera funkcionalnosti
 operacije brisanja gde se koristi nasumično odabrana vrednost
 \texttt{SEED\_DEL}, tako da se brišu samo vrednosti koje su deljive
 sa tom vrednošću. Nakon brisanja tih vrednosti, proverava se
@@ -1487,10 +1500,10 @@ da li su se obrisani parovi zaista obrisali. Takođe, postoji i
 provera da li se neobrisani parovi i dalje nalaze u strukturi ART.\
 
 \begin{lstlisting}[language=Rust,
-                   caption={Test \texttt{insert\_update\_delete\_find}},
+                   caption={Test \texttt{insert\_update\_delete\_get}},
                    label={kod:iudf_test}]
 #[test]
-fn insert_update_delete_find() {
+fn insert_update_delete_get() {
     const SEED: u64 = 10;
 
     let mut rng = Pcg64::seed_from_u64(SEED);
@@ -1498,13 +1511,12 @@ fn insert_update_delete_find() {
     rng.fill(&mut keys[..]);
     let mut art = ARTree::<u64, u64>::new();
 
-
     for &key in keys.iter() {
         art.insert_or_update(key, key + 1);
     }
 
     for &key in keys.iter() {
-        assert_eq!(key + 1, *art.find(key).unwrap());
+        assert_eq!(key + 1, *art.get(key).unwrap());
     }
 
     const SEED_DEL: u64 = 13;
@@ -1517,9 +1529,9 @@ fn insert_update_delete_find() {
 
     for &key in keys.iter() {
         if key % SEED_DEL == 0 {
-            assert_eq!(None, art.find(key));
+            assert_eq!(None, art.get(key));
         } else {
-            assert_eq!(key + 1, *art.find(key).unwrap());
+            assert_eq!(key + 1, *art.get(key).unwrap());
         }
     }
 }
@@ -1528,7 +1540,7 @@ fn insert_update_delete_find() {
 Drugi test je test \texttt{string\_art},
 gde se u ART unose nasumične niske sa odgovarajućim vrednostima.
 Ovaj test je manjeg obima, i služi samo da se proveri da li se niske
-adekvatno tranformišu u nizove bajtova. Nakon unosa parova u ART,
+adekvatno transformišu u nizove bajtova. Nakon unosa parova u ART,
 provere se izvršavaju na sličan način kao i u prvom testu.
 
 \subsection{Merenje performansi}
@@ -1545,23 +1557,23 @@ Sva implementirana merenja se pokreću komandom \texttt{cargo bench}.
 omogućava iscrtavanje grafika od dobijenih rezultata.
 
 Deo koda koji se nalazi u \texttt{benches.rs} datoteci se nalazi na
-listingu~\ref{kod:benches}. U funkciji \texttt{bench\_finds} se nalazi
+listingu~\ref{kod:benches}. U funkciji \texttt{bench\_gets} se nalazi
 implementacija merenja operacije pretraživanja.
 Na analogan način je implementirano i merenje operacije umetanja.
 
 Prvo se uspostavavlja generator pseudoslučajnih brojeva. Zatim,
-pravi se nova grupa merenja sa nazivom \texttt{Finds}. U grupi testova
+pravi se nova grupa merenja sa nazivom \texttt{Gets}. U grupi testova
 je moguće pokrenuti više merenja uzastopno i uporediti ih.
 U ovom slučaju se poredi struktura ART sa heš mapama i
 B-stablima~\cite{btree}.
 
 \begin{lstlisting}[language=Rust,
-                   caption={Funkcija \texttt{bench\_finds}},
+                   caption={Funkcija \texttt{bench\_gets}},
                    label={kod:benches}]
-fn bench_finds(c: &mut Criterion) {
+fn bench_gets(c: &mut Criterion) {
     let mut rng = Pcg64::seed_from_u64(SEED);
 
-    let mut group = c.benchmark_group("Finds");
+    let mut group = c.benchmark_group("Gets");
     for i in (200_000..4_000_001).step_by(200_000) {
         let mut keys: Vec<u64> = vec![0; i];
         rng.fill(&mut keys[..]);
@@ -1576,11 +1588,11 @@ fn bench_finds(c: &mut Criterion) {
         }
 
         group.bench_with_input(BenchmarkId::new("ARTree", i), &keys,
-            |b, k| b.iter(|| art_find(&mut art, k)));
+            |b, k| b.iter(|| art_get(&mut art, k)));
         group.bench_with_input(BenchmarkId::new("HashMap", i), &keys,
-            |b, k| b.iter(|| hmap_find(&mut hmap, k)));
+            |b, k| b.iter(|| hmap_get(&mut hmap, k)));
         group.bench_with_input(BenchmarkId::new("BTree", i), &keys,
-            |b, k| b.iter(|| btree_find(&mut btree, k)));
+            |b, k| b.iter(|| btree_get(&mut btree, k)));
     }
     group.finish();
 }
@@ -1589,26 +1601,26 @@ fn bench_finds(c: &mut Criterion) {
 
 
 Brojačem \texttt{i} u \texttt{for} petlji se kontroliše broj pretraženih
-parova. Brojač se inkrementira za 200 hiljada u svakoj iteraciji do
-granične vrednosti koja je podešena na 4 miliona.
+parova. Brojač se inkrementira za dve stotine hiljada u svakoj iteraciji do
+granične vrednosti koja je podešena na četiri miliona.
 Posle inicijalizovanja svake strukture sa pseudoslučajno generisanim parovima,
 merenja se pokreću funkcijom \texttt{bench\_with\_input}, za svaku strukturu
 ponaosob. Funkcija \texttt{bench\_with\_input} ima tri parametra: nisku koja
 predstavlja naziv merenja, ulazne podatke i funkciju koja uspostavlja merenje.
 U okviru poslednjeg parametra se koristi pomoćna funkcija koja traži sve
 unete ključeve i proverava da li je vrednost dobijena pretragom
-korektna. Na listingu~\ref{kod:art_find} se nalazi jedna od pomenutih
+korektna. Na listingu~\ref{kod:art_get} se nalazi jedna od pomenutih
 pomoćnih funkcija, koja je
 zadužena za pretragu unutar strukture ART.\ Sličnu funkcionalnost imaju i
-funkcije \texttt{hmap\_find} i \texttt{btree\_find} koje pretragu vrše
+funkcije \texttt{hmap\_get} i \texttt{btree\_get} koje pretragu vrše
 unutar heš mape, odnosno B-stabla.
 
 \begin{lstlisting}[language=Rust,
-                   caption={Funkcija \texttt{art\_find}},
-                   label={kod:art_find}]
-fn art_find(art: &mut ARTree<u64, u64>, keys: &Vec<u64>) {
+                   caption={Funkcija \texttt{art\_get}},
+                   label={kod:art_get}]
+fn art_get(art: &mut ARTree<u64, u64>, keys: &Vec<u64>) {
     for key in keys.iter() {
-        assert_eq!(*key + 1, *art.find(*key).unwrap());
+        assert_eq!(*key + 1, *art.get(*key).unwrap());
     }
 }
 \end{lstlisting}
@@ -1632,7 +1644,7 @@ s obzirom da je vremenska složenost njihovih operacija konstantna.
   \label{fig:bench_insert}
 \end{figure}
 
-Na slici~\ref{fig:bench_find} se nalaze rezultati merenja operacije
+Na slici~\ref{fig:bench_get} se nalaze rezultati merenja operacije
 pretraživanja. Rezultati se ne razlikuju u velikoj meri od rezulata sa
 slike~\ref{fig:bench_insert}, s tim da se razlika između \texttt{ARTree}
 i \texttt{BTreeMap} ispoljava ranije, od dva miliona pretraženih
@@ -1640,14 +1652,14 @@ parova.
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=0.90\textwidth]{lines_find.eps}
+  \includegraphics[width=0.90\textwidth]{lines_get.eps}
   \caption{
     Rezultati merenja za operaciju pretraživanja. Apscisa predstavlja broj
     pretraživanih parova, dok ordinata predstavlja prosečno vreme izvršavanja u sekundama.
     Crvenom bojom je predstavljena struktura
     \texttt{ARTree}, zelenom \texttt{BTreeMap}, a plavom \texttt{HashMap}.
   }
-  \label{fig:bench_find}
+  \label{fig:bench_get}
 \end{figure}
 
 
@@ -1667,7 +1679,14 @@ parova.
 % ------------------------------------------------------------------------------
 % Biografija kandidata
 \begin{biografija}
-  \textbf{Jovan Dmitrović} (\emph{Gornji Milanovac, 17.11.1995.})
+  \textbf{Jovan Dmitrović} rođen je 17.11.1995.\ u Gornjem Milanovcu.
+  U rodnom gradu je pohađao OŠ ``Momčilo Nastasijević'' i Gimnaziju
+  ``Takovski ustanak''.
+
+  Započeo je studije na Matematičkom fakultetu Univerziteta u Beogradu
+  2014.\ godine, na smeru Informatika. Osnovne studije je završio
+  u septembru 2018.\ godine, nakon čega je upisao master studije
+  na istom fakultetu.
 \end{biografija}
 % ------------------------------------------------------------------------------
 
