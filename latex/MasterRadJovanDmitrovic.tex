@@ -127,9 +127,6 @@ Usled fokusa na stablinost i bezbednost, programski jezik \textit{Rust}
 se koristi u sistemima renomiranih kompanija kao što su
 \textit{Mozilla}, \textit{Google}, \textit{Amazon},
 i \textit{Microsoft}.
-U glavi~\ref{ch:rust} se nalaze istorijat, opis
-osnovnih karakteristika programskog jezika \textit{Rust} kao i instrukcije
-za instalaciju kompilatora i drugih alata vezanih za \textit{Rust}.
 
 Stabla pretrage su bitan koncept u domenu struktura podataka.
 Njihova osobina da su uvek sortirana ih čini pogodnim za korišćenje
@@ -147,18 +144,23 @@ nad radiks-stablima ne zavisi od količine unetih elemenata,
 već samo od dužine ključa (prevedenog u binarni sistem) nad kojim se operacija izvodi.
 Problem kod radiks-stabala je sprega između potrošnje memorije i efikasnosti,
 koja zavisi od veličine unutrašnjih čvorova.
-
 Novo rešenje predstavljaju
 prilagodljiva radiks-stabla, koja prilagođavaju veličinu unutrašnjih čvorova
 po potrebi, time optimizujući potrošnju memorije.
-Detaljiji opis radiks-stabala i
-prilagodljivih radiks-stabala je dat u glavi~\ref{ch:art}.
 
 U okviru programskog jezika \textit{Rust} ne postoji potpuna podrška za
-prilagodljiva radiks-stabla. U glavi~\ref{ch:rustART} je opisana
-biblioteka \texttt{rustART}, koja daje mogućnoćnost izvršavanja osnovih operacija
+prilagodljiva radiks-stabla. Osnovni cilj ovog rada je implementacija
+biblioteke \texttt{rustART}, koja daje mogućnoćnost izvršavanja osnovih operacija
 nad prilagodljivim radiks-stablima: umetanja, ažuriranja, pretraživanja i brisanja.
-Takođe, prikazana je metodologija testiranja i merenja performansi.
+
+U poglavlju~\ref{ch:rust} se nalaze istorijat, opis
+osnovnih karakteristika programskog jezika \textit{Rust} kao i instrukcije
+za instalaciju kompilatora i drugih alata vezanih za \textit{Rust}.
+Detaljniji opis radiks-stabala i
+prilagodljivih radiks-stabala je dat u poglavlju~\ref{ch:art}.
+Opis implementacije biblioteke \texttt{rustART}, kao i opis metodologije
+testiranja i merenja performansi osnovnih operacija,
+se nalazi u poglavlju~\ref{ch:rustART}.
 
 % ------------------------------------------------------------------------------
 \chapter{Programski jezik \emph{Rust}}~\label{ch:rust}
@@ -1521,6 +1523,16 @@ koraku dobija unutrašnji čvor, briše se odgovarajući list iz dobijenog
 unutrašnji čvor smanjuje funkcijom \texttt{shrink}
 i vraća se vrednost obrisanog lista.
 
+\section{Ispravnost i merenje performansi}
+
+Ispravnost strukture \texttt{ARTree} se
+proverava jediničnim testovima u datoteci \texttt{lib.rs}.
+Implementacija merenja performansi se nalazi u
+datoteci \texttt{benches.rs}, koja se nalazi u
+direktorijumu \texttt{benches}.
+Prilikom merenja performansi, istovremeno se proverava
+ispravnost parova unetih u \texttt{ARTree}.
+
 \subsection{Testiranje}
 U datoteci \texttt{lib.rs} nalaze se dva testa koji proveravaju
 valjanost osnovnih operacija. Testovi su napisani u vidu funkcija
@@ -1587,11 +1599,12 @@ Ovaj test je manjeg obima, i služi samo da se proveri da li se niske
 adekvatno transformišu u nizove bajtova. Nakon unosa parova u \texttt{ARTree},
 provere se izvršavaju na sličan način kao i u prvom testu.
 
-\subsection{Merenje performansi}
+\subsection{Performanse}
 
-U direktorijumu \texttt{benches} se nalazi datoteka \texttt{benches.rs}
-koja sadrži funkcije koje mere performanse umetanja i brisanja parova u
-strukturu \texttt{ARTree}.\ Rezultati se potom porede sa rezultatima istih operacija
+Datoteka \texttt{benches.rs} sadrži funkcije koje mere
+performanse umetanja i pretraživanja parova u
+strukturi \texttt{ARTree}.\
+Rezultati se potom porede sa rezultatima istih operacija
 izvedenim nad sličnim strukturama koje su implementirane u standardnoj
 biblioteci programskog jezika \textit{Rust}.
 
