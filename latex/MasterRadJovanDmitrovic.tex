@@ -78,20 +78,20 @@
 % Apstrakt na srpskom jeziku (u odabranom pismu)
 \apstr{
   Radiks-stabla (engl. \textit{radix tree}) su drvolika struktura koja
-  poranjuju parove ključ-vrednost. Prilagodljiva radiks-stabla
+  pohranjuju parove ključ-vrednost. Prilagodljiva radiks-stabla
   (engl. \textit{Adaptive Radix Tree}) predstavljaju nadogradnju radiks-stabala,
   optimizujući potrošnju memorije. Programski jezik \textit{Rust} je moderan i
   popularan jezik, ali za koji ne postoji potpuna podrška za rad sa prilagodljivim
-  radiks-stablima. Cilj rada je predstavljanje
-  implementacije prilagodljivih radiks-stabala u programskom jeziku \textit{Rust},
+  radiks-stablima. Cilj rada je implementacija
+  prilagodljivih radiks-stabala u programskom jeziku \textit{Rust},
   koja podržava osnovne operacije: umetanje, čitanje, ažuriranje i brisanje.
-  Na kraju rada je prikazano testiranje implementirane strukture podataka,
+  U radu je takođe prikazano testiranje implementirane strukture podataka,
   kao i poređenje performansi sa drugim strukturama podataka implementiranih
   u programskom jeziku \textit{Rust}.
 }
 
 % Ključne reči na srpskom jeziku (u odabranom pismu)
-\kljucnereci{programiranje, programski jezici, strukture podataka}
+\kljucnereci{programski jezici, \textit{Rust}, algoritmi i strukture podataka}
 
 \begin{document}
 % ==============================================================================
@@ -116,8 +116,52 @@
 
 % ------------------------------------------------------------------------------
 \chapter{Uvod}
+Programski jezik \textit{Rust} je moderan i izuzetno popularan programski jezik,
+čija prva verzija je objavljena 2015.\ godine. Odlike ovog jezika su
+robusnost i stabilnost. Najveći doprinos stabilnosti
+programskog jezika \textit{Rust} daju
+njegovi jedinstveni koncepti vlasništva i pozajmljivanja, koji garantuju
+memorijsku bezbednost. Koncept vlasništva takođe
+omogućava odsustvo skupljača otpadaka, što doprinosi efikasnosti.
+Usled fokusa na stablinost i bezbednost, programski jezik \textit{Rust}
+se koristi u sistemima renomiranih kompanija kao što su
+\textit{Mozilla}, \textit{Google}, \textit{Amazon},
+i \textit{Microsoft}.
+U glavi~\ref{ch:rust} se nalaze istorijat, opis
+osnovnih karakteristika programskog jezika \textit{Rust} kao i instrukcije
+za instalaciju kompilatora i drugih alata vezanih za \textit{Rust}.
+
+Stabla pretrage su bitan koncept u domenu struktura podataka.
+Njihova osobina da su uvek sortirana ih čini pogodnim za korišćenje
+u određenim sistemima.
+Jedna primena stabala pretrage su baze podataka, gde se stabla pretrage
+primenjuju kao mape, odnosno kao struktura podataka koja pohranjuje
+parove ključ-vrednost.
+
+Međutim, njihova efikasnost
+zavisi od količine unetih elemenata, što je neefikasno u poređenju sa nekim
+drugim strukturama podataka kao što su heš mape.
+Usled toga se često koriste
+radiks-stabla. Efikasnost operacija
+nad radiks-stablima ne zavisi od količine unetih elemenata,
+već samo od dužine ključa (prevedenog u binarni sistem) nad kojim se operacija izvodi.
+Problem kod radiks-stabala je sprega između potrošnje memorije i efikasnosti,
+koja zavisi od veličine unutrašnjih čvorova.
+
+Novo rešenje predstavljaju
+prilagodljiva radiks-stabla, koja prilagođavaju veličinu unutrašnjih čvorova
+po potrebi, time optimizujući potrošnju memorije.
+Detaljiji opis radiks-stabala i
+prilagodljivih radiks-stabala je dat u glavi~\ref{ch:art}.
+
+U okviru programskog jezika \textit{Rust} ne postoji potpuna podrška za
+prilagodljiva radiks-stabla. U glavi~\ref{ch:rustART} je opisana
+biblioteka \texttt{rustART}, koja daje mogućnoćnost izvršavanja osnovih operacija
+nad prilagodljivim radiks-stablima: umetanja, ažuriranja, pretraživanja i brisanja.
+Takođe, prikazana je metodologija testiranja i merenja performansi.
+
 % ------------------------------------------------------------------------------
-\chapter{Programski jezik \emph{Rust}}
+\chapter{Programski jezik \emph{Rust}}~\label{ch:rust}
 \emph{Rust} je statički tipiziran jezik  fokusiran na bezbednost i
 performanse. Od svog nastanka, ovaj jezik
 je dobio veliku pažnju u svetu programiranja, čemu svedoči i činjenica da je
@@ -705,7 +749,7 @@ bi imala jedinstveni životni vek, a životni vek povratne vrednosti bi ostao ne
 jer se nijedno pravilo spajanja ne odnosi na njega.
 
 
-\chapter{Prilagodljiva radiks-stabla}
+\chapter{Prilagodljiva radiks-stabla}~\label{ch:art}
 
 Razvoj računarske memorije je doprineo da se baze podataka
 mogu u potpunosti smestiti u radnu sistemsku memoriju. Ovakve baze podataka se nazivaju
@@ -730,7 +774,7 @@ vreme odziva više nije problem.
 Strukture koje se tradicionalno koriste u bazama podataka jesu
 drvolike strukture podataka. Međutim, problem je u njihovoj neefikasnosti, jer
 funkcije dodavanja i brisanja elemenata u najboljem slučaju ima asimptotsko vreme izvršavanja
-$ \mathcal{O}(n\log{}n) $, gde je $n$ ukupan broj unetih elemenata.
+$ \mathcal{O}(\log{}n) $, gde je $n$ ukupan broj unetih elemenata.
 U ove svrhe su stvorene nadograđene varijante stabala,
 kao što je struktura podataka FAST
 (engl. \emph{\textbf{F}ast \textbf{A}rchitecture \textbf{S}ensitive \textbf{T}ree})~\cite{fast}
@@ -743,9 +787,9 @@ ali gubi na efikasnosti umetanja i brisanja elemenata.
 Pored drvolikih struktura, u ove svrhe se koriste i heš mape. Nasuprot
 stablima, heš mape su efikasne za sve osnovne operacije (dodavanje, brisanje, pretraživanje),
 sa prosečnom vremenskom složenošću $ \mathcal{O}(1) $. Uprkos efikasnosti heš mapa, one nisu
-dobro rešenje za baze podataka zbog upita opsega. U heš mapama podaci nisu nužno sortirani ili
-grupisani na bilo koji način, što čini upite opsega, koji dohvataju više podataka
-sa sličnim ključem, neefikasnim.
+dobro rešenje za baze podataka zbog upita opsega. U heš mapama gde se ključevi heširaju,
+gde operacija inverzna operaciji heširanja ne postoji, nije moguće dohvatiti
+elemente čiji ključ nije u potpunosti poznat.
 Takođe, povećavanje kapaciteta heš mape je skupo i podrazumeva reorganizaciju
 čitave mape, sa linearnom vremenskom složenošću.
 
@@ -1175,7 +1219,7 @@ $ \lceil \frac{k}{s} \rceil $. Kako je raspon $s$ konstantan i
 iznosi osam bita, vremenska složenost je
 $ \mathcal{O}(k) $, gde je $k$ dužina ključa.
 
-\chapter{ART u programskom jeziku \textit{Rust}}
+\chapter{ART u programskom jeziku \textit{Rust}}~\label{ch:rustART}
 
 U okviru ovog rada je implementirana biblioteka \textbf{rustART}
 koja implementira prilagodljiva radiks-stabla u programskom
@@ -1484,20 +1528,20 @@ pre kojih je napisana anotacija \texttt{\#\lbrack test\rbrack}.
 
 Prvi test je \texttt{insert\_update\_delete\_get}, prikazan na
 listingu~\ref{kod:iudf_test}, gde se
-u ART unosi proizvoljno velika količina parova.
+u \texttt{ARTree} unosi proizvoljno velika količina parova.
 Za generisanje ključeva se koristi generator
 pseudoslučajnih brojeva PCG~\cite{pcg} koji generiše niz
 64-bitnih vrednosti za prosleđenu početnu vrednost \texttt{SEED}.
 Jednostavnosti radi, parovi se prave tako da
 za svaku vrednost $v$ koja je uparena sa ključem $k$
-važi da je $v = k + 1$. Nakon unosa svih parova u ART funkcijom
+važi da je $v = k + 1$. Nakon unosa svih parova u \texttt{ARTree} funkcijom
 \texttt{insert}, postojanje tih parova u samoj strukturi
 se proverava funkcijom \texttt{get}. Sledi provera funkcionalnosti
 operacije brisanja gde se koristi nasumično odabrana vrednost
 \texttt{SEED\_DEL}, tako da se brišu samo vrednosti koje su deljive
 sa tom vrednošću. Nakon brisanja tih vrednosti, proverava se
 da li su se obrisani parovi zaista obrisali. Takođe, postoji i
-provera da li se neobrisani parovi i dalje nalaze u strukturi ART.\
+provera da li se neobrisani parovi i dalje nalaze u strukturi \texttt{ARTree}.\
 
 \begin{lstlisting}[language=Rust,
                    caption={Test \texttt{insert\_update\_delete\_get}},
@@ -1540,14 +1584,14 @@ fn insert_update_delete_get() {
 Drugi test je test \texttt{string\_art},
 gde se u ART unose nasumične niske sa odgovarajućim vrednostima.
 Ovaj test je manjeg obima, i služi samo da se proveri da li se niske
-adekvatno transformišu u nizove bajtova. Nakon unosa parova u ART,
+adekvatno transformišu u nizove bajtova. Nakon unosa parova u \texttt{ARTree},
 provere se izvršavaju na sličan način kao i u prvom testu.
 
 \subsection{Merenje performansi}
 
 U direktorijumu \texttt{benches} se nalazi datoteka \texttt{benches.rs}
 koja sadrži funkcije koje mere performanse umetanja i brisanja parova u
-strukturu ART.\ Rezultati se potom porede sa rezultatima istih operacija
+strukturu \texttt{ARTree}.\ Rezultati se potom porede sa rezultatima istih operacija
 izvedenim nad sličnim strukturama koje su implementirane u standardnoj
 biblioteci programskog jezika \textit{Rust}.
 
@@ -1564,7 +1608,7 @@ Na analogan način je implementirano i merenje operacije umetanja.
 Prvo se uspostavavlja generator pseudoslučajnih brojeva. Zatim,
 pravi se nova grupa merenja sa nazivom \texttt{Gets}. U grupi testova
 je moguće pokrenuti više merenja uzastopno i uporediti ih.
-U ovom slučaju se poredi struktura ART sa heš mapama i
+U ovom slučaju se poredi struktura \texttt{ARTree} sa heš mapama i
 B-stablima~\cite{btree}.
 
 \begin{lstlisting}[language=Rust,
@@ -1611,7 +1655,7 @@ U okviru poslednjeg parametra se koristi pomoćna funkcija koja traži sve
 unete ključeve i proverava da li je vrednost dobijena pretragom
 korektna. Na listingu~\ref{kod:art_get} se nalazi jedna od pomenutih
 pomoćnih funkcija, koja je
-zadužena za pretragu unutar strukture ART.\ Sličnu funkcionalnost imaju i
+zadužena za pretragu unutar strukture \texttt{ARTree}.\ Sličnu funkcionalnost imaju i
 funkcije \texttt{hmap\_get} i \texttt{btree\_get} koje pretragu vrše
 unutar heš mape, odnosno B-stabla.
 
