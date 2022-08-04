@@ -150,7 +150,7 @@ po potrebi, time optimizujući potrošnju memorije.
 
 U okviru programskog jezika \textit{Rust} ne postoji potpuna podrška za
 prilagodljiva radiks-stabla. Osnovni cilj ovog rada je implementacija
-biblioteke \texttt{rustART}, koja daje mogućnoćnost izvršavanja osnovih operacija
+biblioteke \textit{rustART}, koja daje mogućnoćnost izvršavanja osnovih operacija
 nad prilagodljivim radiks-stablima: umetanja, ažuriranja, pretraživanja i brisanja.
 
 U poglavlju~\ref{ch:rust} se nalaze istorijat, opis
@@ -158,7 +158,7 @@ osnovnih karakteristika programskog jezika \textit{Rust} kao i instrukcije
 za instalaciju kompilatora i drugih alata vezanih za \textit{Rust}.
 Detaljniji opis radiks-stabala i
 prilagodljivih radiks-stabala je dat u poglavlju~\ref{ch:art}.
-Opis implementacije biblioteke \texttt{rustART}, kao i opis metodologije
+Opis implementacije biblioteke \textit{rustART}, kao i opis metodologije
 testiranja i merenja performansi osnovnih operacija,
 se nalazi u poglavlju~\ref{ch:rustART}.
 
@@ -1537,6 +1537,9 @@ ispravnost parova unetih u \texttt{ARTree}.
 U datoteci \texttt{lib.rs} nalaze se dva testa koji proveravaju
 valjanost osnovnih operacija. Testovi su napisani u vidu funkcija
 pre kojih je napisana anotacija \texttt{\#\lbrack test\rbrack}.
+Testovi se pokreču komandom \texttt{cargo test} i potrebno
+im je $0.84$ sekundi za izvršavanje na procesoru
+\textit{AMD Ryzen 7 3700U}.
 
 Prvi test je \texttt{insert\_update\_delete\_get}, prikazan na
 listingu~\ref{kod:iudf_test}, gde se
@@ -1685,13 +1688,24 @@ fn art_get(art: &mut ARTree<u64, u64>, keys: &Vec<u64>) {
 Merenje je izvršeno na procesoru \textit{AMD Ryzen 7 3700U}. Rezultati merenja
 operacija umetanja su prikazani na slici~\ref{fig:bench_insert}.
 Vreme izvršavanja za \texttt{ARTree} i \texttt{BTreeMap} je gotovo identično
-sve do tri miliona unetih parova, nakon toga \texttt{ARTree} ima značajno
-bolje rezultate. Heš mape imaju značajno bolje rezultate, što je i očekivano
+sve do tri miliona unetih parova, nakon toga \texttt{ARTree} ima prednost.
+Kako je struktura \texttt{BTreeMap} zasnovana na stablima pretrage,
+efikasnost njenih operacija zavisi od količine unetih parova.
+S druge strane, \texttt{ARTree} ne zavisi od broja unetih parova, što dovodi
+do boljih rezultata u merenjima.
+Heš mape imaju značajno bolje rezultate u odnosu na druge dve strukture,
+što je i očekivano
 s obzirom da je vremenska složenost njihovih operacija konstantna.
+U slučaju da je neophodno koristiti mapu isključivo za pretraživanja unapred
+poznatih ključeva, heš mape su bolje rešenje. Međutim, kada ključ nije poznat
+u celosti,
+ili je neophodno da se parovi mogu posetiti u sortiranom redosledu (po ključu),
+onda ima smisla koristiti drvolike strukture kao što je
+\texttt{ARTree}.
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=0.90\textwidth]{lines_insert.eps}
+  \includegraphics[width=0.78\textwidth]{lines_insert.eps}
   \caption{
     Rezultati merenja za operaciju umetanja. Apscisa predstavlja broj
     unetih parova, dok ordinata predstavlja prosečno vreme izvršavanja u sekundama.
@@ -1709,7 +1723,7 @@ parova.
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=0.90\textwidth]{lines_get.eps}
+  \includegraphics[width=0.78\textwidth]{lines_get.eps}
   \caption{
     Rezultati merenja za operaciju pretraživanja. Apscisa predstavlja broj
     pretraživanih parova, dok ordinata predstavlja prosečno vreme izvršavanja u sekundama.
@@ -1722,6 +1736,40 @@ parova.
 
 % ------------------------------------------------------------------------------
 \chapter{Zaključak}
+U radu su prikazani koncept rada prilagodljivih radiks-stabala
+kao i njihove razlike u odnosu na druge drvolike strukture.
+Teoretski i po rezultatima merenja, ART pokazuje da
+ima svoje mesto u svetu struktura podataka.
+
+Pored samih prilagodljivih radiks-stabala, opisano je i korišćenje
+programskog jezika \textit{Rust}. Uprkos nesvakidašnjim konceptima
+koje \textit{Rust} uvodi kao što je sistem vlasništva,
+evidentni su razlozi zbog kojih je \textit{Rust} jedan od najpopularnijih
+jezika današnjice. Usled svoje popularnosti, \textit{Rust}
+ima veliku podršku zajednice, što je od velike važnosti za
+relativno mlad programski jezik.
+
+Memorijska bezbednost ovog jezika dolazi do izražaja
+prilikom implementacije struktura podataka, što je bio i slučaj sa
+bibliotekom \textit{rustART}. Programski jezik \textit{Rust} je
+na prvi pogled restriktivan, onemogućavajući slobodno korišćenje
+referenci i pokazivača. Međutim, upravo ta restriktivnost
+pomaže u sprečavanju grešaka koje je lako napraviti ali
+teško otkriti.
+
+Biblioteka \textit{rustART} se zasniva na originalnom radu koji je
+predstavio prilagodljiva radiks-stabla 2013.\ godine. Međutim,
+od 2013.\ godine do danas je došlo do tehnološkog pomaka,
+te današnji procesori mogu koristiti veće SIMD vektore od onih koji
+su bili dostupni tada. Iz tog razloga se, na primer, mogu
+promeniti tipovi unutrašnjeg čvora tako da tipovi odgovaraju
+dužini konkretnog SIMD vektora, optimizujući i performanse
+i iskorišćenje memorije.
+Korišćenjem novih tipova, mogao bi se i eliminisati tip unutrašnjeg
+čvora sa 48 čvorova, zarad kontrolisanja granulacije unutrašnjih čvorova.
+Stoga se očekuje dalji razvoj
+novih struktura podataka zasnovanih na radiks-stablima
+koje će moći iskoristiti pun potencijal modernog hardvera.
 
 % ------------------------------------------------------------------------------
 % Literatura
