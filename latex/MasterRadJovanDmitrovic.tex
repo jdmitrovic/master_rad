@@ -79,7 +79,7 @@
 \apstr{
   Radiks-stabla (engl. \textit{radix tree}) su drvolika struktura koja
   pohranjuju parove ključ-vrednost. Prilagodljiva radiks-stabla
-  (engl. \textit{Adaptive Radix Tree}) predstavljaju nadogradnju radiks-stabala,
+  (engl. \textit{adaptive radix tree}) predstavljaju nadogradnju radiks-stabala,
   optimizujući potrošnju memorije. Programski jezik \textit{Rust} je moderan i
   popularan jezik, ali za koji ne postoji potpuna podrška za rad sa prilagodljivim
   radiks-stablima. Cilj rada je implementacija
@@ -91,7 +91,8 @@
 }
 
 % Ključne reči na srpskom jeziku (u odabranom pismu)
-\kljucnereci{programski jezici, \textit{Rust}, algoritmi i strukture podataka}
+\kljucnereci{programski jezici, \textit{Rust}, stabla pretrage,
+  prilagodljiva radiks-stabla, algoritmi i strukture podataka}
 
 \begin{document}
 % ==============================================================================
@@ -633,7 +634,6 @@ neophodno samo da ima informaciju koji se tipovi mogu naći u vektoru da bi se
 mogla rezervisati adekvatna količina memorije.
 
 \subsubsection{Heš mape}
-
 Za razliku od vektora, deo standardne biblioteke koja implementira heš mape
 se mora ručno uključiti u program naredbom \texttt{use}. Funkcija \texttt{insert} će uneti
 odgovarajući par u mapu, ali će postaviti novu vrednost, bez obzira da li se ključ već
@@ -722,7 +722,7 @@ U listingu~\ref{life:fn_def_lifespan} je eksplicitno naveden životni vek refere
 identifikatorom \texttt{a}, funkcija \texttt{duza\_rec} očekuje parametre sa istim životnim vekom.
 
 \lstinputlisting[language=Rust,
-                 caption={Definisanje funkcije čiji parametri imaju ekplicitno navedene životne vekove},
+                 caption={Definisanje funkcije čiji parametri imaju eskplicitno navedene životne vekove},
                  label={life:fn_def_lifespan}]{fn_def_lifespan.rs}
 
 Nije uvek neophodno eksplicitno deklarisati životni vek svake reference prilikom
@@ -751,7 +751,6 @@ jer se nijedno pravilo spajanja ne odnosi na njega.
 
 
 \chapter{Prilagodljiva radiks-stabla}~\label{ch:art}
-
 Razvoj računarske memorije je doprineo da se baze podataka
 mogu u potpunosti smestiti u radnu sistemsku memoriju. Ovakve baze podataka se nazivaju
 \textbf{memorisane baze podataka} (engl. \emph{in-memory databases}), a njihovi predstavnici su
@@ -877,7 +876,6 @@ prilagodljivog radiks-stabla.
 \end{figure}
 
 \section{Struktura prilagodljivih radiks-stabala}~\label{sec:struktura_art}
-
 Čvorovi radiks-stabla ne moraju nužno memorisati jedan bajt ključa.
 Broj bitova koji unutrašnji čvorovi memorišu se naziva \textbf{raspon} (engl. \emph{span}).
 To znači da, u svom osnovnom obliku, radiks-stabla imaju visinu koja zavisi od
@@ -964,7 +962,6 @@ slici~\ref{fig:radix_nodes}:
 čvor po veličini.
 
 \section{Memorijska optimizacija unutrašnjih čvorova}
-
 Parcijalni ključ čvora radiks-stabla se odnosi na deo ključa
 koji taj čvor reprezentuje.
 Nadovezujući parcijalne ključeve čvorova na putu od korena stabla
@@ -1019,7 +1016,6 @@ Sve preko unapred određenog broja bajtova tog vektora se ne memoriše,
 već se koristi optimističan metod čuvanja.
 
 \section{Algoritmi pretrage i umetanja}~\label{sec:algoritmi_pretraga_umetanje}
-
 U svom radu iz 2013.\ godine, autori prilagodljivih radiks-stabala su
 objavili i algoritme pretrage i umetanja. Ovi algoritmi su veoma slični
 algoritmima za radiks-stabla u osnovnom obliku, i zato će biti navedeni
@@ -1221,7 +1217,6 @@ iznosi osam bita, vremenska složenost je
 $ \mathcal{O}(k) $, gde je $k$ dužina ključa.
 
 \chapter{ART u programskom jeziku \textit{Rust}}~\label{ch:rustART}
-
 U okviru ovog rada je implementirana biblioteka \textbf{rustART}
 koja implementira prilagodljiva radiks-stabla u programskom
 jeziku \textit{Rust}. Izvorni kôd ove biblioteke je dostupan na
@@ -1248,7 +1243,6 @@ tri modula:
 
 
 \section{Struktura \texttt{ARTree} i svojstvo \texttt{ARTKey}}
-
 Struktura koja predstavlja prilagodljiva radiks-stabla se zove \texttt{ARTree}
 i data je u listingu~\ref{kod:artree}. Definisana je u datoteci \texttt{lib.rs},
 tako da je brzo dostupna krajnjem korisniku koji koristi ovu biblioteku.
@@ -1374,7 +1368,6 @@ tip: tip vrednosti. Generički tip ključa nije neophodan nakon njegovog
 transformisanja u vektor bajtova.
 
 \section{Implementacija osnovnih operacija}
-
 U datoteci \texttt{tree.rs} se nalaze funkcije koje implementiraju
 osnovne operacije.
 Umetanje i ažuriranje parova se spaja u jednu funkciju,
@@ -1401,8 +1394,9 @@ funkcije \texttt{find\_child}
 sa nazivom \texttt{find\_child\_mut}. Obe funkcije su sastavni
 deo strukture \texttt{ARTInnerNode}.
 
-\subsection{Umetanje i ažuriranje}~\label{subsec:umetanje_azururanje}
+\newpage
 
+\subsection{Umetanje i ažuriranje}~\label{subsec:umetanje_azururanje}
 Implementacija funkcije \texttt{insert} je složenija
 zato što ova funkcija, za razliku od funkcije pretrage, zahteva
 menjanje same strukture, koje mora biti u skladu sa pravilima
@@ -1513,7 +1507,6 @@ unutrašnji čvor smanjuje funkcijom \texttt{shrink}
 i vraća se vrednost obrisanog lista.
 
 \section{Ispravnost i merenje performansi}
-
 Ispravnost strukture \texttt{ARTree} se
 proverava jediničnim testovima u \texttt{lib.rs} datoteci.
 Implementacija merenja performansi se nalazi u
@@ -1592,7 +1585,6 @@ adekvatno transformišu u nizove bajtova. Nakon unosa parova u \texttt{ARTree},
 provere se izvršavaju na sličan način kao i u prvom testu.
 
 \subsection{Performanse}
-
 Datoteka \texttt{benches.rs} sadrži funkcije koje mere
 performanse umetanja i pretraživanja parova u
 strukturi \texttt{ARTree}.\
@@ -1694,7 +1686,7 @@ onda ima smisla koristiti drvolike strukture kao što je
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=0.78\textwidth]{lines_insert.eps}
+  \includegraphics[width=0.90\textwidth]{lines_insert.eps}
   \caption{
     Rezultati merenja za operaciju umetanja. Apscisa predstavlja broj
     unetih parova, dok ordinata predstavlja prosečno vreme izvršavanja u sekundama.
@@ -1712,7 +1704,7 @@ parova.
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=0.78\textwidth]{lines_get.eps}
+  \includegraphics[width=0.90\textwidth]{lines_get.eps}
   \caption{
     Rezultati merenja za operaciju pretraživanja. Apscisa predstavlja broj
     pretraživanih parova, dok ordinata predstavlja prosečno vreme izvršavanja u sekundama.
