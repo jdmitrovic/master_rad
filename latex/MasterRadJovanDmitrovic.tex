@@ -123,7 +123,7 @@ programskog jezika \textit{Rust} daju
 njegovi jedinstveni koncepti vlasništva i pozajmljivanja, koji garantuju
 memorijsku bezbednost. Koncept vlasništva takođe
 omogućava odsustvo skupljača otpadaka, što doprinosi efikasnosti.
-Usled fokusa na stablinost i bezbednost, programski jezik \textit{Rust}
+Usled fokusa na stabilnosti i bezbednosti, programski jezik \textit{Rust}
 se koristi u sistemima renomiranih kompanija kao što su
 \textit{Mozilla}, \textit{Google}, \textit{Amazon},
 i \textit{Microsoft}.
@@ -134,7 +134,6 @@ u određenim sistemima.
 Jedna primena stabala pretrage su baze podataka, gde se stabla pretrage
 primenjuju kao mape, odnosno kao struktura podataka koja pohranjuje
 parove ključ-vrednost.
-
 Međutim, njihova efikasnost
 zavisi od količine unetih elemenata, što je neefikasno u poređenju sa nekim
 drugim strukturama podataka kao što su heš mape.
@@ -1757,6 +1756,13 @@ referenci i pokazivača. Međutim, upravo ta restriktivnost
 pomaže u sprečavanju grešaka koje je lako napraviti ali
 teško otkriti.
 
+Eksperimentalni rezultati biblioteke \textit{rustART} pokazuju
+da prilagodljiva radiks-stabla imaju bolje performanse od
+B-stabala, koja su implementirana u standardnoj biblioteci
+programskog jezika \textit{Rust}. Značajan dobitak na performansama
+je očigledan nakon tri miliona unetih,
+odnosno dva miliona pretraživanih, parova.
+
 Biblioteka \textit{rustART} se zasniva na originalnom radu koji je
 predstavio prilagodljiva radiks-stabla 2013.\ godine. Međutim,
 od 2013.\ godine do danas je došlo do tehnološkog pomaka,
@@ -1783,11 +1789,11 @@ koje će moći iskoristiti pun potencijal modernog hardvera.
 
 % ------------------------------------------------------------------------------
 % Biografija kandidata
+
 \begin{biografija}
   \textbf{Jovan Dmitrović} rođen je 17.11.1995.\ u Gornjem Milanovcu.
-  U rodnom gradu je pohađao OŠ ``Momčilo Nastasijević'' i Gimnaziju
-  ``Takovski ustanak''.
-
+  U rodnom gradu je pohađao OŠ ,,Momčilo Nastasijević`` i Gimnaziju
+  ,,Takovski ustanak``.
   Započeo je studije na Matematičkom fakultetu Univerziteta u Beogradu
   2014.\ godine, na smeru Informatika. Osnovne studije je završio
   u septembru 2018.\ godine, nakon čega je upisao master studije
