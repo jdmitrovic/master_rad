@@ -166,7 +166,7 @@ se nalazi u poglavlju~\ref{ch:rustART}.
 \emph{Rust} je statički tipiziran jezik  fokusiran na bezbednost i
 performanse. Od svog nastanka, ovaj jezik
 je dobio veliku pažnju u svetu programiranja, čemu svedoči i činjenica da je
-\emph{Rust} proglašen za "omiljeni programski jezik" već petu godinu za redom
+\emph{Rust} proglašen za ,,omiljeni programski jezik`` već petu godinu za redom
 u anketi koju je sprovela popularna veb-stranica \emph{Stack Overflow}~\cite{mostloved_so}.
 
 Danas se \emph{Rust} koristi na velikom broju komercijalnih projekata. Na primer:
@@ -537,7 +537,7 @@ se koriste mutabilne reference koje se obeležavaju sa \texttt{\&mut}. Za razlik
 u drugim programskim jezicima, može postojati samo jedna mutabilna referenca za jednu
 promenljivu u istom dosegu u kojem ne sme postojati ni imutabilna referenca te promenljive.
 
-U \emph{Rust}-u je nemoguće napraviti ``zalutalu'' referencu (engl. \emph{dangling reference}),
+U \emph{Rust}-u je nemoguće napraviti ,,zalutalu`` referencu (engl. \emph{dangling reference}),
 tj.\ referencu koja referiše na prostor u memoriji koji je već oslobođen. Prilikom prevođenja
 koda, kompilator će dati preporuku za korišćenje statičke reference uz pomoć sintakse
 \texttt{\&'static}. Ukoliko bi se pokušalo prevođenje koda iz listinga~\ref{poz:dangle},
@@ -581,7 +581,7 @@ Mogu se implementirati i metodi koji ne uzimaju instancu kao argument; njima se 
 
 \subsection{Enumeratori}\label{subsec:enum}
 Enumeratori u programskom jeziku \emph{Rust} imaju dodatne mogućnosti u odnosu na enumeratore u
-drugim programskim jezicima: svaki ``tip'' u enumeratoru može se posmatrati kao torka vrednosti.
+drugim programskim jezicima: svaki ,,tip`` u enumeratoru može se posmatrati kao torka vrednosti.
 Ovime se, na primer, postiže ponašanje enumeratora \texttt{Option} koji premošćava izostanak vrednosti
 \texttt{null}. \texttt{Option} je definisan na listingu~\ref{enum:def}.
 
@@ -1257,7 +1257,7 @@ parova koji se unose u stablo. Prvo polje strukture je \texttt{root}, koje se od
 na koren prilagodljivog radiks-stabla. Da je koren i jedino polje ove strukture,
 kompilator ne bi dopustio korišćenje generičkog tipa \texttt{K} koje se ne pominje
 unutar same strukture. Zbog toga, mora se koristiti tzv.\ \textbf{fantomski marker},
-koji kao generički tip uzima \texttt{K}. Ovaj tip podataka se naziva ``fantomskim''
+koji kao generički tip uzima \texttt{K}. Ovaj tip podataka se naziva ,,fantomskim``
 zato što ne koristi memoriju, već je samo vrsta indikatora za kompilator.
 
 \begin{lstlisting}[language=Rust,
@@ -1458,29 +1458,19 @@ dosadašnjem stablu.
 Tada se dodaje list sa novim parom u unutrašnji
 čvor, koji se, po potrebi, može proširiti funkcijom \texttt{grow}.
 
-Funkcija \texttt{grow} kao parametar uzima unutrašnji čvor
-koji se proširuje, čiji je tip enumerator
-\texttt{ARTInnerNode}. Većina vektora ključeva i dece
+Funkcija \texttt{grow} je implemenirana nad sva četiri
+tipa unutrašnjeg čvora, i omogućava popunjenom čvoru
+da uveća svoj kapacitet. Većina vektora ključeva i dece
 u okviru unutrašnjih čvorova
 se proširuje iterativnim putem, odnosno prebacivanjem svakog
 elementa pojedinačno iz manjeg vektora u veći.
-
-Izuzetak predstavlja \texttt{Inner16}, gde se pojavljuje
-SIMD vektor kao vektor ključeva.
-Kada se \texttt{Inner4} proširuje u \texttt{Inner16},
-novi vektor ključeva se popunjava funkcijom \texttt{\_mm\_setr\_epi8},
-koja 128-bitni SIMD vektor popunjava sa četiri člana
-popunjenog vektora ključeva iz \texttt{Inner4}
-i nulama (nije bitno šta se nalazi u ostatku vektora kad
-postoji evidencija o broju dece). Pri proširivanju
-\texttt{Inner16} u \texttt{Inner48}, SIMD vektor se
-transformiše u standardan vektor iste dužine funkcijom
-standardne biblioteke \texttt{transmute}, pa se
-ti vektori uvećavaju iterativnim putem. U slučaju
-gde je \texttt{Inner256} poslat kao argument,
+Izuzetak bi trebalo da predstavlja \texttt{Inner16},
+gde se pojavljuje SIMD vektor kao vektor ključeva.
+Međutim, implementacija SIMD instrukcija u programskom jeziku \textit{Rust}
+omogućava da se SIMD vektori ponašaju kao nizovi.
+U slučaju gde se \texttt{Inner256} proširuje,
 doći će do greške zato što je \texttt{Inner256}
-čvor maksimalne veličine, te se ne može
-proširiti.
+čvor maksimalne veličine, te se ne može proširiti.
 
 \subsection{Brisanje}
 Operacija brisanja briše par ključ-vrednost iz strukture
@@ -1525,7 +1515,7 @@ i vraća se vrednost obrisanog lista.
 \section{Ispravnost i merenje performansi}
 
 Ispravnost strukture \texttt{ARTree} se
-proverava jediničnim testovima u datoteci \texttt{lib.rs}.
+proverava jediničnim testovima u \texttt{lib.rs} datoteci.
 Implementacija merenja performansi se nalazi u
 datoteci \texttt{benches.rs}, koja se nalazi u
 direktorijumu \texttt{benches}.
@@ -1570,7 +1560,7 @@ fn insert_update_delete_get() {
     let mut art = ARTree::<u64, u64>::new();
 
     for &key in keys.iter() {
-        art.insert_or_update(key, key + 1);
+        art.insert(key, key + 1);
     }
 
     for &key in keys.iter() {
@@ -1641,7 +1631,7 @@ fn bench_gets(c: &mut Criterion) {
         let mut btree = BTreeMap::<u64, u64>::new();
 
         for key in keys.iter() {
-            art.insert_or_update(*key, *key + 1);
+            art.insert(*key, *key + 1);
             hmap.insert(*key, *key + 1);
             btree.insert(*key, *key + 1);
         }
