@@ -122,11 +122,14 @@ Programski jezik \textit{Rust} je moderan i izuzetno popularan programski jezik,
 robusnost i stabilnost. Najveći doprinos stabilnosti
 programskog jezika \textit{Rust} daju
 njegovi jedinstveni koncepti vlasništva i pozajmljivanja, koji garantuju
-memorijsku bezbednost. Koncept vlasništva takođe
+memorijsku bezbednost. Pojam vlasništva se odnosi
+na činjenicu da svaka vrednost ima jedinstvenu promenljivu koja poseduje
+tu vrednost, dok se pozajmljivanje vrednosti vrši putem referenci.
+Koncept vlasništva takođe
 omogućava odsustvo skupljača otpadaka, što doprinosi efikasnosti.
 Usled fokusa na stabilnosti i bezbednosti, programski jezik \textit{Rust}
 se koristi u sistemima renomiranih kompanija kao što su
-\textit{Mozilla}, \textit{Google}, \textit{Amazon},
+\textit{Mozilla}, \textit{Google}, \textit{Amazon}
 i \textit{Microsoft}.
 
 Stabla pretrage su bitan koncept u domenu struktura podataka.
@@ -181,18 +184,19 @@ Danas se \emph{Rust} koristi na velikom broju komercijalnih projekata. Na primer
         IoT sigurnosni servis \emph{edgelet}~\cite{edgelet},
     \item U registru \emph{JavaScript} paketa \emph{npm},
         kod procedura koje prouzrokuju veliko opterećenje procesora~\cite{npm},
-    \item U veb-brauzeru \textit{Firefox}~\cite{firefox_rust}.
+    \item U veb-pretraživaču \textit{Firefox}~\cite{firefox_rust}.
 \end{itemize}
 
 \section{Razvoj jezika \emph{Rust}}
 Programski jezik \emph{Rust} je dizajnirao Grejdon Hor
 (engl. \emph{Graydon Hoare}) koji je, u to vreme, bio zaposlen u kompaniji
-Mozila.
+\textit{Mozilla}.
 Hor je rad na ovom jeziku započeo 2006.\ godine kao svoj lični projekat,
 na kojem je samostalno radio naredne tri godine.
 Sredinom 2010.\ godine, u projekat se
-uključila i sama Mozila, koja i danas sponzoriše njegov razvoj.
-Pored zaposlenih Mozile, pošto je u pitanju programski jezik otvorenog koda,
+uključila i sama \textit{Mozilla}, koja i danas sponzoriše njegov razvoj.
+Pored zaposlenih u kompaniji \textit{Mozilla},
+pošto je u pitanju programski jezik otvorenog koda,
 svoj doprinos je dalo i preko 5000 dobrovoljaca~\cite{thanks_rust}.
 
 Pre nego što se Mozila priključila projektu, \emph{Rust} je izgledao dosta
@@ -203,7 +207,7 @@ koje se mogu izvoditi nad specifičnim tipom podataka pri kompiliranju. Za
 razliku od ove dve osobine, neka dizajnerska rešenja su ostala do danas, kao
 što je imutabilnost i kontrola pristupa memoriji~\cite{history_rust}.
 
-Nedugo nakon priključivanja Mozile, Grejdon Hor napušta projekat
+Nedugo nakon priključivanja kompaniji \textit{Mozilla}, Grejdon Hor napušta projekat
 2012.\ godine. U ovom periodu \emph{Rust} dobija svoj menadžer
 paketa \emph{Cargo} zajedno sa repozitorijumom paketa \url{crates.io}.
 Proces \emph{RFC}, inspirisan procesom \emph{PEP} programskog jezika
@@ -236,7 +240,7 @@ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 \end{lstlisting}
 
 \noindent
-Potvrdu da li se instalacija uspešno izvršila može se dobiti proverom verzije
+Potvrda da li se instalacija uspešno izvršila može se dobiti proverom verzije
 \emph{Rust} kompilatora komandom:
 
 \begin{lstlisting}[language={}, style=text]
@@ -245,7 +249,7 @@ rustc --version
 
 Pored samog \emph{Rust} kompilatora, u instalaciju su uključeni i
 sistem \emph{Cargo} i alat \emph{rustup}. Alat \emph{rustup} daje mogućnost
-dobavljanja nove verzije \emph{Rust}-a sa veba, kao i
+dobavljanja nove verzije \emph{Rust} kompilatora i alata sa veba, kao i
 mogućnost deinstalacije komandama:
 
 \begin{lstlisting}[language={}, style=text]
@@ -261,7 +265,7 @@ se komandom:
 cargo new novi_projekat
 \end{lstlisting}
 
-Komandom iznad se pravi novi direktorijum \texttt{novi\_projekat} koji
+Navedenom komandom se pravi novi direktorijum \texttt{novi\_projekat} koji
 sadrži konfiguracionu datoteku \texttt{Cargo.toml} i direktorijum \texttt{src}
 koji treba da sadrži izvorne datoteke obeležene ekstenzijom \emph{.rs}
 i u kojem se inicijalno nalazi datoteka \emph{main.rs}. Takođe, sa novim direktorijumom se
@@ -283,7 +287,7 @@ edition = "2018"
 
 U prvoj liniji koda, \texttt{[package]} označava sekciju koja opisuje
 paket koji je napravljen. Informacije koje se ovde nalaze su dobijene
-iz varijabli okruženja. Posle oznake \texttt{[dependencies]} se
+iz promenljivih okruženja. Posle oznake \texttt{[dependencies]} se
 popisuju svi paketi koji su neophodni za rad sa novim paketom,
 tako da ih \emph{Cargo} može dopremiti.
 
@@ -297,7 +301,7 @@ sintaksa programskog jezika \textit{Rust} podseća na sintaksu programskog jezik
                  label={inst:main}]{main.rs}
 
 \emph{Cargo} prevodi projekat komandom
-\texttt{cargo build} a prevodi ga i pokreće
+\texttt{cargo build}, a prevodi ga i pokreće
 \texttt{cargo run}. Korišćenjem komande \texttt{cargo check}
 može se proveriti da li se kôd kompilira, bez generisanja
 izvršne datoteke, što je korisno jer je ova opcija efikasnija
@@ -350,8 +354,8 @@ moguće promeniti tip promenljive koja se ponovo definiše.
 \subsection{Tipovi}
 Programski jezik \emph{Rust} je statički tipiziran jezik, ali
 ne zahteva pisanje tipa uz svaku promenljivu, osim ako je to
-neophodno; primer je korišćenje funkcije \texttt{parse}, data na listingu~\ref{ty:parse},
-koja prevodi nisku u odgovarajuću brojčanu vrednost. Buduči da
+neophodno. Primer je korišćenje funkcije \texttt{parse}, date na listingu~\ref{ty:parse},
+koja prevodi nisku u odgovarajuću brojčanu vrednost. Budući da funkcija
 \texttt{parse} može vratiti i nepostojeću vrednost kada niska nije napisana
 u odgovarajućem formatu, ulančava se i funkcija \texttt{expect} koja
 prinudno zaustavlja program i ispisuje prosleđenu poruku.
@@ -406,12 +410,12 @@ ili korišćenjem novih promenljivih, ili korišćenjem \texttt{.i} sintakse,
 počevši od $0$.
 
 Nizovi predstavljaju kolekciju vrednosti istog tipa i, poput torki,
-fiksne su veličine. Obeležavaju se sa uglastim zagradama, unutra kojih su elementi
+fiksne su veličine. Obeležavaju se uglastim zagradama, unutra kojih su elementi
 razdvojeni zarezima.
 
 Niske se u programskom jeziku \emph{Rust} javljaju u dva oblika:
 u obliku literala i u obliku niske promenljive dužine
-(u \emph{Rust}-u se one zovu \emph{string}, odnosno \emph{String}).
+(u programskom jeziku \emph{Rust} se one zovu \emph{string}, odnosno \emph{String}).
 Literalima se veličina zna pre kompilacije i njihov sadržaj se ne može promeniti,
 pa se one mogu čuvati na steku, dok se niske promenljive dužine moraju čuvati na hipu.
 
@@ -538,7 +542,8 @@ se koriste mutabilne reference koje se obeležavaju sa \texttt{\&mut}. Za razlik
 u drugim programskim jezicima, može postojati samo jedna mutabilna referenca za jednu
 promenljivu u istom dosegu u kojem ne sme postojati ni imutabilna referenca te promenljive.
 
-U \emph{Rust}-u je nemoguće napraviti ,,zalutalu`` referencu (engl. \emph{dangling reference}),
+U programskom jeziku \emph{Rust}je nemoguće napraviti
+,,zalutalu`` referencu (engl. \emph{dangling reference}),
 tj.\ referencu koja referiše na prostor u memoriji koji je već oslobođen. Prilikom prevođenja
 koda, kompilator će dati preporuku za korišćenje statičke reference uz pomoć sintakse
 \texttt{\&'static}. Ukoliko bi se pokušalo prevođenje koda iz listinga~\ref{poz:dangle},
@@ -642,7 +647,8 @@ nalazi u mapi.
 Korišćenjem funkcije \texttt{entry}, može se dobiti enumerator \texttt{Entry} koji ukazuje
 da li vrednost za dati ključ postoji u mapi. Ako se na \texttt{Entry} nadoveže funkcija
 \texttt{or\_insert}, ona će uneti odgovarajući par u mapu samo ako taj ključ ne postoji u
-mapi. Nakon toga, \texttt{or\_insert} će vratiti referencu na par koji je napravljen, ili koji
+mapi. Nakon toga, funkcija \texttt{or\_insert}
+će vratiti referencu na par koji je napravljen, ili koji
 je nađen u mapi, kao u listingu~\ref{hmap:insert}. U istom listingu se koristi naredba
 \texttt{println!} sa argumentom \texttt{\{:?\}}, koja ispisuje odgovarajuće informacije
 za debagovanje; u ovom slučaju, biće ispisano \texttt{\{„Pas”: 7, „Macka”: 3\}}.
@@ -762,7 +768,7 @@ od sekundarne memorije bazirane na magnetnim diskovima.
 
 Za memorisane baze podataka je neophodna struktura podataka koja kodira parove
 ključ-vrednost tako da se za odgovarajući ključ može naći vrednost koja mu
-je pridružena, gde i ključevi i vrednosti mogu biti bilo koji tip podataka.
+je pridružena, gde i ključevi i vrednosti mogu biti proizvoljnog tipa.
 Takođe, ova struktura bi trebalo da podrži upite opsega
 (engl. \emph{range queries}), tj.\ upite kod kojih se dohvata više podataka
 čiji se ključevi nalaze u nekom datom opsegu.
@@ -773,7 +779,7 @@ vreme odziva više nije problem.
 
 Strukture koje se tradicionalno koriste u bazama podataka jesu
 drvolike strukture podataka. Međutim, problem je u njihovoj neefikasnosti, jer
-funkcije dodavanja i brisanja elemenata u najboljem slučaju ima asimptotsko vreme izvršavanja
+funkcije dodavanja i brisanja elemenata u najboljem slučaju imaju asimptotsko vreme izvršavanja
 $ \mathcal{O}(\log{}n) $, gde je $n$ ukupan broj unetih elemenata.
 U ove svrhe su stvorene nadograđene varijante stabala,
 kao što je struktura podataka FAST
@@ -787,9 +793,9 @@ ali gubi na efikasnosti umetanja i brisanja elemenata.
 Pored drvolikih struktura, u ove svrhe se koriste i heš mape. Nasuprot
 stablima, heš mape su efikasne za sve osnovne operacije (dodavanje, brisanje, pretraživanje),
 sa prosečnom vremenskom složenošću $ \mathcal{O}(1) $. Uprkos efikasnosti heš mapa, one nisu
-dobro rešenje za baze podataka zbog upita opsega. U heš mapama gde se ključevi heširaju,
-gde operacija inverzna operaciji heširanja ne postoji, nije moguće dohvatiti
-elemente čiji ključ nije u potpunosti poznat.
+dobro rešenje za baze podataka zbog upita opsega. U heš mapama gde se ključevi heširaju
+i gde operacija inverzna operaciji heširanja ne postoji, nije moguće dohvatiti
+elemente čiji ključ nije u potpunosti poznat bez prolaska kroz sve unete parove.
 Takođe, povećavanje kapaciteta heš mape je skupo i podrazumeva reorganizaciju
 čitave mape, sa linearnom vremenskom složenošću.
 
@@ -826,18 +832,19 @@ radiks-stabla, vrednosti nisu prikazane na slici.
 Ukoliko bi se u primeru na
 slici~\ref{fig:radix} dodao par sa ključem \texttt{PO},
 stablo ne bi menjalo svoju strukturu, već
-bi se samo čvoru \texttt{O} dodala nedostajuća vrednost.
+bi se samo čvoru \texttt{O} pridružila nedostajuća vrednost.
 Pri dodavanju para sa ključem \texttt{MAK}, pretraga bi prilikom prolaska
 kroz stablo došla do čvora \texttt{M} i tu bi stala,
 pošto ne postoji dete \texttt{A}. Tada se dodaje novo podstablo
 čvoru \texttt{M}, gde se dobija novo stablo kao na slici~\ref{fig:radix2}.
 
 
-Ovom metodom grupisanja sličnih ključeva u
-istom podstablu rezultuje vremenskom složenošću čitanja, umetanja i brisanja
+Grupisanje sličnih ključeva u
+isto podstablo rezultuje vremenskom složenošću čitanja, umetanja i brisanja
 elemenata koja ne zavisi od broja elemenata
 unetih u strukturu niti od veličine same strukture, već od
-dužine ključa u njegovoj binarnoj reprezenaciji. Iako je vremenska složenost linearna,
+dužine ključa u njegovoj binarnoj reprezenaciji. Iako je vremenska složenost linearna
+u odnosu na dužinu ključa,
 osobina da efikasnost ne zavisi od broja unetih elemenata je pogodna za primenu
 u memorisanim bazama podataka. Prednost radiks-stabala je i u činjenici da ona,
 za razliku od stabala pretrage, ne zahtevaju rebalansiranje zarad
@@ -879,7 +886,7 @@ prilagodljivog radiks-stabla.
 Čvorovi radiks-stabla ne moraju nužno memorisati jedan bajt ključa.
 Broj bitova koji unutrašnji čvorovi memorišu se naziva \textbf{raspon} (engl. \emph{span}).
 To znači da, u svom osnovnom obliku, radiks-stabla imaju visinu koja zavisi od
-dužine ključa $k$ i od raspona $s$, i ona iznosi $ \lceil \frac{k}{s} \rceil $.
+dužine najdužeg ključa $k$ i od raspona $s$, i ona iznosi $ \lceil \frac{k}{s} \rceil $.
 
 Odabir raspona ima uticaja i na vremensku i na memorijsku složenost
 radiks-stabla. Ukoliko je raspon mali, onda je potencijalni broj dece po
@@ -990,17 +997,30 @@ eksplicitno. Postoje dva metoda čuvanja parcijalnih ključeva unutrašnjih
         $d$ bitova ključa pretrage bez provere jednakosti,
         i pretraga se nastavlja dalje.
         Kad pretraga stigne do lista, tada se ceo ključ proverava.
+        Na slici~\ref{fig:radix_compression_opt} je prikazano
+        optimistično sažimanje puteva, gde su vrednosti $d$
+        ispisane plavom bojom za svaki unutrašnji čvor.
 \end{description}
-
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=0.55\textwidth]{radix_compression.eps}
+  \includegraphics[width=0.60\textwidth]{radix_compression.eps}
   \caption{Pesimistično sažimanje puteva radiks-stabla, gde su samo
     čvorovi \texttt{A} i \texttt{K}, kao i \texttt{P} i \texttt{O} sažeti,
     dok \texttt{PO} i \texttt{D} nisu, jer čvor \texttt{PO}
-    sadrži vrednost}
+    sadrži vrednost.}
   \label{fig:radix_compression}
+\end{figure}
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.60\textwidth]{radix_compression_optimistic.eps}
+  \caption{Optimistično sažimanje puteva radiks-stabla, gde su samo
+    čvorovi \texttt{A} i \texttt{K}, kao i \texttt{P} i \texttt{O} sažeti,
+    dok \texttt{PO} i \texttt{POD} nisu, jer čvor \texttt{PO}
+    sadrži vrednost. Pošto \texttt{PO} sadrži vrednost, bajt \texttt{O}
+    se mora čuvati.}
+  \label{fig:radix_compression_opt}
 \end{figure}
 
 Pesimističan metod daje brzu proveru korektnosti putanje, ali sa sobom nosi
@@ -1222,7 +1242,7 @@ koja implementira prilagodljiva radiks-stabla u programskom
 jeziku \textit{Rust}. Izvorni kôd ove biblioteke je dostupan na
 veb-stranici \url{https://github.com/jdmitrovic/rustART}.
 
-Biblioteke napisane u \textit{Rust}-u
+Biblioteke napisane u programskom jeziku \textit{Rust}
 imaju osnovnu datoteku koja se zove \texttt{lib.rs},
 koju je moguće deliti u manje datoteke koje se nazivaju
 moduli. U biblioteci \textit{rustART} postoje
@@ -1277,14 +1297,16 @@ pub trait ARTKey {
 
 \texttt{ARTKey} sadrži samo jednu funkciju: funkciju koja može dati ključ
 prevesti u vektor bajtova, odnosno \texttt{Vec<u8>}. Da bi se vrednost
-bilo kog tipa mogla koristiti kao ključ u \texttt{ARTree}, taj tip mora prvo
+proizvoljnog tipa mogla koristiti kao ključ u \texttt{ARTree}, taj tip mora prvo
 implementirati ovo svojstvo. U datoteci \texttt{key.rs} su date
 implementacije ovog svojstva za primitivne tipove (celi brojevi, brojevi zapisani
 u pokretnom zarezu), kao i za niske. Funkcija standardne biblioteke
 \texttt{to\_be\_bytes} je definisana za sve brojeve i ona prevodi brojeve u
 njihovu reprezentaciju u bajtovima u \textit{big-endian}~\cite{endianness}
 sistemu. \textit{Big-endian} se odnosi na poredak bajtova smeštenih u memoriji,
-odnosno na činjenicu da su bajtovi u memoriji smešteni po značajnosti.
+odnosno na činjenicu da su bajtovi u memoriji smešteni redom od najznačajnijeg
+do najmanje značajnog bajta. S druge strane, bajtovi u \textit{little-endian}
+poretku su smešteni u memoriji od najmanje značajnog do najznačajnijeg bajta.
 Funkcija \texttt{to\_be\_bytes} smešta bajtove u niz,
 koji se mora prevesti u vektor funkcijom \texttt{into\_vec}.
 Standardna biblioteka takođe sadrži odgovarajuću funkciju za prevođenje
@@ -1347,8 +1369,8 @@ pub struct ARTLeaf<V>{
 \end{lstlisting}
 
 \texttt{ARTNode} razlikuje dve vrste čvorova: unutrašnje \texttt{Inner} i
-listove \texttt{Leaf}. U \texttt{Leaf} se smešta struktura \texttt{ARTLeaf}
-koja sadrži vrednost i ključ dok se u \texttt{Inner} smeštaju tri podatka:
+listove \texttt{Leaf}. U čvorove tipa \texttt{Leaf} se smešta struktura \texttt{ARTLeaf}
+koja sadrži vrednost i ključ dok se u čvorove tipa \texttt{Inner} smeštaju tri podatka:
 enumerator \texttt{ARTInnerNode}, parcijalni ključ i vrednost. Vrednost se ovde
 nalazi u \texttt{Option} omotaču, jer unutrašnji čvorovi
 ne moraju nužno imati vrednosti.
@@ -1363,7 +1385,7 @@ podaci o dužini parcijalnog čvora i broju smeštene dece.
 \texttt{Box} pokazivač je ovde neophodan zato što je \texttt{ARTNode}
 rekurzivna struktura, i kompilator bez njega ne bi znao
 koliko memorije treba rezervisati.
-Svi pomenuti tipovi čvorova imaju jedan generičan
+Svi pomenuti tipovi čvorova imaju jedan generički
 tip: tip vrednosti. Generički tip ključa nije neophodan nakon njegovog
 transformisanja u vektor bajtova.
 
@@ -1519,7 +1541,7 @@ ispravnost parova unetih u \texttt{ARTree}.
 U datoteci \texttt{lib.rs} nalaze se dva testa koji proveravaju
 valjanost osnovnih operacija. Testovi su napisani u vidu funkcija
 pre kojih je napisana anotacija \texttt{\#\lbrack test\rbrack}.
-Testovi se pokreču komandom \texttt{cargo test} i potrebno
+Testovi se pokreću komandom \texttt{cargo test} i potrebno
 im je $0.84$ sekundi za izvršavanje na procesoru
 \textit{AMD Ryzen 7 3700U}.
 
@@ -1594,8 +1616,8 @@ biblioteci programskog jezika \textit{Rust}.
 
 Merenje je izvršeno pomoću paketa \textit{Criterion.rs}~\cite{criterion}.
 Sva implementirana merenja se pokreću komandom \texttt{cargo bench}.
-\texttt{Criterion} takođe
-omogućava iscrtavanje grafika od dobijenih rezultata.
+Paket \texttt{Criterion} takođe
+omogućava iscrtavanje grafika na osnovu dobijenih rezultata.
 
 Deo koda koji se nalazi u \texttt{benches.rs} datoteci se nalazi na
 listingu~\ref{kod:benches}. U funkciji \texttt{bench\_gets} se nalazi
