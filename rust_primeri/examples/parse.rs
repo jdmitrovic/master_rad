@@ -1,4 +1,4 @@
 fn main() {
-    let broj = "10".parse().expect("Nije unet broj!");
-    println!("Unet broj je: {}", num);
+    let broj: i32 = "10".parse().expect("Nije unet broj!");
+    println!("Unet broj je: {}", broj);
 }

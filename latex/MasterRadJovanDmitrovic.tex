@@ -720,12 +720,15 @@ odnosno reference koje referišu na već oslobođeni prostor. U istoj sekciji je
 i jedan od načina na koji se problem zalutalih referenci može zaobići:
 korišćenjem statičkog životnog veka. Drugi način rešavanja ovog problema jeste korišćenjem
 eksplicitno navedenih životnih vekova.
-Životni vekovi referenci se obeležavaju sa apostrofom i identifikatorom životnog veka posle
+Životni vekovi referenci su implementirani u vidu generičkih parametara
+koji se obeležavaju sa apostrofom i identifikatorom životnog veka posle
 znaka \texttt{\&} i pre tipa reference. Prilikom definisanja funkcije se navode između
 karaktera \texttt{<} i \texttt{>} zajedno sa generičkim tipovima.
 U listingu~\ref{life:fn_def_lifespan} je eksplicitno naveden životni vek referenci
 \texttt{s1} i \texttt{s2}. Kako je životni vek ove dve reference obeležen istim
 identifikatorom \texttt{a}, funkcija \texttt{duza\_rec} očekuje parametre sa istim životnim vekom.
+Slično kao i kod generičkih tipova, identifikator \texttt{a} se ne odnosi
+na konkretan životni vek.
 
 \lstinputlisting[language=Rust,
                  caption={Definisanje funkcije čiji parametri imaju eskplicitno navedene životne vekove},
