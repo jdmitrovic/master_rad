@@ -612,6 +612,15 @@ Ukoliko se promenljiva ne otpakuje, kompilator će ispisati odgovarajuću grešk
 se ispisati i kada naredba \texttt{match} ne pokrije sve moguće vrste enumeratora, gde je moguće
 koristiti \texttt{\_} notaciju za obeležavanje podrazumevane grane.
 
+Na listingu~\ref{enum:def_match} je dat primer korišćenja podrazumevane grane.
+Enumerator \texttt{Boja} podržava tri različita modela boja: RGB, CYMK i HSV.\
+Naredba \texttt{match} sa {\_} granom omogućava
+ispisivanje vrednosti komponenti boja koje su pohranjene isključivo u RGB modelu.
+
+\lstinputlisting[language=Rust,
+                 caption={Korišćenje \texttt{match} naredbe sa podrazumevanom granom},
+                 label={enum:def_match}]{default_match.rs}
+
 \subsection{Strukture podataka promenljivog sadržaja}
 Pored torki i nizova, \emph{Rust} ima podršku za strukture podataka kojima se sadržaj
 može menjati: to su vektori i heš mape.
@@ -1745,19 +1754,18 @@ parova.
 
 % ------------------------------------------------------------------------------
 \chapter{Zaključak}~\label{ch:zakljucak}
-U radu su prikazani koncept rada prilagodljivih radiks-stabala
-kao i njihove razlike u odnosu na druge drvolike strukture.
+U radu je prikazano korišćenje programskog jezika \textit{Rust}
+u svrhe predstavljanja koncepta rada prilagodljivih radiks-stabala,
+kao i njihovih razlika u odnosu na druge drvolike strukture.
 Teoretski i po rezultatima merenja, ART pokazuje da
 ima svoje mesto u svetu struktura podataka.
 
-Pored samih prilagodljivih radiks-stabala, opisano je i korišćenje
-programskog jezika \textit{Rust}. Uprkos nesvakidašnjim konceptima
+Uprkos nesvakidašnjim konceptima
 koje \textit{Rust} uvodi kao što je sistem vlasništva,
 evidentni su razlozi zbog kojih je \textit{Rust} jedan od najpopularnijih
 jezika današnjice. Usled svoje popularnosti, \textit{Rust}
 ima veliku podršku zajednice, što je od velike važnosti za
 relativno mlad programski jezik.
-
 Memorijska bezbednost ovog jezika dolazi do izražaja
 prilikom implementacije struktura podataka, što je bio i slučaj sa
 bibliotekom \textit{rustART}. Programski jezik \textit{Rust} je
