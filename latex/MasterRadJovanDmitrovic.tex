@@ -610,12 +610,12 @@ listingu~\ref{enum:match}.
 
 Ukoliko se promenljiva ne otpakuje, kompilator će ispisati odgovarajuću grešku. Slično, greška će
 se ispisati i kada naredba \texttt{match} ne pokrije sve moguće vrste enumeratora, gde je moguće
-koristiti \texttt{\_} notaciju za obeležavanje podrazumevane grane.
+koristiti notaciju \texttt{\_} za obeležavanje podrazumevane grane.
 
 Na listingu~\ref{enum:def_match} je dat primer korišćenja podrazumevane grane.
 Enumerator \texttt{Boja} podržava tri različita modela boja: RGB, CYMK i HSV.\
-Naredba \texttt{match} sa {\_} granom omogućava
-ispisivanje vrednosti komponenti boja koje su pohranjene isključivo u RGB modelu.
+Naredba \texttt{match} sa granom \texttt{\_} omogućava
+ispisivanje vrednosti komponenti boja koje su pohranjene isključivo u modelu RGB.\
 
 \lstinputlisting[language=Rust,
                  caption={Korišćenje \texttt{match} naredbe sa podrazumevanom granom},
